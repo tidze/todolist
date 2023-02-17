@@ -7,7 +7,16 @@ module.exports = {
         "./node_modules/flowbite/**/*.js"
     ],
     theme: {
-        extend: {},
+        extend: {
+            fontFamily: {
+                'Rubik': ['Rubik', 'sans-serif'],
+                'Zeyada': ['Zeyada', 'cursive'],
+
+            }
+        },
+        colors: {
+            "customRed_1": "D90429"
+        },
     },
     plugins: [
         require('flowbite/plugin')
