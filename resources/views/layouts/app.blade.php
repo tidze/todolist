@@ -759,7 +759,7 @@
             .dark\:hover\:text-white:hover {
                 --tw-text-opacity: 1;
                 color: rgb(255 255 255 / var(--tw-text-opacity))
-    }
+            }
 
             .group:hover .dark\:group-hover\:stroke-gray-400 {
                 stroke: #9ca3af
@@ -825,13 +825,14 @@
         }
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
 </head>
 
 <body class="antialiased ">
     @include('layouts.navbar')
     @yield('content')
     @include('layouts.footer')
-
+    @livewireScripts
 </body>
 
 </html>

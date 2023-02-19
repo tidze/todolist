@@ -17,3 +17,7 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+node_modules.rar
+vendor.rar
+node_modules.zip
+vendor.zip
