@@ -5,11 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laravel</title>
-
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
+    <title>Todolist</title>
 
     <!-- Styles -->
     <style>
@@ -826,6 +822,10 @@
     </style>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
+    <script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
+    <script defer type="text/javascript" src="{{ asset('js/datepicker.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery-clock-timepicker.min.js') }}"></script>
+
 </head>
 
 <body class="antialiased ">
@@ -833,6 +833,15 @@
     @yield('content')
     @include('layouts.footer')
     @livewireScripts
+    @stack('script')
+    <p class="example">
+    <strong>Standard time picker</strong><br />
+	<i>(no settings specified)</i><br />
+    <input class="time standard" type="text" value="10:15" onchange="console.log('Time changed to: ' + this.value)" />
+   </p>
+   <script>
+    $(document).ready(function() {$('.standard').clockTimePicker();});
+</script>
 </body>
 
 </html>

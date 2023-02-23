@@ -1,29 +1,23 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="bg-zinc-800 flex justify-center p-2" style="">
-        <div class="flex items-center flex-col lg:flex-row w-full md:w-2/3 ">
-            <img id="my_profile_pic_holder" class="shrink-0 m-2 w-44 h-44 border border-red-600 rounded-full">
-            <p class="shrink py-2 px-5 md:p-0">
-                <span>About Me</span>
-                <br>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit
-                expedita tempore
-                voluptates tenetur porro rerum animi vero unde molestiae sint, fugiat officiis hic odio
-                mollitia atque nemo libero autem deleniti.
-            </p>
+    <div class="relative max-w-sm">
+        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+            <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd"
+                    d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                    clip-rule="evenodd"></path>
+            </svg>
         </div>
+        <input datepicker datepicker-buttons type="text"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Select date">
     </div>
 
-    <div class="flex flex-col items-center md:flex-row md:justify-center border bg-zinc-900">
-        <div class="border w-64 h-72 md:w-56 md:h-64 m-2 rounded cursor-pointer hover:bg-gradient-to-t hover:from-white">
-            <a href="{{ route('web-developement') }}" class="no-underline border border-red-600 block h-full">Web Developement</a>
-        </div>
-        <div class="border w-64 h-72 md:w-56 md:h-64 m-2 rounded cursor-pointer hover:bg-gradient-to-t hover:from-white">
-            <a href="{{ route('game-developement') }}" class="no-underline border border-red-600 block h-full">Game Developement</a>
-        </div>
-        <div class="border w-64 h-72 md:w-56 md:h-64 m-2 rounded cursor-pointer hover:bg-gradient-to-t hover:from-white">
-            <a href="{{ route('cg-career') }}" class="no-underline border border-red-600 block h-full">CG Carrer</a>
-        </div>
-    </div>
+    <br>
+
 @endsection
+
+@push('script')
+    
+@endpush

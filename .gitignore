@@ -21,3 +21,5 @@ node_modules.rar
 vendor.rar
 node_modules.zip
 vendor.zip
+/resources/views/epicgames/
+/resources/views/presentandcorrect/
