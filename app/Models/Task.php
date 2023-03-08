@@ -4,6 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
+// use App\Models\Category;
+// HasOne
 
 class Task extends Model
 {
@@ -19,8 +23,9 @@ class Task extends Model
         'ending_time',
     ];
 
-    public function relatedModels()
+    public function task():HasOne
     {
-        return $this->hasOne(Category::class);
+        return $this->hasOne(Category::class,'id');
+        // return $this->hasOne(User::class,'id');
     }
 }

@@ -1,0 +1,11 @@
+# Add User_id to the task table
+# Make Edit button work for Every task
+# Add Google Graph to the website for each task (at the end of the day what did you do? sum)
+# Make Website Livetime interactive using livewire
+# Email Verification
+# Add initial guidance
+# Add timezone table to the database
+# Add Sketchy Theme to the calendar
+# Add Animation to the for helping the user to undrestand how things are done
+# Problem of editing a task and it would interfere with another task's duration
+# Notification and stuff like that
