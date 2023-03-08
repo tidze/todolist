@@ -9,13 +9,9 @@ use Illuminate\Support\Facades\DB;
 
 class Task extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $allTasks = Task::retriveAllTasks();
-        // $allTasks = CategoryModel::all();
-        // dd($allTasks);
-        return view('welcome')->with('allTasks', $allTasks);
-
+        return view('layouts.app');
     }
 
     public function getTasks()
@@ -36,7 +32,7 @@ class Task extends Controller
             'taskCategory'=>['required'],
             'taskDescription'=>['required'],
         ]);
-        
+
         $category = Task::checkForExistingCategory($request->input('taskCategory'), $request->input('taskDescription'));
         if (is_null($category)) {
             // if the category not exists, add the category to the categories table and then add the task
