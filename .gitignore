@@ -23,3 +23,7 @@ node_modules.zip
 vendor.zip
 /resources/views/epicgames/
 /resources/views/presentandcorrect/
+/app/Http/Controllers/GameDevelopment.php
+/app/Http/Controllers/Controller.php
+/app/Http/Controllers/CGCareer.php
+

@@ -9,3 +9,17 @@
 # Add Animation to the for helping the user to undrestand how things are done
 # Problem of editing a task and it would interfere with another task's duration
 # Notification and stuff like that
+
+    "tailwindCSS.includeLanguages": {
+        "html": "html",
+        "javascript": "javascript",
+        "css": "css",
+        "php": "php",
+        "blade": "html",
+    },
+    "editor.quickSuggestions": {
+        "strings": true
+    },
+    "css.validate": false,
+    "editor.inlineSuggest.enabled": true,
+    "tailwindCSS.emmetCompletions": true,

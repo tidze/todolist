@@ -11,3 +11,4 @@ Route::get('/', [Task::class,'index']);
 // Route::post('/addtask', [Task::class,'store'])->name('task');
 
 Route::post('/addtask', [TaskLivewire::class,'store'])->name('TaskAdd');
+// Route::post('/deletetask', [TaskLivewire::class,'deleteId'])->name('TaskDelete');

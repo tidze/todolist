@@ -1,27 +1,27 @@
 <div>
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <table class="w-full text-[9px] text-left ">
+            <thead class="uppercase bg-gray-50 dark:bg-gray-700  text-white ">
                 <tr>
-                    <th scope="col" class="px-3 py-1">
+                    <th scope="col" class="px-1 py-0">
                         id
                     </th>
-                    <th scope="col" class="px-3 py-1">
-                        category_id
+                    <th scope="col" class="px-1 py-0">
+                        c_id
                     </th>
-                    <th scope="col" class="px-3 py-1">
-                        Categories.category
+                    <th scope="col" class="px-1 py-0">
+                        C.category
                     </th>
-                    <th scope="col" class="px-3 py-1">
-                        Categories.description
+                    <th scope="col" class="px-1 py-0">
+                        C.description
                     </th>
-                    <th scope="col" class="px-3 py-1">
+                    <th scope="col" class="px-1 py-0">
                         duration
                     </th>
-                    <th scope="col" class="px-3 py-1">
+                    <th scope="col" class="px-1 py-0">
                         starting_time
                     </th>
-                    <th scope="col" class="px-3 py-1">
+                    <th scope="col" class="px-1 py-0">
                         ending_time
                     </th>
                 </tr>
@@ -29,30 +29,33 @@
             <tbody>
 
                 @foreach ($allTasks as $task)
-                    <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-                        <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 text-teal-600">
+                        <td scope="row" class="px-2 py-1 font-medium whitespace-nowrap text-white">
                             {{ $task->id }}
                         </td>
-                        <td class="px-4 py-2">
+                        <td class="px-2 py-0">
                             {{ $task->category_id }}
                         </td>
-                        <td class="px-4 py-2">
+                        <td class="px-2 py-0">
                             {{ $task->category }}
                         </td>
-                        <td class="px-4 py-2">
+                        <td class="px-2 py-0">
                             {{ $task->description }}
                         </td>
-                        <td class="px-4 py-2">
+                        <td class="px-2 py-0">
                             {{ $task->desired_duration }}
                         </td>
-                        <td class="px-4 py-2">
+                        <td class="px-2 py-0">
                             {{ $task->starting_time }}
                         </td>
-                        <td class="px-4 py-2">
+                        <td class="px-2 py-0">
                             {{ $task->ending_time }}
                         </td>
-                        <td class="px-4 py-2">
+                        <td class="px-2 py-0">
                             <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                            <form wire:submit.prevent="deleteTask({{ $task->id }})">
+                                <button type="submit" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</button>
+                            </form>
                         </td>
                     </tr>
                 @endforeach

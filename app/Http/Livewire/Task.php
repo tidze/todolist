@@ -14,8 +14,10 @@ class Task extends Component
     public $desiredDuration;
     public $startingTimepoint_obj;
     public $endingTimepoint_obj;
+    public $inputValue;
+    public $deleteId;
 
-    // protected $listeners = ['refreshComponent' => '$refresh'];
+    // protected $listeners = ['deleteTask'];
 
     public function mount()
     {
@@ -28,30 +30,41 @@ class Task extends Component
 
     public function render()
     {
-        // return dd($this->desiredDuration);
         return view('livewire.task');
+    }
+
+    public function deleteId($id)
+    {
+        $this->deleteId = $id;
+    }
+
+    public function deleteTask($id)
+    {
+        TaskModel::findOrFail($id)->delete();
+        // TaskModel::findOrFail($this->deleteId)->delete();
+        // dd($targetTask);
     }
 
     public function store()
     {
         $this->validate([
+            'startingTimepoint_obj' => ['required'],
+            'endingTimepoint_obj' => ['required'],
+            'desiredDuration' => ['required'],
             'taskCategory' => ['required'],
             'taskDescription' => ['required'],
         ]);
 
-        $category = Task::checkForExistingCategory($this->taskCategory, $this->taskDescription);
+        $category = Task::checkForExistingCategory(trim($this->taskCategory), trim($this->taskDescription));
         if (is_null($category)) {
             // if the category not exists, add the category to the categories table and then add the task
-            Task::insertIntoCategories($this->taskCategory, $this->taskDescription);
-            Task::insertIntoTasks($this->taskCategory, $this->taskDescription);
+            Task::insertIntoCategories(trim($this->taskCategory), trim($this->taskDescription));
+            Task::insertIntoTasks(trim($this->taskCategory), trim($this->taskDescription));
         } else {
             // if the category exists, just retrive the id from categories table and insert it as category_id
-            Task::insertIntoTasks($this->taskCategory, $this->taskDescription);
+            Task::insertIntoTasks(trim($this->taskCategory), trim($this->taskDescription));
         }
         $this->emitTo('tasks-table', '$refresh');
-        // session();
-        // return redirect('/');
-        // return redirect()->back();
     }
 
     public function checkForExistingCategory($category, $description)
