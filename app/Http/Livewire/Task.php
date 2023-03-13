@@ -14,15 +14,20 @@ class Task extends Component
     public $desiredDuration;
     public $startingTimepoint_obj;
     public $endingTimepoint_obj;
-    public $inputValue;
-    public $deleteId;
+    public $startingTimepoint;
+    public $endingTimepoint;
+    public $targetTaskIdEdit;
 
-    // protected $listeners = ['deleteTask'];
+    // since we're calling editTask from tasks-table component's controller we need to register our function controller
+    protected $listeners = ['editTask'];
 
     public function mount()
     {
         $this->endingTimepoint_obj = '';
         $this->startingTimepoint_obj = '';
+        // the starting time for "clock time picker" ought to be current time. for now we leave it at 00:00
+        $this->startingTimepoint = '00:00';
+        $this->endingTimepoint = '00:00';
         $this->desiredDuration = '';
         $this->taskCategory = '';
         $this->taskDescription = '';
@@ -33,16 +38,42 @@ class Task extends Component
         return view('livewire.task');
     }
 
-    public function deleteId($id)
+    // incoming request from tasks-table anchor tag
+    public function editTask($id)
     {
-        $this->deleteId = $id;
+        $this->targetTaskIdEdit = $id;
+
+        $task = TaskModel::select('tasks.*', 'categories.category', 'categories.description')->join('categories', 'tasks.category_id', '=', 'categories.id')->get()->find($this->targetTaskIdEdit);
+        $this->taskCategory= $task->category;
+        $this->taskDescription= $task->description;
+        $this->desiredDuration = $task->desired_duration;
+        $this->startingTimepoint_obj = $task->starting_time;
+        $this->endingTimepoint_obj = $task->ending_time;
+        // this patch is temporary untill i find a better solution. (what if the time zone is in a different format?)
+        $this->startingTimepoint =  substr($task->starting_time, 16, 5);
+        $this->endingTimepoint = substr($task->ending_time, 16, 5);
+        // send back the targetTaskIdEdit to tasks-table
+        $this->emitTo('tasks-table', 'sendBackId', $this->targetTaskIdEdit);
+    }
+
+    public function update()
+    {
+        // $task = TaskModel::findOrFail($this->targetTaskIdEdit);
+        // dd($task);
+        $category = Task::checkForExistingCategory(trim($this->taskCategory), trim($this->taskDescription));
+        if (is_null($category)) {
+            // if the category not exists, add the category to the categories table and then update the task
+            Task::insertIntoCategories(trim($this->taskCategory), trim($this->taskDescription));
+            Task::updateIntoTasks(trim($this->targetTaskIdEdit),trim($this->taskCategory), trim($this->taskDescription));
+        } else {
+            // if the category exists, just retrive the id from categories table and update it with category_id
+            Task::updateIntoTasks(trim($this->targetTaskIdEdit),trim($this->taskCategory), trim($this->taskDescription));
+        }
     }
 
     public function deleteTask($id)
     {
         TaskModel::findOrFail($id)->delete();
-        // TaskModel::findOrFail($this->deleteId)->delete();
-        // dd($targetTask);
     }
 
     public function store()
@@ -65,6 +96,14 @@ class Task extends Component
             Task::insertIntoTasks(trim($this->taskCategory), trim($this->taskDescription));
         }
         $this->emitTo('tasks-table', '$refresh');
+        $this->taskCategory = '';
+        $this->taskDescription = '';
+        $this->desiredDuration = '';
+        $this->startingTimepoint_obj = '';
+        $this->endingTimepoint_obj = '';
+        $this->startingTimepoint = '00:00';
+        $this->endingTimepoint = '00:00';
+        $this->targetTaskIdEdit = '';
     }
 
     public function checkForExistingCategory($category, $description)
@@ -83,6 +122,17 @@ class Task extends Component
     public function insertIntoTasks($category, $description)
     {
         $taskModel = new TaskModel;
+        $retrievedCategory = Task::checkForExistingCategory($category, $description);
+        $taskModel->category_id = $retrievedCategory->id;
+        $taskModel->desired_duration = $this->desiredDuration;
+        $taskModel->starting_time = $this->startingTimepoint_obj;
+        $taskModel->ending_time = $this->endingTimepoint_obj;
+        $taskModel->save();
+    }
+
+    public function updateIntoTasks($taskId,$category, $description)
+    {
+        $taskModel = TaskModel::findOrFail($taskId);
         $retrievedCategory = Task::checkForExistingCategory($category, $description);
         $taskModel->category_id = $retrievedCategory->id;
         $taskModel->desired_duration = $this->desiredDuration;

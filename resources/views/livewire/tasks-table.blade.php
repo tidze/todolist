@@ -1,7 +1,7 @@
 <div>
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-[9px] text-left ">
-            <thead class="uppercase bg-gray-50 dark:bg-gray-700  text-white ">
+            <thead class="uppercase bg-gray-50 dark:bg-gray-700 text-white">
                 <tr>
                     <th scope="col" class="px-1 py-0">
                         id
@@ -29,8 +29,14 @@
             <tbody>
 
                 @foreach ($allTasks as $task)
-                    <tr class="bg-white border-b dark:bg-gray-900 dark:border-gray-700 text-teal-600">
-                        <td scope="row" class="px-2 py-1 font-medium whitespace-nowrap text-white">
+                    {{-- @isset($sendBackId) --}}
+
+                    {{-- @endisset --}}
+
+                    <tr
+                    @if ($task->id == $sendBackId) @class(['box-border','border','border-indigo-500','bg-gray-900','text-indigo-500'])  @endif
+                    class="box-border border-b bg-gray-900 border-gray-700 border text-teal-600">
+                        <td scope="row" class="box-border hover:box-content px-2 py-1 font-medium whitespace-nowrap text-white">
                             {{ $task->id }}
                         </td>
                         <td class="px-2 py-0">
@@ -52,7 +58,9 @@
                             {{ $task->ending_time }}
                         </td>
                         <td class="px-2 py-0">
-                            <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                            <form wire:submit.prevent="edit({{ $task->id }})">
+                                <button type="submit" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
+                            </form>
                             <form wire:submit.prevent="deleteTask({{ $task->id }})">
                                 <button type="submit" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</button>
                             </form>

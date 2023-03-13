@@ -7,12 +7,16 @@ use Livewire\Component;
 
 class TasksTable extends Component
 {
-    protected $listeners = ['$refresh'];
+    protected $listeners = ['$refresh','sendBackId'];
+    public $sendBackId;
     // protected $listeners = ['refreshComponent' => '$refresh'];
+
+
     public function render()
     {
-        return view('livewire.tasks-table',[
-            'allTasks'=>TaskModel::select('tasks.*','categories.category','categories.description')->join('categories','tasks.category_id','=','categories.id')->get()
+        return view('livewire.tasks-table', [
+            'allTasks' => TaskModel::select('tasks.*', 'categories.category', 'categories.description')->join('categories', 'tasks.category_id', '=', 'categories.id')->get(),
+            'sendBackId' => $this->sendBackId
         ]);
     }
 
@@ -22,5 +26,15 @@ class TasksTable extends Component
         // TaskModel::findOrFail($this->deleteId)->delete();
         // dd($targetTask);
         // $this->emit('refreshComponent');
+    }
+
+    public function edit($id)
+    {
+        $this->emitTo('task', 'editTask', $id);
+    }
+
+    public function sendBackId($id)
+    {
+        $this->sendBackId = $id;
     }
 }

@@ -1,12 +1,23 @@
 <div>
+    {{-- {{ $startingTimepoint }} --}}
+    <input type="text" id="targetTaskIdEdit" name="targetTaskIdEdit" wire:model.defer="targetTaskIdEdit" class="w-32" value="{{ $targetTaskIdEdit }}" readonly>
+    <label for="targetTaskIdEdit">targetTaskId</label>
+    <br>
+    @empty($targetTaskIdEdit)
+        <p>targetTaskIdEdit is empty</p>
+    @else
+        <p>targetTaskIdEdit <span class="underline">Not</span> empty</p>
+    @endempty
+    <br>
     <input type="date" id="targetDate">
     <label for="targetDate">targetDate</label>
     <form method="POST" wire:submit.prevent="store">
         @csrf
         <div>
             <input id="startingDate" type="date" class="">
-            <input id="startingTimepoint" class="time startingTimepoint bg-black text-white text-center w-40" type="text" value="10:15" />
+            <input id="startingTimepoint" wire:model.defer="startingTimepoint" class="time startingTimepoint bg-black text-white text-center w-40" type="text" value="" />
             <label for="startingTimepoint">startingTimepoint</label>
+            {{-- <label for="startingTimepoint">d</label> --}}
             <input id="startingTimepoint_obj" wire:model.defer="startingTimepoint_obj" name="startingTimepoint_obj" class="bg-black text-white text-center w-52 p-0 text-[10px]"
                 type="text" value="" />
             @error('startingTimepoint_obj')
@@ -16,7 +27,8 @@
 
         <div>
             <input id="endingDate" type="date" class="">
-            <input id="endingTimepoint" class="time endingTimepoint bg-black text-white text-center w-40" type="text" value="10:15" onchange="" />
+            <input id="endingTimepoint" wire:model.defer="endingTimepoint" class="time endingTimepoint bg-black text-white text-center w-40" type="text" value="00:00"
+                onchange="" />
             <label for="endingTimepoint">endingTimepoint</label>
             <input name="endingTimepoint_obj" wire:model.defer="endingTimepoint_obj" id="endingTimepoint_obj" class="bg-black text-white text-center w-52 p-0 text-[10px]"
                 type="text" value="0" />
@@ -30,10 +42,18 @@
         </div>
         <div class="inline-block w-52 py-5 mr-9 relative">
             <div class="absolute flex left-full mx-2">
-                <label id="rangeValue" class="">0</label>
+                <label id="rangeValue" class="">
+                    @if (empty($desiredDuration))
+                        0
+                    @else
+                        @php print(''.$desiredDuration.'') @endphp
+                    @endif
+                </label>
                 <span class="mx-1">m</span>
             </div>
-            <input name="desiredDuration" wire:model.defer="desiredDuration" id="desiredDuration" min="0" max="0" type="range" value="0"
+            <input name="desiredDuration" wire:model.defer="desiredDuration" id="desiredDuration" min="0"
+                max=@if (empty($desiredDuration)) 0 @else @php print('\''.$desiredDuration.'\'') @endphp @endif type="range"
+                value=@if (empty($desiredDuration)) 0 @else @php print('\''.$desiredDuration.'\'') @endphp @endif
                 class="inline-block w-full h-2 bg-gray-700 p-1 rounded-lg appearance-none cursor-pointer range-lg" oninput="rangeValue.innerText = this.value">
         </div>
         @error('desiredDuration')
@@ -59,6 +79,14 @@
         focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800
         dark:text-gray-400 dark:border-gray-600 dark:hover:text-white
         dark:hover:bg-gray-700">Add
+            Task</button>
+        <button wire:click="update"
+            class="px-3 py-1 text-xs font-medium mr-2 mb-2 text-gray-900
+        focus:outline-none bg-white rounded-lg border border-gray-200
+        hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4
+        focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800
+        dark:text-gray-400 dark:border-gray-600 dark:hover:text-white
+        dark:hover:bg-gray-700">Update
             Task</button>
     </form>
 </div>
@@ -91,6 +119,7 @@
             fonts: {
                 fontFamily: 'Rubik'
             }
+
         });
         $('.endingTimepoint').clockTimePicker({
             fonts: {
@@ -106,10 +135,13 @@
     $("#startingTimepoint").on("change", () => {
         giveDateObject("#startingDate", "#startingTimepoint", "#startingTimepoint_obj");
         document.getElementById("startingTimepoint_obj").dispatchEvent(new Event('input'));
+        document.getElementById("startingTimepoint").dispatchEvent(new Event('input'));
     });
     $("#endingTimepoint").on("change", () => {
         giveDateObject("#endingDate", "#endingTimepoint", "#endingTimepoint_obj");
         document.getElementById("endingTimepoint_obj").dispatchEvent(new Event('input'));
+        document.getElementById("endingTimepoint").dispatchEvent(new Event('input'));
+        // console.log('endingTimepoint on change');
     });
     $("#desiredDuration").on("change", () => {
         document.getElementById("desiredDuration").dispatchEvent(new Event('input'));
@@ -118,6 +150,15 @@
     $("#targetDate").on("change", () => {
         copyDate("#targetDate", "#startingDate");
         copyDate("#targetDate", "#endingDate");
+        giveDateObject("#startingDate", "#startingTimepoint", "#startingTimepoint_obj");
+        giveDateObject("#endingDate", "#endingTimepoint", "#endingTimepoint_obj");
+    });
+
+    $("#startingDate").on("change", () => {
+        giveDateObject("#startingDate", "#startingTimepoint", "#startingTimepoint_obj");
+    });
+    $("#endingDate").on("change", () => {
+        giveDateObject("#endingDate", "#endingTimepoint", "#endingTimepoint_obj");
     });
 
     function giveDateObject(dateInput, input, output) {
