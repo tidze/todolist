@@ -24,24 +24,30 @@
         <p>targetTaskIdEdit <span class="underline">Not</span> empty</p>
     @endempty
     <br>
-    <input type="date" id="targetDate">
+    <div id="targetDateContainer">
+        <input type="date" id="targetDate">
+    </div>
     <label for="targetDate">targetDate</label>
     <form wire:submit.prevent="storeOrUpdate({{ (str_contains($detector,9))? $_99:$_88 }})">
         @csrf
         <div>
-            <input id="startingDate" type="date" class="">
+            <div id="startingDateContainer" class="inline-block border-2 border-sky-500" >
+                <input id="startingDate" type="date" class="">
+            </div>
             <input id="startingTimepoint" wire:model.defer="startingTimepoint" class="time startingTimepoint bg-black text-white text-center w-40" type="text" value="" />
             <label for="startingTimepoint">startingTimepoint</label>
             {{-- <label for="startingTimepoint">d</label> --}}
             <input id="startingTimepoint_obj" wire:model.defer="startingTimepoint_obj" name="startingTimepoint_obj" class="bg-black text-white text-center w-52 p-0 text-[10px]"
-                type="text" value="" />
+            type="text" value="" />
             @error('startingTimepoint_obj')
-                <span class="text-red-500 text-[9px]">{{ $message }}</span>
+            <span class="text-red-500 text-[9px]">{{ $message }}</span>
             @enderror
         </div>
 
         <div>
-            <input id="endingDate" type="date" class="">
+            <div id="endingDateContainer" class="inline-block border-2 border-sky-500" >
+                <input id="endingDate" type="date" class="">
+            </div>
             <input id="endingTimepoint" wire:model.defer="endingTimepoint" class="time endingTimepoint bg-black text-white text-center w-40" type="text"
                 value={{ $endingTimepoint }} onchange="" />
             <label for="endingTimepoint">endingTimepoint</label>
@@ -71,7 +77,7 @@
                 value=@if (empty($desiredDuration)) 0 @else @php print('\''.$desiredDuration.'\'') @endphp @endif
                 class="inline-block w-full h-2 bg-gray-700 p-1 rounded-lg appearance-none cursor-pointer range-lg" oninput="rangeValue.innerText = this.value">
         </div>
-        @error('desiredDuration')
+        @error('desiredDuration')   
             <span class="text-red-500 text-[9px]">{{ $message }}</span>
         @enderror
         <div>
@@ -172,9 +178,32 @@
     $("#startingDate").on("change", () => {
         giveDateObject("#startingDate", "#startingTimepoint", "#startingTimepoint_obj");
     });
+
     $("#endingDate").on("change", () => {
         giveDateObject("#endingDate", "#endingTimepoint", "#endingTimepoint_obj");
     });
+
+    // for all input[date], to be selectable with just clicking anywhere on input. (not just date picker icon)
+    $("#startingDateContainer").on("click", () => {
+        document.querySelector("#startingDate").showPicker();
+    });
+    $("#endingDateContainer").on("click", () => {
+        document.querySelector("#endingDate").showPicker();
+    });
+    $("#targetDateContainer").on("click", () => {
+        document.querySelector("#targetDate").showPicker();
+    });
+
+    // const _dateOverlay = document.getElementsByClassName("_dateOverlay");
+    //     const dateInput = document.querySelector("input");
+
+    //     _dateOverlay.addEventListener("click", () => {
+    //         try {
+    //             dateInput.showPicker();
+    //         } catch (error) {
+    //             console.log('_dateOverlay is not working.');
+    //         }
+    //     });
 
     function giveDateObject(dateInput, input, output) {
         input = String(input);

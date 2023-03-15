@@ -15,7 +15,7 @@
                     <th scope="col" class="px-1 py-0">
                         C.description
                     </th>
-                    <th scope="col" class="px-1 py-0">
+                    <th scope="col" class="px-1 py-0">tr
                         duration
                     </th>
                     <th scope="col" class="px-1 py-0">
@@ -29,12 +29,8 @@
             <tbody>
 
                 @foreach ($allTasks as $task)
-                    {{-- @isset($sendBackId) --}}
-
-                    {{-- @endisset --}}
-
                     <tr
-                    @if ($task->id == $sendBackId) @class(['box-border','border','border-indigo-500','bg-gray-900','text-indigo-500'])  @endif
+                    @if ($task->id == $sendBackId) @class(['box-border','border','border-indigo-500','bg-gray-900','text-indigo-500']) @endif
                     class="box-border border-b bg-gray-900 border-gray-700 border text-teal-600">
                         <td scope="row" class="box-border hover:box-content px-2 py-1 font-medium whitespace-nowrap text-white">
                             {{ $task->id }}

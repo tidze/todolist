@@ -20,6 +20,7 @@ class Task extends Component
     public $startingDatepoint;
     public $endingDatepoint;
     public $targetTaskIdEdit;
+    // detector for whether it should be update or store fucntion (any parameter that contains 9, store has been choosen)
     public $detector;
     public $_88 = 88;
     public $_99 = 99;
@@ -123,6 +124,7 @@ class Task extends Component
         $this->startingTimepoint = '00:00';
         $this->endingTimepoint = '00:00';
         $this->targetTaskIdEdit = '';
+        $this->emitTo('tasks-table', 'sendBackId', $this->targetTaskIdEdit);
         $this->resetErrorBag();
     }
 

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        input::-webkit-datetime-edit-day-field:focus,
+        input::-webkit-datetime-edit-month-field:focus,
+        input::-webkit-datetime-edit-year-field:focus {
+            background-color: red;
+            color: white;
+            outline: none;
+        }
+
+        input[type="date"]::-webkit-inner-spin-button,
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            display: none;
+            -webkit-appearance: none;
+        }
+    </style>
+</head>
+
+<body>
+    <button>Show the date picker</button>
+    <div style="border:2px solid royalblue;position: relative;width:200px;height:200px; display: inline-block;">
+        <input type="date" style="position: absolute;width: 100%;height:100%;">
+    </div>
+
+    <script>
+        console.clear();
+        const _dateOverlay = document.getElementById("div");
+        const dateInput = document.querySelector("input");
+
+        _dateOverlay.addEventListener("click", () => {
+            try {
+                dateInput.showPicker();
+                // A date picker is shown.
+            } catch (error) {
+                // Use external library when this fails.
+            }
+        });
+    </script>
+</body>
+
+</html>
