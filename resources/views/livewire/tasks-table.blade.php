@@ -15,7 +15,7 @@
                     <th scope="col" class="px-1 py-0">
                         C.description
                     </th>
-                    <th scope="col" class="px-1 py-0">tr
+                    <th scope="col" class="px-1 py-0">
                         duration
                     </th>
                     <th scope="col" class="px-1 py-0">

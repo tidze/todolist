@@ -60,11 +60,11 @@ class Task extends Component
         $this->taskCategory = $task->category;
         $this->taskDescription = $task->description;
         $this->desiredDuration = $task->desired_duration;
-        $this->startingTimepoint_obj = $task->starting_time;
-        $this->endingTimepoint_obj = $task->ending_time;
-        // this patch is temporary untill i find a better solution. (what if the time zone is in a different format?)
-        $this->startingTimepoint =  substr($task->starting_time, 16, 5);
-        $this->endingTimepoint = substr($task->ending_time, 16, 5);
+        // turn it into each time zone , this fix is temporary
+        $this->startingTimepoint_obj = $task->starting_time * 1000;
+        $this->endingTimepoint_obj = $task->ending_time * 1000;
+        $this->startingTimepoint =  date("H:i", $task->starting_time+12600);
+        $this->endingTimepoint = date("H:i", $task->ending_time+12600);
         // send back the targetTaskIdEdit to tasks-table
         $this->emitTo('tasks-table', 'sendBackId', $this->targetTaskIdEdit);
     }
@@ -147,8 +147,9 @@ class Task extends Component
         $retrievedCategory = Task::checkForExistingCategory($category, $description);
         $taskModel->category_id = $retrievedCategory->id;
         $taskModel->desired_duration = $this->desiredDuration;
-        $taskModel->starting_time = $this->startingTimepoint_obj;
-        $taskModel->ending_time = $this->endingTimepoint_obj;
+        // The UnixEpoch in js is in miliseconds, while php is in seconds.
+        $taskModel->starting_time = substr($this->startingTimepoint_obj, 0, 10);
+        $taskModel->ending_time = substr($this->endingTimepoint_obj, 0, 10);
         $taskModel->save();
     }
 
@@ -159,8 +160,8 @@ class Task extends Component
             ->update([
                 'category_id' => $retrievedCategory->id,
                 'desired_duration' => $this->desiredDuration,
-                'starting_time' => $this->startingTimepoint_obj,
-                'ending_time' => $this->endingTimepoint_obj,
+                'starting_time' => substr($this->startingTimepoint_obj, 0, 10),
+                'ending_time' => substr($this->endingTimepoint_obj, 0, 10),
             ]);
         $this->emitTo('tasks-table', '$refresh');
         $this->taskCategory = '';

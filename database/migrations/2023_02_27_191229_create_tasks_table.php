@@ -14,10 +14,11 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
+            // $table->foreignId('user_id')->references('id')->on('users');
             $table->foreignId('category_id')->references('id')->on('categories');
-            $table->string('desired_duration');
-            $table->string('starting_time');
-            $table->string('ending_time');
+            $table->integer('desired_duration')->comment("Minutes");
+            $table->integer('starting_time')->comment('Unix Epoch Time');
+            $table->integer('ending_time')->comment('Unix Epoch Time');
             // $table->string('timezone')->nullable();
         });
     }

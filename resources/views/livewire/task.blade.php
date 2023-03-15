@@ -11,8 +11,15 @@
         {{ $detector }}<br>
         {{ $_88 }}<br>
         {{ $_99 }}<br>
+        {{ date_default_timezone_get() }}<br>
+        {{ date_default_timezone_set('Asia/Tehran') }}<br>
+        {{ date_default_timezone_get() }}<br>
+        {{-- {{ Asia/Tehran }}<br> --}}
+        {{-- {{ date_timezone_get() }}<br> --}}
+        {{-- {{ gettime }}<br> --}}
     </p>
-    <input type="text" id="targetTaskIdEdit" name="targetTaskIdEdit" wire:model.defer="targetTaskIdEdit" class="w-32 border-2 border-indigo-500" value="{{ $targetTaskIdEdit }}" readonly>
+    <input type="text" id="targetTaskIdEdit" name="targetTaskIdEdit" wire:model.defer="targetTaskIdEdit" class="w-32 border-2 border-indigo-500" value="{{ $targetTaskIdEdit }}"
+        readonly>
     <label for="targetTaskIdEdit">targetTaskId</label>
     @error('targetTaskIdEdit')
         <span class="text-red-500 text-[9px]">{{ $message }}</span>
@@ -28,24 +35,24 @@
         <input type="date" id="targetDate">
     </div>
     <label for="targetDate">targetDate</label>
-    <form wire:submit.prevent="storeOrUpdate({{ (str_contains($detector,9))? $_99:$_88 }})">
+    <form wire:submit.prevent="storeOrUpdate({{ str_contains($detector, 9) ? $_99 : $_88 }})">
         @csrf
         <div>
-            <div id="startingDateContainer" class="inline-block border-2 border-sky-500" >
+            <div id="startingDateContainer" class="inline-block border-2 border-sky-500">
                 <input id="startingDate" type="date" class="">
             </div>
             <input id="startingTimepoint" wire:model.defer="startingTimepoint" class="time startingTimepoint bg-black text-white text-center w-40" type="text" value="" />
             <label for="startingTimepoint">startingTimepoint</label>
             {{-- <label for="startingTimepoint">d</label> --}}
             <input id="startingTimepoint_obj" wire:model.defer="startingTimepoint_obj" name="startingTimepoint_obj" class="bg-black text-white text-center w-52 p-0 text-[10px]"
-            type="text" value="" />
+                type="number" value="" />
             @error('startingTimepoint_obj')
-            <span class="text-red-500 text-[9px]">{{ $message }}</span>
+                <span class="text-red-500 text-[9px]">{{ $message }}</span>
             @enderror
         </div>
 
         <div>
-            <div id="endingDateContainer" class="inline-block border-2 border-sky-500" >
+            <div id="endingDateContainer" class="inline-block border-2 border-sky-500">
                 <input id="endingDate" type="date" class="">
             </div>
             <input id="endingTimepoint" wire:model.defer="endingTimepoint" class="time endingTimepoint bg-black text-white text-center w-40" type="text"
@@ -77,7 +84,7 @@
                 value=@if (empty($desiredDuration)) 0 @else @php print('\''.$desiredDuration.'\'') @endphp @endif
                 class="inline-block w-full h-2 bg-gray-700 p-1 rounded-lg appearance-none cursor-pointer range-lg" oninput="rangeValue.innerText = this.value">
         </div>
-        @error('desiredDuration')   
+        @error('desiredDuration')
             <span class="text-red-500 text-[9px]">{{ $message }}</span>
         @enderror
         <div>
@@ -116,6 +123,11 @@
 <script type="text/javascript" src="{{ asset('js/jquery-clock-timepicker.min.js') }}"></script>
 
 <script>
+    const date1 = new Date();
+    // const date2 = new Date('August 19, 1975 23:15:30 GMT-02:00');
+
+    console.log("date1.getTimezoneOffset() " + date1.getTimezoneOffset());
+
     Livewire.hook('component.initialized', (component) => {
         $('.startingTimepoint').clockTimePicker({
             autosize: true,
@@ -140,7 +152,6 @@
             fonts: {
                 fontFamily: 'Rubik'
             }
-
         });
         $('.endingTimepoint').clockTimePicker({
             fonts: {
@@ -225,16 +236,15 @@
         let minutes = $(input).val().replace(':', '').slice(2, 4);
         date.setHours(hours);
         date.setMinutes(minutes);
-        // date.toJSON();
-        $(output).val(date);
+        $(output).val(date.getTime());
         // document.getElementById(output).value = date;
         setFullDuration();
     }
 
     function setFullDuration() {
         console.log("setFullDuration");
-        let startingTimePoint = new Date(document.getElementById("startingTimepoint_obj").value);
-        let endingTimePoint = new Date(document.getElementById("endingTimepoint_obj").value);
+        let startingTimePoint = document.getElementById("startingTimepoint_obj").value;
+        let endingTimePoint = document.getElementById("endingTimepoint_obj").value;
         let difference = Math.abs(startingTimePoint - endingTimePoint);
         document.getElementById("fullDuration_obj").value = msToTime(difference);
         document.getElementById("desiredDuration").max = msToMin(difference);
