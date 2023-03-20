@@ -3,17 +3,20 @@
         {{ $taskCategory }}<br>
         {{ $taskDescription }}<br>
         {{ $desiredDuration }}<br>
-        {{ $startingTimepoint_obj }}<br>
-        {{ $endingTimepoint_obj }}<br>
+        {{ $startingTimepoint_unix }}<br>
+        {{ $endingTimepoint_unix }}<br>
         {{ $startingTimepoint }}<br>
         {{ $endingTimepoint }}<br>
+        {{ 'startingDatepoint ' . ($startingDatepoint ?? 'Not set') }}<br>
+        {{ 'endingDatepoint ' . ($endingDatepoint ?? 'Not set') }}<br>
         {{ $targetTaskIdEdit }}<br>
         {{ $detector }}<br>
         {{ $_88 }}<br>
         {{ $_99 }}<br>
         {{ date_default_timezone_get() }}<br>
-        {{ date_default_timezone_set('Asia/Tehran') }}<br>
-        {{ date_default_timezone_get() }}<br>
+        {{ print_r($timezone) }}<br>
+        {{-- {{ date_default_timezone_set('Asia/Tehran') }}<br> --}}
+        {{-- {{ date_default_timezone_get() }}<br> --}}
         {{-- {{ Asia/Tehran }}<br> --}}
         {{-- {{ date_timezone_get() }}<br> --}}
         {{-- {{ gettime }}<br> --}}
@@ -32,41 +35,45 @@
     @endempty
     <br>
     <div id="targetDateContainer">
-        <input type="date" id="targetDate">
+        <input type="date" id="targetDate" value="{{ $startingDatepoint }}">
+        <label for="targetDate" class="text-teal-600">targetDate</label>
     </div>
-    <label for="targetDate">targetDate</label>
     <form wire:submit.prevent="storeOrUpdate({{ str_contains($detector, 9) ? $_99 : $_88 }})">
         @csrf
+        {{-- startingTimepoint Component --}}
         <div>
             <div id="startingDateContainer" class="inline-block border-2 border-sky-500">
-                <input id="startingDate" type="date" class="">
+                <input id="startingDate" type="date" class="" value="{{ $startingDatepoint }}">
             </div>
-            <input id="startingTimepoint" wire:model.defer="startingTimepoint" class="time startingTimepoint bg-black text-white text-center w-40" type="text" value="" />
-            <label for="startingTimepoint">startingTimepoint</label>
+            <input id="startingTimepoint" wire:model.defer="startingTimepoint" class="time startingTimepoint bg-black text-white text-center w-40" type="text"  />
+            <label for="startingTimepoint" class="text-teal-600">startingTimepoint</label>
             {{-- <label for="startingTimepoint">d</label> --}}
-            <input id="startingTimepoint_obj" wire:model.defer="startingTimepoint_obj" name="startingTimepoint_obj" class="bg-black text-white text-center w-52 p-0 text-[10px]"
+            <input id="startingTimepoint_unix" wire:model.defer="startingTimepoint_unix" name="startingTimepoint_unix" class="bg-black text-white text-center w-52 p-0 text-[10px]"
                 type="number" value="" />
-            @error('startingTimepoint_obj')
+            <lable for="startingTimepoint_unix">startingTimepoint_unix</lable>
+            @error('startingTimepoint_unix')
                 <span class="text-red-500 text-[9px]">{{ $message }}</span>
             @enderror
         </div>
 
+        {{-- endingTimepoint Component --}}
         <div>
             <div id="endingDateContainer" class="inline-block border-2 border-sky-500">
-                <input id="endingDate" type="date" class="">
+                <input id="endingDate" type="date" class="" value="{{ $endingDatepoint }}">
             </div>
             <input id="endingTimepoint" wire:model.defer="endingTimepoint" class="time endingTimepoint bg-black text-white text-center w-40" type="text"
                 value={{ $endingTimepoint }} onchange="" />
-            <label for="endingTimepoint">endingTimepoint</label>
-            <input name="endingTimepoint_obj" wire:model.defer="endingTimepoint_obj" id="endingTimepoint_obj" class="bg-black text-white text-center w-52 p-0 text-[10px]"
+            <label for="endingTimepoint" class="text-teal-600">endingTimepoint</label>
+            <input name="endingTimepoint_unix" wire:model.defer="endingTimepoint_unix" id="endingTimepoint_unix" class="bg-black text-white text-center w-52 p-0 text-[10px]"
                 type="text" value="0" />
-            @error('endingTimepoint_obj')
+            <lable for="startingTimepoint_unix">startingTimepoint_unix</lable>
+            @error('endingTimepoint_unix')
                 <span class="text-red-500 text-[9px]">{{ $message }}</span>
             @enderror
         </div>
         <div>
             <input id="fullDuration_obj" wire:model="fullDuration_obj" class="bg-black text-white text-center w-64 p-0 text-[10px]" type="text" value="sdf" />
-            <label for="fullDuration">fullDuration</label>
+            <label for="fullDuration" class="text-teal-600">fullDuration</label>
         </div>
         <div class="inline-block w-52 py-5 mr-9 relative">
             <div class="absolute flex left-full mx-2">
@@ -84,6 +91,7 @@
                 value=@if (empty($desiredDuration)) 0 @else @php print('\''.$desiredDuration.'\'') @endphp @endif
                 class="inline-block w-full h-2 bg-gray-700 p-1 rounded-lg appearance-none cursor-pointer range-lg" oninput="rangeValue.innerText = this.value">
         </div>
+        <lable for="desiredDuration">desiredDuration</lable>
         @error('desiredDuration')
             <span class="text-red-500 text-[9px]">{{ $message }}</span>
         @enderror
@@ -119,178 +127,164 @@
     </form>
 </div>
 
-<script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
-<script type="text/javascript" src="{{ asset('js/jquery-clock-timepicker.min.js') }}"></script>
+@push('script')
+    <script>
+        console.log('Task Script Loaded.')
+        const date1 = new Date();
 
-<script>
-    const date1 = new Date();
-    // const date2 = new Date('August 19, 1975 23:15:30 GMT-02:00');
-
-    console.log("date1.getTimezoneOffset() " + date1.getTimezoneOffset());
-
-    Livewire.hook('component.initialized', (component) => {
-        $('.startingTimepoint').clockTimePicker({
-            autosize: true,
-            fonts: {
-                fontFamily: 'Rubik'
-            }
+        Livewire.hook('component.initialized', (component) => {
+            $('.startingTimepoint').clockTimePicker({
+                autosize: true,
+                fonts: {
+                    fontFamily: 'Rubik'
+                }
+            });
+            $('.endingTimepoint').clockTimePicker({
+                fonts: {
+                    fontFamily: 'Rubik'
+                }
+            });
+            setDateForToday("#targetDate");
+            copyDate("#targetDate", "#startingDate");
+            copyDate("#targetDate", "#endingDate");
+            // console.log('component.initialized');
         });
-        $('.endingTimepoint').clockTimePicker({
-            fonts: {
-                fontFamily: 'Rubik'
-            }
+
+        Livewire.hook('element.updated', (el, component) => {
+            $('.startingTimepoint').clockTimePicker({
+                autosize: true,
+                fonts: {
+                    fontFamily: 'Rubik'
+                }
+            });
+            $('.endingTimepoint').clockTimePicker({
+                fonts: {
+                    fontFamily: 'Rubik'
+                }
+            });
         });
-        setDateForToday("#targetDate");
-        copyDate("#targetDate", "#startingDate");
-        copyDate("#targetDate", "#endingDate");
-        // console.log('component.initialized');
-    });
-
-    Livewire.hook('element.updated', (el, component) => {
-        $('.startingTimepoint').clockTimePicker({
-            autosize: true,
-            fonts: {
-                fontFamily: 'Rubik'
-            }
+        // input range wasn't working in chrome so I added this part
+        document.querySelectorAll('input[type="range"]').forEach((input) => {
+            input.addEventListener('mousedown', () => window.getSelection().removeAllRanges());
         });
-        $('.endingTimepoint').clockTimePicker({
-            fonts: {
-                fontFamily: 'Rubik'
-            }
+
+        $("#startingTimepoint").on("change", () => {
+            giveDateObject("#startingDate", "#startingTimepoint", "#startingTimepoint_unix");
+            document.getElementById("startingTimepoint_unix").dispatchEvent(new Event('input'));
+            document.getElementById("startingTimepoint").dispatchEvent(new Event('input'));
         });
-    });
-    // input range wasn't working in chrome so I added this part
-    document.querySelectorAll('input[type="range"]').forEach((input) => {
-        input.addEventListener('mousedown', () => window.getSelection().removeAllRanges());
-    });
+        $("#endingTimepoint").on("change", () => {
+            giveDateObject("#endingDate", "#endingTimepoint", "#endingTimepoint_unix");
+            document.getElementById("endingTimepoint_unix").dispatchEvent(new Event('input'));
+            document.getElementById("endingTimepoint").dispatchEvent(new Event('input'));
+            // console.log('endingTimepoint on change');
+        });
+        $("#desiredDuration").on("change", () => {
+            document.getElementById("desiredDuration").dispatchEvent(new Event('input'));
+        });
 
-    $("#startingTimepoint").on("change", () => {
-        giveDateObject("#startingDate", "#startingTimepoint", "#startingTimepoint_obj");
-        document.getElementById("startingTimepoint_obj").dispatchEvent(new Event('input'));
-        document.getElementById("startingTimepoint").dispatchEvent(new Event('input'));
-    });
-    $("#endingTimepoint").on("change", () => {
-        giveDateObject("#endingDate", "#endingTimepoint", "#endingTimepoint_obj");
-        document.getElementById("endingTimepoint_obj").dispatchEvent(new Event('input'));
-        document.getElementById("endingTimepoint").dispatchEvent(new Event('input'));
-        // console.log('endingTimepoint on change');
-    });
-    $("#desiredDuration").on("change", () => {
-        document.getElementById("desiredDuration").dispatchEvent(new Event('input'));
-    });
+        $("#targetDate").on("change", () => {
+            copyDate("#targetDate", "#startingDate");
+            copyDate("#targetDate", "#endingDate");
+            giveDateObject("#startingDate", "#startingTimepoint", "#startingTimepoint_unix");
+            giveDateObject("#endingDate", "#endingTimepoint", "#endingTimepoint_unix");
+        });
 
-    $("#targetDate").on("change", () => {
-        copyDate("#targetDate", "#startingDate");
-        copyDate("#targetDate", "#endingDate");
-        giveDateObject("#startingDate", "#startingTimepoint", "#startingTimepoint_obj");
-        giveDateObject("#endingDate", "#endingTimepoint", "#endingTimepoint_obj");
-    });
+        $("#startingDate").on("change", () => {
+            giveDateObject("#startingDate", "#startingTimepoint", "#startingTimepoint_unix");
+        });
 
-    $("#startingDate").on("change", () => {
-        giveDateObject("#startingDate", "#startingTimepoint", "#startingTimepoint_obj");
-    });
+        $("#endingDate").on("change", () => {
+            giveDateObject("#endingDate", "#endingTimepoint", "#endingTimepoint_unix");
+        });
 
-    $("#endingDate").on("change", () => {
-        giveDateObject("#endingDate", "#endingTimepoint", "#endingTimepoint_obj");
-    });
+        // for all input[date], to be selectable with just clicking anywhere on input. (not just date picker icon)
+        $("#startingDateContainer").on("click", () => {
+            document.querySelector("#startingDate").showPicker();
+        });
+        $("#endingDateContainer").on("click", () => {
+            document.querySelector("#endingDate").showPicker();
+        });
+        $("#targetDateContainer").on("click", () => {
+            document.querySelector("#targetDate").showPicker();
+        });
 
-    // for all input[date], to be selectable with just clicking anywhere on input. (not just date picker icon)
-    $("#startingDateContainer").on("click", () => {
-        document.querySelector("#startingDate").showPicker();
-    });
-    $("#endingDateContainer").on("click", () => {
-        document.querySelector("#endingDate").showPicker();
-    });
-    $("#targetDateContainer").on("click", () => {
-        document.querySelector("#targetDate").showPicker();
-    });
+        function giveDateObject(dateInput, input, output) {
+            input = String(input);
+            output = String(output);
 
-    // const _dateOverlay = document.getElementsByClassName("_dateOverlay");
-    //     const dateInput = document.querySelector("input");
+            // getting the day, month, year from targetDate input and creating a date
+            let purifiedDate = $(dateInput).val().replaceAll('-', '');
+            let year = purifiedDate.slice(0, 4);
 
-    //     _dateOverlay.addEventListener("click", () => {
-    //         try {
-    //             dateInput.showPicker();
-    //         } catch (error) {
-    //             console.log('_dateOverlay is not working.');
-    //         }
-    //     });
+            // and do not forget that js month is starting from '0'
+            let month = purifiedDate.slice(4, 6) - 1;
+            let day = purifiedDate.slice(6, 8);
+            let date = new Date(year, month, day);
 
-    function giveDateObject(dateInput, input, output) {
-        input = String(input);
-        output = String(output);
+            // I did not want any milisecond in parameter
+            date.setSeconds(0);
 
-        // getting the day, month, year from targetDate input and creating a date
-        let purifiedDate = $(dateInput).val().replaceAll('-', '');
-        let year = purifiedDate.slice(0, 4);
+            let hours = $(input).val().replace(':', '').slice(0, 2);
+            let minutes = $(input).val().replace(':', '').slice(2, 4);
+            date.setHours(hours);
+            date.setMinutes(minutes);
+            $(output).val(date.getTime());
+            // document.getElementById(output).value = date;
+            setFullDuration();
+        }
 
-        // and do not forget that js month is starting from '0'
-        let month = purifiedDate.slice(4, 6) - 1;
-        let day = purifiedDate.slice(6, 8);
-        let date = new Date(year, month, day);
+        function setFullDuration() {
+            // console.log("setFullDuration");
+            let startingTimePoint = document.getElementById("startingTimepoint_unix").value;
+            let endingTimePoint = document.getElementById("endingTimepoint_unix").value;
+            let difference = Math.abs(startingTimePoint - endingTimePoint);
+            document.getElementById("fullDuration_obj").value = msToTime(difference);
+            document.getElementById("desiredDuration").max = msToMin(difference);
+            document.getElementById("desiredDuration").value = msToMin(difference);
+            document.getElementById("desiredDuration").dispatchEvent(new Event('input'));
+            document.getElementById("rangeValue").innerText = msToMin(difference);
 
-        // I did not want any milisecond in parameter
-        date.setSeconds(0);
+        }
 
-        let hours = $(input).val().replace(':', '').slice(0, 2);
-        let minutes = $(input).val().replace(':', '').slice(2, 4);
-        date.setHours(hours);
-        date.setMinutes(minutes);
-        $(output).val(date.getTime());
-        // document.getElementById(output).value = date;
-        setFullDuration();
-    }
+        function msToMin(duration) {
+            return Math.floor(duration / (1000 * 60));
+            // return Math.ceil(duration / (1000 * 60));
+        }
 
-    function setFullDuration() {
-        console.log("setFullDuration");
-        let startingTimePoint = document.getElementById("startingTimepoint_obj").value;
-        let endingTimePoint = document.getElementById("endingTimepoint_obj").value;
-        let difference = Math.abs(startingTimePoint - endingTimePoint);
-        document.getElementById("fullDuration_obj").value = msToTime(difference);
-        document.getElementById("desiredDuration").max = msToMin(difference);
-        document.getElementById("desiredDuration").value = msToMin(difference);
-        document.getElementById("desiredDuration").dispatchEvent(new Event('input'));
-        document.getElementById("rangeValue").innerText = msToMin(difference);
+        function msToTime(duration) {
+            var milliseconds = parseInt((duration % 1000) / 100),
+                seconds = Math.floor((duration / 1000) % 60),
+                minutes = Math.floor((duration / (1000 * 60)) % 60),
+                hours = Math.floor((duration / (1000 * 60 * 60)) % 24),
+                day = Math.floor(duration / (1000 * 60 * 60 * 24)),
+                hours = hours < 10 ? "0" + hours : hours;
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
 
-    }
+            return day + " " + hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+            // return day + " " + hours + ":" + minutes + ":" + seconds;
+        }
 
-    function msToMin(duration) {
-        return Math.floor(duration / (1000 * 60));
-        // return Math.ceil(duration / (1000 * 60));
-    }
+        function dateSeperator() {
+            // a purified date is a date that has no '-', '/', or any other uselesh shit
+            let purifiedDate = $("#date").val().replaceAll('-', '');
+            let year = purifiedDate.slice(0, 4);
+            let month = purifiedDate.slice(4, 6);
+            let day = purifiedDate.slice(6, 8);
+            // console.log(day, month, year);
+        }
 
-    function msToTime(duration) {
-        var milliseconds = parseInt((duration % 1000) / 100),
-            seconds = Math.floor((duration / 1000) % 60),
-            minutes = Math.floor((duration / (1000 * 60)) % 60),
-            hours = Math.floor((duration / (1000 * 60 * 60)) % 24),
-            day = Math.floor(duration / (1000 * 60 * 60 * 24)),
-            hours = hours < 10 ? "0" + hours : hours;
-        minutes = minutes < 10 ? "0" + minutes : minutes;
-        seconds = seconds < 10 ? "0" + seconds : seconds;
+        function setDateForToday(targetInput) {
+            let newDate = new Date();
+            let day = ("0" + newDate.getDate()).slice(-2);
+            let month = ("0" + (newDate.getMonth() + 1)).slice(-2);
+            let year = newDate.getFullYear();
+            $(targetInput).val(year + '-' + month + '-' + day);
+        }
 
-        return day + " " + hours + ":" + minutes + ":" + seconds + "." + milliseconds;
-        // return day + " " + hours + ":" + minutes + ":" + seconds;
-    }
-
-    function dateSeperator() {
-        // a purified date is a date that has no '-', '/', or any other uselesh shit
-        let purifiedDate = $("#date").val().replaceAll('-', '');
-        let year = purifiedDate.slice(0, 4);
-        let month = purifiedDate.slice(4, 6);
-        let day = purifiedDate.slice(6, 8);
-        console.log(day, month, year);
-    }
-
-    function setDateForToday(targetInput) {
-        let newDate = new Date();
-        let day = ("0" + newDate.getDate()).slice(-2);
-        let month = ("0" + (newDate.getMonth() + 1)).slice(-2);
-        let year = newDate.getFullYear();
-        $(targetInput).val(year + '-' + month + '-' + day);
-    }
-
-    function copyDate(input, output) {
-        $(output).val($(input).val());
-    }
-</script>
+        function copyDate(input, output) {
+            $(output).val($(input).val());
+        }
+    </script>
+@endpush

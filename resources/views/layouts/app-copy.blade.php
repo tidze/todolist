@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Todolist</title>
+    <title>@yield("title","Todolist app-copy")</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
@@ -15,6 +15,8 @@
 </head>
 
 <body class="antialiased font-Rubik">
+    app-copy.blade.php
+    <br>
     @include('layouts.navbar')
     @yield('content')
     @livewireScripts

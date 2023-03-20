@@ -5,15 +5,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>@yield("title","TodolistMyAss")</title>
+    <title>@yield("title","Todolist app-main")</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
     @stack('style')
+    @stack('script-head')
 
 </head>
 
 <body class="antialiased font-Rubik">
+    app-main.blade.php
+    <br>
     @include('layouts.navbar')
 
     @yield('content')

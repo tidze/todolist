@@ -10,12 +10,12 @@ class TasksTable extends Component
     protected $listeners = ['$refresh','sendBackId'];
     public $sendBackId;
     // protected $listeners = ['refreshComponent' => '$refresh'];
-
+    protected $layout = null;
 
     public function render()
     {
         return view('livewire.tasks-table', [
-            'allTasks' => TaskModel::select('tasks.*', 'categories.category', 'categories.description')->join('categories', 'tasks.category_id', '=', 'categories.id')->get(),
+            'allTasks' => TaskModel::select('tasks.*', 'categories.category', 'categories.description')->join('categories', 'tasks.category_id', '=', 'categories.id')->orderBy('starting_time')->get(),
             'sendBackId' => $this->sendBackId
         ]);
     }

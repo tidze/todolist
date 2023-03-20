@@ -4,32 +4,34 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>Todolist</title>
+    <meta name="robots" content="noindex">
+    <title>@yield('title', 'Todolist app')</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @livewireStyles
-    @stack('jquery')
-    @stack('clock-timepicker')
-
+    @stack('script-head')
+    <script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/jquery-clock-timepicker.min.js') }}"></script>
 </head>
 
 <body class="antialiased font-Rubik">
-    @include('layouts.navbar')
-    @yield('content')
     @livewireScripts
-    @stack('script')
+    app.blade.php
+    <br>
+    {{-- @include('layouts.navbar') --}}
+
+
+    {{-- @yield('content') --}}
 
     @livewire('task')
+    @livewire('custom-chart')   
 
-    <br>
     {{-- all tasks from database into table format --}}
     @livewire('tasks-table')
 
     @include('layouts.footer')
-    <script>
-
-    </script>
+    @stack('script')
+    <script></script>
 </body>
 
 </html>
