@@ -20,11 +20,11 @@
     <br>
     {{-- @include('layouts.navbar') --}}
 
+    @livewire('custom-chart')
 
     {{-- @yield('content') --}}
 
     @livewire('task')
-    @livewire('custom-chart')   
 
     {{-- all tasks from database into table format --}}
     @livewire('tasks-table')

@@ -62,10 +62,10 @@
                             {{ $task->ending_time }}
                         </td>
                         <td class="px-2 py-0">
-                            {{ date('Y-M-d H:i', $task->starting_time + 12600) }}
+                            {{ date('Y-M(m)-d H:i', $task->starting_time + 12600) }}
                         </td>
                         <td class="px-2 py-0">
-                            {{ date('Y-M-d H:i', $task->ending_time + 12600) }}
+                            {{ date('Y-M(m)-d H:i', $task->ending_time + 12600) }}
                         </td>
                         <td class="px-2 py-0">
                             <form wire:submit.prevent="edit({{ $task->id }})">

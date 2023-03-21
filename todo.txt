@@ -2,6 +2,7 @@
 # Add Google Graph to the website for each task (at the end of the day what did you do? sum)
 # Add Dynamic Scroller Graph V2
 # Fix Jquery import only one main page
+# Bug ending clock time picker always switches to to hour when even when clicked on minute section but after edit changes
 # Fix targetDate onchange is not affecting timepoints
 # Make All the clocktime pickers component into only one component
 # Add timezone table to the database

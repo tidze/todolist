@@ -43,7 +43,7 @@
         {{-- startingTimepoint Component --}}
         <div>
             <div id="startingDateContainer" class="inline-block border-2 border-sky-500">
-                <input id="startingDate" type="date" class="" value="{{ $startingDatepoint }}">
+                <input wire:ignore  id="startingDate" type="date" class="" value="{{ $startingDatepoint }}">
             </div>
             <input id="startingTimepoint" wire:model.defer="startingTimepoint" class="time startingTimepoint bg-black text-white text-center w-40" type="text"  />
             <label for="startingTimepoint" class="text-teal-600">startingTimepoint</label>
@@ -59,7 +59,7 @@
         {{-- endingTimepoint Component --}}
         <div>
             <div id="endingDateContainer" class="inline-block border-2 border-sky-500">
-                <input id="endingDate" type="date" class="" value="{{ $endingDatepoint }}">
+                <input wire:ignore  id="endingDate" type="date" class="" value="{{ $endingDatepoint }}">
             </div>
             <input id="endingTimepoint" wire:model.defer="endingTimepoint" class="time endingTimepoint bg-black text-white text-center w-40" type="text"
                 value={{ $endingTimepoint }} onchange="" />
