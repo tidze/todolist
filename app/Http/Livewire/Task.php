@@ -21,7 +21,7 @@ class Task extends Component
     // when does your "task" starts and when does it ends?
     public $startingTimepoint;
     public $endingTimepoint;
-    // when does your "day" starts and when does it ends?
+    // when does your "day" starts and when does it ends? task history : today , yesterday or from 4 days ago till now
     public $startingDatepoint;
     public $endingDatepoint;
     public $targetTaskIdEdit;

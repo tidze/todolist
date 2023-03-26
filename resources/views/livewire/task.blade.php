@@ -1,29 +1,25 @@
 <div>
+    {{-- Components Debugger Information --}}
     <p class="text-amber-600 text-[8px]">
-        {{ $taskCategory }}<br>
-        {{ $taskDescription }}<br>
-        {{ $desiredDuration }}<br>
-        {{ $startingTimepoint_unix }}<br>
-        {{ $endingTimepoint_unix }}<br>
-        {{ $startingTimepoint }}<br>
-        {{ $endingTimepoint }}<br>
-        {{ 'startingDatepoint ' . ($startingDatepoint ?? 'Not set') }}<br>
-        {{ 'endingDatepoint ' . ($endingDatepoint ?? 'Not set') }}<br>
-        {{ $targetTaskIdEdit }}<br>
-        {{ $detector }}<br>
-        {{ $_88 }}<br>
-        {{ $_99 }}<br>
-        {{ date_default_timezone_get() }}<br>
-        {{ print_r($timezone) }}<br>
-        {{-- {{ date_default_timezone_set('Asia/Tehran') }}<br> --}}
-        {{-- {{ date_default_timezone_get() }}<br> --}}
-        {{-- {{ Asia/Tehran }}<br> --}}
-        {{-- {{ date_timezone_get() }}<br> --}}
-        {{-- {{ gettime }}<br> --}}
+        taskCategory= <span class='text-amber-100'>{{ ($taskCategory ?? 'Not Set') }}</span> <br>
+        taskDescription= <span class="text-amber-100">{{ $taskDescription ?? 'Not Set'}}</span><br>
+        desiredDuration= <span class="text-amber-100">{{ $desiredDuration ?? 'Not Set'}}</span><br>
+        startingTimepoint_unix= <span class="text-amber-100">{{ $startingTimepoint_unix ?? 'Not Set'}}</span><br>
+        endingTimepoint_unix= <span class="text-amber-100">{{ $endingTimepoint_unix ?? 'Not Set'}}</span><br>
+        startingTimepoint= <span class="text-amber-100">{{ $startingTimepoint ?? 'Not Set'}}</span><br>
+        endingTimepoint= <span class="text-amber-100">{{ $endingTimepoint ?? 'Not Set'}}</span><br>
+        startingDatepoint= <span class="text-amber-100">{{ $startingDatepoint ?? 'Not set'}}</span><br>
+        endingDatepoint= <span class="text-amber-100">{{ $endingDatepoint ?? 'Not set'}}</span><br>
+        targetTaskIdEdit= <span class="text-amber-100">{{ $targetTaskIdEdit??'Not set' }}</span><br>
+        detector= <span class="text-amber-100">'{{ $detector??'Not Set' }}</span><br>
+        _88= <span class="text-amber-100">{{ ($_88??'Not Set') }}</span><br>
+        _99= <span class="text-amber-100">{{ ($_99??'Not Set') }}</span><br>
+        date_default_timezone_get=<span class="text-amber-100">{{ date_default_timezone_get() }}</span><br>
+        timezone= <span class="text-amber-100">{{ ($timezone??'Not Set')}}</span><br>
     </p>
-    <input type="text" id="targetTaskIdEdit" name="targetTaskIdEdit" wire:model.defer="targetTaskIdEdit" class="w-32 border-2 border-indigo-500" value="{{ $targetTaskIdEdit }}"
+    <input type="hidden" id="targetTaskIdEdit" name="targetTaskIdEdit" wire:model.defer="targetTaskIdEdit" class="w-32 border-2 border-indigo-500" value="{{ $targetTaskIdEdit }}"
         readonly>
-    <label for="targetTaskIdEdit">targetTaskId</label>
+    {{-- <label for="targetTaskIdEdit">targetTaskId</label>
     @error('targetTaskIdEdit')
         <span class="text-red-500 text-[9px]">{{ $message }}</span>
     @enderror
@@ -33,7 +29,7 @@
     @else
         <p>targetTaskIdEdit <span class="underline">Not</span> empty</p>
     @endempty
-    <br>
+    <br> --}}
     <div id="targetDateContainer">
         <input type="date" id="targetDate" value="{{ $startingDatepoint }}">
         <label for="targetDate" class="text-teal-600">targetDate</label>
@@ -43,33 +39,33 @@
         {{-- startingTimepoint Component --}}
         <div>
             <div id="startingDateContainer" class="inline-block border-2 border-sky-500">
-                <input wire:ignore  id="startingDate" type="date" class="" value="{{ $startingDatepoint }}">
+                <input {{-- wire:ignore --}} id="startingDate" type="date" class="" value="{{ $startingDatepoint }}">
             </div>
-            <input id="startingTimepoint" wire:model.defer="startingTimepoint" class="time startingTimepoint bg-black text-white text-center w-40" type="text"  />
+            <input id="startingTimepoint" wire:model.defer="startingTimepoint" class="time startingTimepoint bg-black text-white text-center w-40" type="text" />
             <label for="startingTimepoint" class="text-teal-600">startingTimepoint</label>
             {{-- <label for="startingTimepoint">d</label> --}}
             <input id="startingTimepoint_unix" wire:model.defer="startingTimepoint_unix" name="startingTimepoint_unix" class="bg-black text-white text-center w-52 p-0 text-[10px]"
-                type="number" value="" />
-            <lable for="startingTimepoint_unix">startingTimepoint_unix</lable>
+                type="hidden" value="" />
+            {{-- <lable for="startingTimepoint_unix">startingTimepoint_unix</lable>
             @error('startingTimepoint_unix')
                 <span class="text-red-500 text-[9px]">{{ $message }}</span>
-            @enderror
+            @enderror --}}
         </div>
 
         {{-- endingTimepoint Component --}}
         <div>
             <div id="endingDateContainer" class="inline-block border-2 border-sky-500">
-                <input wire:ignore  id="endingDate" type="date" class="" value="{{ $endingDatepoint }}">
+                <input {{-- wire:ignore --}} id="endingDate" type="date" class="" value="{{ $endingDatepoint }}">
             </div>
             <input id="endingTimepoint" wire:model.defer="endingTimepoint" class="time endingTimepoint bg-black text-white text-center w-40" type="text"
                 value={{ $endingTimepoint }} onchange="" />
             <label for="endingTimepoint" class="text-teal-600">endingTimepoint</label>
             <input name="endingTimepoint_unix" wire:model.defer="endingTimepoint_unix" id="endingTimepoint_unix" class="bg-black text-white text-center w-52 p-0 text-[10px]"
-                type="text" value="0" />
-            <lable for="startingTimepoint_unix">startingTimepoint_unix</lable>
+                type="hidden" value="0" />
+            {{-- <lable for="startingTimepoint_unix">startingTimepoint_unix</lable>
             @error('endingTimepoint_unix')
                 <span class="text-red-500 text-[9px]">{{ $message }}</span>
-            @enderror
+            @enderror --}}
         </div>
         <div>
             <input id="fullDuration_obj" wire:model="fullDuration_obj" class="bg-black text-white text-center w-64 p-0 text-[10px]" type="text" value="sdf" />
@@ -163,7 +159,7 @@
                 }
             });
         });
-        // input range wasn't working in chrome so I added this part
+        // input range wasn't working in chrome so I added   part
         document.querySelectorAll('input[type="range"]').forEach((input) => {
             input.addEventListener('mousedown', () => window.getSelection().removeAllRanges());
         });
@@ -188,14 +184,21 @@
             copyDate("#targetDate", "#endingDate");
             giveDateObject("#startingDate", "#startingTimepoint", "#startingTimepoint_unix");
             giveDateObject("#endingDate", "#endingTimepoint", "#endingTimepoint_unix");
+            document.getElementById("endingTimepoint_unix").dispatchEvent(new Event('input'));
+            document.getElementById("startingTimepoint_unix").dispatchEvent(new Event('input'));
+            // document.getElementById("targetDate").dispatchEvent(new Event('input'));
+            // document.getElementById("startingDate").dispatchEvent(new Event('input'));
+            // document.getElementById("endingDate").dispatchEvent(new Event('input'));
         });
 
         $("#startingDate").on("change", () => {
             giveDateObject("#startingDate", "#startingTimepoint", "#startingTimepoint_unix");
+            document.getElementById("startingTimepoint_unix").dispatchEvent(new Event('input'));
         });
 
         $("#endingDate").on("change", () => {
             giveDateObject("#endingDate", "#endingTimepoint", "#endingTimepoint_unix");
+            document.getElementById("endingTimepoint_unix").dispatchEvent(new Event('input'));
         });
 
         // for all input[date], to be selectable with just clicking anywhere on input. (not just date picker icon)

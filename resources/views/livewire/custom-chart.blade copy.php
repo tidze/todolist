@@ -4,16 +4,14 @@
         <p class="text-amber-600 text-[9px]">
             $startingDatepoint_unix = <span class='text-amber-100'>{{ isset($startingDatepoint_unix) ? $startingDatepoint_unix : 'Not Set' }}</span> <br>
             $endingDatepoint_unix = <span class="text-amber-100">{{ isset($endingDatepoint_unix) ? $endingDatepoint_unix : 'Not Set' }}</span><br>
-            $startingDate = <span class="text-amber-100">{{ isset($startingDate) ? $startingDate : 'Not Set' }}</span><br>
-            $endingDate = <span class="text-amber-100">{{ isset($endingDate) ? $endingDate : 'Not Set' }}</span><br>
+            $startingDate > x_unix = <span class="text-amber-100">{{ isset($startingDate) ? $startingDate : 'Not Set' }}</span><br>
+            $endingDate > x_unix = <span class="text-amber-100">{{ isset($endingDate) ? $endingDate : 'Not Set' }}</span><br>
             $startingHourpoint = <span class="text-amber-100">{{ isset($startingHourpoint) ? $startingHourpoint : 'Not Set' }}</span><br>
             $endingHourpoint = <span class="text-amber-100">{{ isset($endingHourpoint) ? $endingHourpoint : 'Not Set' }}</span><br>
-            {{-- $$tasksGraphArray --> = <pre class="text-amber-100">{{ isset($tasksGraphArray) ? print_r($tasksGraphArray) : 'Not Set' }}</pre><br> --}}
-            {{-- $flattened = <span class="text-amber-100">{{ var_dump($flattened) }}</span><br> --}}
+            $$tasksGraphArray --> = <pre class="text-amber-100">{{ isset($tasksGraphArray) ? print_r($tasksGraphArray) : 'Not Set' }}</pre><br>
         </p>
-        <div class="relative z-20">
+        <div class="relative z-10">
             <span wire:click="getTask()" class="inline-block border border-amber-600 p-0.5 rounded hover:bg-yellow-500 hover:text-black cursor-pointer">getTask()</span>
-            <span wire:click="" id="customDebug" class="inline-block border border-amber-600 p-0.5 rounded hover:bg-yellow-500 hover:text-black cursor-pointer">customDebug</span>
             <br>
             <div>
                 {{-- for input date overlay to be clickable every where --}}
@@ -47,51 +45,60 @@
     </div>
     {{-- Graph Chart --}}
     <div class="flex flex-col items-center">
-        <div id="flattenTasksGraph" wire:click="flattenTasksGraph"
-            class="relative z-10 text-amber-600 text-[9px] w-60 text-center
-            inline-block border border-amber-600 p-0.5 rounded
-            hover:bg-yellow-500 hover:text-black cursor-pointer">
-            Flat
-        </div>
-        <div class="relative p-2 border-2 border-red-800">
+        <div id="flattenTasksGraph" wire:click="calcTaskTopOffset"
+            class="relative z-10 text-amber-600 text-[9px] w-60 text-center inline-block border border-amber-600 p-0.5
+            rounded hover:bg-yellow-500 hover:text-black cursor-pointer">
+            Sort</div>
+        <div>
             <div class="border border-orange-600 w-60 h-[87vh] relative right-0 box-border">
+                {{-- <div class="relative w-20 h-20 border border-red-500 top-10 "></div> --}}
+                {{-- <div class="relative w-20 h-20 border border-red-500"></div> --}}
                 {{-- startTimepointHandle --}}
-                <div class="w-[30%] h-[2px] bg-amber-700 border-t-2 border-t-amber-700 absolute right-full">
-                    <div class="relative flex flex-row justify-center items-center w-[140px] -translate-x-2/4 -translate-y-2/4 -rotate-45 h-10">
-                        <div class="bg-amber-700 flex-[auto] h-px flex items-center justify-start">
-                            <div class="w-[1px] h-5 translate-x-2/4 translate-y-0 rotate-45 flex justify-end items-center">
-                                <pre class="text-amber-200 text-[9px] inline-block">{{ $startingHourpoint }} </pre>
-                            </div>
+                {{-- <div class="w-[30%] h-[2px] bg-amber-700 border-t-2 border-t-amber-700 absolute right-full">
+                <div class="relative flex flex-row justify-center items-center w-[140px] -translate-x-2/4 -translate-y-2/4 -rotate-45 h-10">
+                    <div class="bg-amber-700 flex-[auto] h-px flex items-center justify-start">
+                        <div class="w-[1px] h-5 translate-x-2/4 translate-y-0 rotate-45 flex justify-end items-center">
+                            <pre class="text-amber-200 text-[9px] inline-block">{{ $startingHourpoint }} </pre>
                         </div>
-                        <div class="bg-amber-700 flex-[auto] h-px flex items-center justify-start invisible"></div>
                     </div>
+                    <div class="bg-amber-700 flex-[auto] h-px flex items-center justify-start invisible"></div>
                 </div>
+            </div> --}}
                 {{-- endTimepointHandle --}}
-                <div class="w-[30%] h-px bg-amber-700 border-t-2 border-t-amber-700 absolute top-full left-full">
-                    <div class="relative flex flex-row justify-center items-center w-[140px] -translate-x-2/4 -translate-y-2/4 -rotate-45 h-10 -right-full">
-                        <div class="bg-amber-700 flex-[auto] h-px flex items-center justify-end invisible"></div>
-                        <div class="bg-amber-700 flex-[auto] h-px flex items-center justify-end">
-                            <div class="w-[3px] h-5 translate-x-2/4 translate-y-0 rotate-45 flex justify-start items-center">
-                                <pre class="text-amber-200 text-[9px]"> {{ $endingHourpoint }}</pre>
-                            </div>
+                {{-- <div class="w-[30%] h-px bg-amber-700 border-t-2 border-t-amber-700 absolute top-full left-full">
+                <div class="relative flex flex-row justify-center items-center w-[140px] -translate-x-2/4 -translate-y-2/4 -rotate-45 h-10 -right-full">
+                    <div class="bg-amber-700 flex-[auto] h-px flex items-center justify-end invisible"></div>
+                    <div class="bg-amber-700 flex-[auto] h-px flex items-center justify-end">
+                        <div class="w-[3px] h-5 translate-x-2/4 translate-y-0 rotate-45 flex justify-start items-center">
+                            <pre class="text-amber-200 text-[9px]"> {{ $endingHourpoint }}</pre>
                         </div>
                     </div>
                 </div>
+            </div> --}}
 
              @isset($tasksGraphArray)
                     @foreach ($tasksGraphArray as $_task)
-                        <div style=" {{ ($_task['top']?? '') }} ; {{ ($_task['height'] ?? '') }};"
+                        <div style=" @php print_r("top:". substr(100*abs((abs(substr($startingDatepoint_unix,0,10) -         $_task->starting_time)) / (abs(substr($startingDatepoint_unix,0,10)) - substr($endingDatepoint_unix,0,10))),0,2)    ."%" ) @endphp ;
+                                  @php print_r("height:". str_replace(".", "", substr(100*abs( (abs($_task->ending_time - $_task->starting_time))  /  (abs(substr($startingDatepoint_unix,0,10) - substr($endingDatepoint_unix,0,10)))  )  ,0,2 ) ) ."%") @endphp"
 
                             {{-- The Starting point is 100% off by Y Axis so i added translate transform  --}}
-                            class="taskGraphItem box-border {{ ($_task['translate'] ?? '') }} {{ ($_task['position'] ?? '') }} w-full text-[9px] border border-cyan-800">
-                            {{-- time indicator --}}
+
+                            class="taskGraphItem box-border -translate-y-full w-full absolute text-[9px] border border-cyan-800">
                             <div class="box-border border border-b-transparent border-r-transparent border-l-transparent border-t-purple-600 h-[20px] w-1/5 absolute -left-[20%]">
                                 <div class="flex justify-end">
-                                    <div class="mx-1">{{ date('H:i', $_task['starting_time'] + 12600) }}</div>
-                                    <div class="">{{ date('H:i', $_task['ending_time'] + 12600) }}</div>
+                                    <div class="mx-1">{{ date('H:i', $_task->starting_time + 12600) }}</div>
+                                    <div class="">{{ date('H:i', $_task->ending_time + 12600) }}</div>
                                 </div>
                             </div>
                         </div>
+
+                        {{-- DO NOT DELETE THIS BELLOW CODE, AT ANY CIRCUMSTANCE. I FUCKED MYSELF TILL I FIXED IT. --}}
+                        {{-- <div class="text-[9px] text-red-500 "> --}}
+                        {{-- top --}}
+                        {{-- {{ substr(100*abs((abs(substr($startingDatepoint_unix,0,10) -         $_task->starting_time)) / (abs(substr($startingDatepoint_unix,0,10)) - substr($endingDatepoint_unix,0,10))),0,2) }} --}}
+                        {{-- height --}}
+                        {{-- {{ str_replace(".", "", substr(100*abs( (abs($_task->ending_time - $_task->starting_time))  /  (abs(substr($startingDatepoint_unix,0,10) - substr($endingDatepoint_unix,0,10)))  )  ,0,2 ) ) }} --}}
+                        {{-- </div> --}}
 
                     @endforeach
                 @endisset
@@ -159,18 +166,15 @@
             // console.log('endingHourpoint on change');
         });
         $('#flattenTasksGraph').on('click', function() {
-            console.log('flattenTasksGraph');
-        });
-
-        $('#customDebug').on('click', function() {
-            console.group("customDebug");
-            let date = new Date(parseInt($('#startingDatepoint_unix').val()));
-            let date2 = new Date(parseInt($('#endingDatepoint_unix').val()));
-//
-            console.log('startingDatepoint_unix',date,$('#startingDatepoint_unix').val());
-            console.log('endingDatepoint_unix',date2,$('#endingDatepoint_unix').val());
-            console.groupEnd();
-        });
+            // $('.taskGraphItem').toggleClass('relative');
+            $('.taskGraphItem').removeClass('absolute');
+            $('.taskGraphItem').addClass('relative');
+            $('.taskGraphItem').css("top", "")
+            // console.log(kir);
+        })
+        // $('#getTasks').on('click', function() {
+        //     console.log('getTasks');
+        // });
 
         $(".startingDate").on("change", () => {
             giveDateObject(".startingDate", "#startingHourpoint", "#startingDatepoint_unix");

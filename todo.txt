@@ -1,12 +1,18 @@
 # Add Static Graph with changable starting and ending timepoint V1
 # Add Google Graph to the website for each task (at the end of the day what did you do? sum)
 # Add Dynamic Scroller Graph V2
+# Add a remaining time of the day
+# Add Color for each category type
 # Fix Jquery import only one main page
+# Fix targetDate does not work on change while updating tasks
 # Bug ending clock time picker always switches to to hour when even when clicked on minute section but after edit changes
 # Fix targetDate onchange is not affecting timepoints
 # Make All the clocktime pickers component into only one component
 # Add timezone table to the database
 # Add User_id to the task table
+# Add a Streak since when you had video/unknown
+# Add this to github
+# Dockerize this app
 # Add Email Verification
 # Add Sketchy Theme to the calendar
 # Add Animation to the for helping the user to undrestand how things are done
@@ -15,6 +21,7 @@
 # Problem of editing a task and it would interfere with another task's duration
 # Problem How to merge Databases? From phone local save to windows ? what if it was locally saved?
 # Category Combiner
+
 #1 Make Edit button work for Every task
 #1 Make Website Livetime interactive using livewire
 

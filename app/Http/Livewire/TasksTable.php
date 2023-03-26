@@ -9,15 +9,20 @@ class TasksTable extends Component
 {
     protected $listeners = ['$refresh','sendBackId'];
     public $sendBackId;
+    public $allTasks;
     // protected $listeners = ['refreshComponent' => '$refresh'];
     protected $layout = null;
 
     public function render()
     {
+        $this->getAllTasks();
         return view('livewire.tasks-table', [
-            'allTasks' => TaskModel::select('tasks.*', 'categories.category', 'categories.description')->join('categories', 'tasks.category_id', '=', 'categories.id')->orderBy('starting_time')->get(),
             'sendBackId' => $this->sendBackId
         ]);
+    }
+
+    public function getAllTasks(){
+        $this->allTasks = TaskModel::select('tasks.*', 'categories.category', 'categories.description')->join('categories', 'tasks.category_id', '=', 'categories.id')->orderBy('starting_time','DESC')->get();
     }
 
     public function deleteTask($id)

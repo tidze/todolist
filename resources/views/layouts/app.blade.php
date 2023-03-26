@@ -8,16 +8,26 @@
     <title>@yield('title', 'Todolist app')</title>
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @stack('style')
     @livewireStyles
+
     @stack('script-head')
     <script type="text/javascript" src="{{ asset('js/jquery.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/jquery-clock-timepicker.min.js') }}"></script>
+    <style>
+        .debug-border{
+            border:1px solid tomato;
+        }
+        .debug-border *{
+            border:1px solid tomato;
+        }
+        </style>
 </head>
 
 <body class="antialiased font-Rubik">
     @livewireScripts
-    app.blade.php
-    <br>
+    {{-- app.blade.php --}}
+    {{-- <br> --}}
     {{-- @include('layouts.navbar') --}}
 
     @livewire('custom-chart')
