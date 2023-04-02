@@ -11,7 +11,7 @@
         startingDatepoint= <span class="text-amber-100">{{ $startingDatepoint ?? 'Not set'}}</span><br>
         endingDatepoint= <span class="text-amber-100">{{ $endingDatepoint ?? 'Not set'}}</span><br>
         targetTaskIdEdit= <span class="text-amber-100">{{ $targetTaskIdEdit??'Not set' }}</span><br>
-        detector= <span class="text-amber-100">'{{ $detector??'Not Set' }}</span><br>
+        detector= <span class="text-amber-100">{{ $detector??'Not Set' }}</span><br>
         _88= <span class="text-amber-100">{{ ($_88??'Not Set') }}</span><br>
         _99= <span class="text-amber-100">{{ ($_99??'Not Set') }}</span><br>
         date_default_timezone_get=<span class="text-amber-100">{{ date_default_timezone_get() }}</span><br>
@@ -45,7 +45,7 @@
             <label for="startingTimepoint" class="text-teal-600">startingTimepoint</label>
             {{-- <label for="startingTimepoint">d</label> --}}
             <input id="startingTimepoint_unix" wire:model.defer="startingTimepoint_unix" name="startingTimepoint_unix" class="bg-black text-white text-center w-52 p-0 text-[10px]"
-                type="hidden" value="" />
+                type="" value="" />
             {{-- <lable for="startingTimepoint_unix">startingTimepoint_unix</lable>
             @error('startingTimepoint_unix')
                 <span class="text-red-500 text-[9px]">{{ $message }}</span>
@@ -194,6 +194,10 @@
         $("#startingDate").on("change", () => {
             giveDateObject("#startingDate", "#startingTimepoint", "#startingTimepoint_unix");
             document.getElementById("startingTimepoint_unix").dispatchEvent(new Event('input'));
+            console.log('#startingHourpoint onChange');
+        });
+        $("#startingDate").on("input", () => {
+            console.log('#startingHourpoint onInput');
         });
 
         $("#endingDate").on("change", () => {

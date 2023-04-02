@@ -48,7 +48,7 @@
             font-family: 'Rubik', sans-serif;
         }
 
-        @supports(display: grid) {
+        @supports('display') {
 
             .grid-container {
                 display: grid;
