@@ -9,8 +9,10 @@ class CustomChart extends Component
 {
     public $startingHourpoint;
     public $endingHourpoint;
-    public $startingDatepoint_unix = '1679927400000';
-    public $endingDatepoint_unix = '1679948940000';
+    // public $startingDatepoint_unix = '1679927400000';
+    // public $endingDatepoint_unix = '1679948940000';
+    public $startingDatepoint_unix;
+    public $endingDatepoint_unix;
     public $tasksGraphArray;
     public $startingDate;
     public $endingDate;
@@ -18,6 +20,8 @@ class CustomChart extends Component
 
     public function mount()
     {
+        $this->startingDatepoint_unix = '1679927400000';
+        $this->endingDatepoint_unix = '1679948940000';
         $this->flattened = false;
         $this->startingHourpoint = '18:00';
         $this->endingHourpoint = '23:59';

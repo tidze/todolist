@@ -30,17 +30,17 @@
     {{-- <br> --}}
     {{-- @include('layouts.navbar') --}}
 
-    {{-- @livewire('custom-chart') --}}
+    @livewire('task')
+
+    @livewire('custom-chart')
 
     @livewire('custom-graph-x')
 
     {{-- @yield('content') --}}
 
-
     {{-- all tasks from database into table format --}}
     @livewire('tasks-table')
 
-    @livewire('task')
 
     @include('layouts.footer')
     @stack('script')

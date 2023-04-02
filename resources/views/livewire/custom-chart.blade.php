@@ -18,7 +18,7 @@
             <div>
                 {{-- for input date overlay to be clickable every where --}}
                 <div id="startingDateContainer" class="inline-block border-2 border-sky-500">
-                    <input wire:ignore class="startingDate" type="date" class="" value="{{ $startingDate }}">
+                    <input wire:ignore class="startingDate" type="date" class="" value="{{ date('Y-m-d',substr($startingDatepoint_unix,0,10))   }}">
                 </div>
                 <input id="startingHourpoint" wire:model.defer="startingHourpoint" class="w-40 text-center text-white bg-black time startingHourpoint" type="text" />
                 <label for="startingHourpoint" class="text-teal-600">startingHourpoint</label>
@@ -32,7 +32,7 @@
             <div>
                 {{-- for input date overlay to be clickable every where --}}
                 <div id="endingDateContainer" class="inline-block border-2 border-sky-500">
-                    <input class="endingDate" type="date" class="" value="{{ $endingDate }}">
+                    <input class="endingDate" type="date" class="" value="{{ date('Y-m-d',substr($endingDatepoint_unix,0,10)) }}">
                 </div>
                 <input id="endingHourpoint" wire:model.defer="endingHourpoint" class="w-40 text-center text-white bg-black time endingHourpoint" type="text" />
                 <label for="endingHourpoint" class="text-teal-600">endingHourpoint</label>
@@ -53,8 +53,8 @@
             hover:bg-yellow-500 hover:text-black cursor-pointer">
             Flat
         </div>
-        <div class="relative p-2 border-2 border-red-800">
-            <div class="border border-orange-600 w-60 h-[87vh] relative right-0 box-border">
+        <div class="relative p-2 border-2 border-red-400 border-opacity-0">
+            <div class="border-2 border-orange-800 border-opacity-50 w-60 h-[50vh] relative right-0 box-border">
                 {{-- startTimepointHandle --}}
                 <div class="w-[30%] h-[2px] bg-amber-700 border-t-2 border-t-amber-700 absolute right-full">
                     <div class="relative flex flex-row justify-center items-center w-[140px] -translate-x-2/4 -translate-y-2/4 -rotate-45 h-10">
@@ -83,9 +83,9 @@
                         <div style=" {{ ($_task['top']?? '') }} ; {{ ($_task['height'] ?? '') }};"
 
                             {{-- The Starting point is 100% off by Y Axis so i added translate transform  --}}
-                            class="taskGraphItem box-border {{ ($_task['translate'] ?? '') }} {{ ($_task['position'] ?? '') }} w-full text-[9px] border border-cyan-800">
+                            class="taskGraphItem box-border {{ ($_task['translate'] ?? '') }} {{ ($_task['position'] ?? '') }} w-full text-[9px] border border-yellow-400 border-opacity-70">
                             {{-- time indicator --}}
-                            <div class="box-border border border-b-transparent border-r-transparent border-l-transparent border-t-purple-600 h-[20px] w-1/5 absolute -left-[20%]">
+                            <div class="box-border border border-b-transparent border-r-transparent border-l-transparent border-t-yellow-400 h-[20px] w-1/5 absolute -left-[20%]">
                                 <div class="flex justify-end">
                                     <div class="mx-1">{{ date('H:i', $_task['starting_time'] + 12600) }}</div>
                                     <div class="">{{ date('H:i', $_task['ending_time'] + 12600) }}</div>

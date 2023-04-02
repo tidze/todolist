@@ -46,13 +46,13 @@
         </div>
     </div>
     {{-- Graph Chart --}}
-    <div class="flex flex-col items-center">
-        <div id="flattenTasksGraph" wire:click="flattenTasksGraph"
+    <div class="flex flex-col items-center p-1">
+        {{-- <div id="flattenTasksGraph" wire:click="flattenTasksGraph"
             class="relative z-10 text-amber-600 text-[9px] w-60 text-center
             inline-block border border-amber-600 p-0.5 rounded
             hover:bg-yellow-500 hover:text-black cursor-pointer">
             Flat
-        </div>
+        </div> --}}
             @isset($seperatedTasks)
                 @foreach ($seperatedTasks as $index => $tasksOfDay)
                     <div style="width:700px" class="border-2 border-cyan-900 h-[6vh] flex flex-row relative right-0 box-border border-opacity-100 ">
