@@ -7,6 +7,8 @@
     <meta name="robots" content="noindex">
     <title>@yield('title', 'Todolist app')</title>
     <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2991/2991148.png">
+    {{-- <link rel="stylesheet" href="{{asset('build/assets/app-6004121e.css')}}"> --}}
+    {{-- <script src="{{asset('build/assets/app-2f7bb1b3.js')}}"></script> --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @stack('style')
     @livewireStyles

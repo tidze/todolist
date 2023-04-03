@@ -1,21 +1,21 @@
-<div>
+<div class="border border-sky-300">
     {{-- Components Debugger Information --}}
     <p class="text-amber-600 text-[8px]">
-        taskCategory= <span class='text-amber-100'>{{ ($taskCategory ?? 'Not Set') }}</span> <br>
-        taskDescription= <span class="text-amber-100">{{ $taskDescription ?? 'Not Set'}}</span><br>
-        desiredDuration= <span class="text-amber-100">{{ $desiredDuration ?? 'Not Set'}}</span><br>
-        startingTimepoint_unix= <span class="text-amber-100">{{ $startingTimepoint_unix ?? 'Not Set'}}</span><br>
-        endingTimepoint_unix= <span class="text-amber-100">{{ $endingTimepoint_unix ?? 'Not Set'}}</span><br>
-        startingTimepoint= <span class="text-amber-100">{{ $startingTimepoint ?? 'Not Set'}}</span><br>
-        endingTimepoint= <span class="text-amber-100">{{ $endingTimepoint ?? 'Not Set'}}</span><br>
-        startingDatepoint= <span class="text-amber-100">{{ $startingDatepoint ?? 'Not set'}}</span><br>
-        endingDatepoint= <span class="text-amber-100">{{ $endingDatepoint ?? 'Not set'}}</span><br>
-        targetTaskIdEdit= <span class="text-amber-100">{{ $targetTaskIdEdit??'Not set' }}</span><br>
-        detector= <span class="text-amber-100">{{ $detector??'Not Set' }}</span><br>
-        _88= <span class="text-amber-100">{{ ($_88??'Not Set') }}</span><br>
-        _99= <span class="text-amber-100">{{ ($_99??'Not Set') }}</span><br>
-        date_default_timezone_get=<span class="text-amber-100">{{ date_default_timezone_get() }}</span><br>
-        timezone= <span class="text-amber-100">{{ ($timezone??'Not Set')}}</span><br>
+        {{-- taskCategory= <span class='text-amber-100'>{{ ($taskCategory ?? 'Not Set') }}</span> <br> --}}
+        {{-- taskDescription= <span class="text-amber-100">{{ $taskDescription ?? 'Not Set'}}</span><br> --}}
+        {{-- desiredDuration= <span class="text-amber-100">{{ $desiredDuration ?? 'Not Set'}}</span><br> --}}
+        {{-- startingTimepoint_unix= <span class="text-amber-100">{{ $startingTimepoint_unix ?? 'Not Set'}}</span><br> --}}
+        {{-- endingTimepoint_unix= <span class="text-amber-100">{{ $endingTimepoint_unix ?? 'Not Set'}}</span><br> --}}
+        {{-- startingTimepoint= <span class="text-amber-100">{{ $startingTimepoint ?? 'Not Set'}}</span><br> --}}
+        {{-- endingTimepoint= <span class="text-amber-100">{{ $endingTimepoint ?? 'Not Set'}}</span><br> --}}
+        {{-- startingDatepoint= <span class="text-amber-100">{{ $startingDatepoint ?? 'Not set'}}</span><br> --}}
+        {{-- endingDatepoint= <span class="text-amber-100">{{ $endingDatepoint ?? 'Not set'}}</span><br> --}}
+        {{-- targetTaskIdEdit= <span class="text-amber-100">{{ $targetTaskIdEdit??'Not set' }}</span><br> --}}
+        {{-- detector= <span class="text-amber-100">{{ $detector??'Not Set' }}</span><br> --}}
+        {{-- _88= <span class="text-amber-100">{{ ($_88??'Not Set') }}</span><br> --}}
+        {{-- _99= <span class="text-amber-100">{{ ($_99??'Not Set') }}</span><br> --}}
+        {{-- date_default_timezone_get=<span class="text-amber-100">{{ date_default_timezone_get() }}</span><br> --}}
+        {{-- timezone= <span class="text-amber-100">{{ ($timezone??'Not Set')}}</span><br> --}}
     </p>
     <input type="hidden" id="targetTaskIdEdit" name="targetTaskIdEdit" wire:model.defer="targetTaskIdEdit" class="w-32 border-2 border-indigo-500" value="{{ $targetTaskIdEdit }}"
         readonly>
@@ -45,7 +45,7 @@
             <label for="startingTimepoint" class="text-teal-600">startingTimepoint</label>
             {{-- <label for="startingTimepoint">d</label> --}}
             <input id="startingTimepoint_unix" wire:model.defer="startingTimepoint_unix" name="startingTimepoint_unix" class="bg-black text-white text-center w-52 p-0 text-[10px]"
-                type="" value="" />
+                type="hidden" value="" />
             {{-- <lable for="startingTimepoint_unix">startingTimepoint_unix</lable>
             @error('startingTimepoint_unix')
                 <span class="text-red-500 text-[9px]">{{ $message }}</span>

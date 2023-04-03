@@ -26,4 +26,5 @@ vendor.zip
 /app/Http/Controllers/GameDevelopment.php
 /app/Http/Controllers/Controller.php
 /app/Http/Controllers/CGCareer.php
+/public/build.zip
 

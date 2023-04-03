@@ -33,6 +33,9 @@
                     <th scope="col" class="px-1 py-0">
                         Edit
                     </th>
+                    <th scope="col" class="px-1 py-0">
+                        Delete
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -71,6 +74,8 @@
                             <form wire:submit.prevent="edit({{ $task->id }})">
                                 <button type="submit" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
                             </form>
+                        </td>
+                        <td class="px-2 py-0">
                             <form wire:submit.prevent="deleteTask({{ $task->id }})">
                                 <button type="submit" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</button>
                             </form>
