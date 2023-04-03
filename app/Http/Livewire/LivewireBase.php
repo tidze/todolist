@@ -10,4 +10,13 @@ class LivewireBase extends Component
     {
         return view('livewire.livewire-base');
     }
+    public function ducka(){
+        dd('LivewireBase ducka');
+    }
+    public function duck(){
+        dd('LivewireBase duck');
+    }
+    public function duck_post(){
+        dd('LivewireBase duck_post');
+    }
 }
