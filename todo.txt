@@ -3,6 +3,7 @@
 # Add Dynamic Scroller Graph V2
 # Add a remaining time of the day
 # Add Color for each category type
+# Add pagination to the table tasks
 # Fix Jquery import only one main page
 # Fix targetDate does not work on change while updating tasks
 # Bug ending clock time picker always switches to to hour when even when clicked on minute section but after edit changes

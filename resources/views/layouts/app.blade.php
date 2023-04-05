@@ -36,14 +36,15 @@
 
     @livewire('task')
 
+    @livewire('tasks-table')
+
     @livewire('custom-chart')
 
-    @livewire('custom-graph-x')
+    {{-- @livewire('custom-graph-x') --}}
 
     {{-- @yield('content') --}}
 
     {{-- all tasks from database into table format --}}
-    @livewire('tasks-table')
 
     @include('layouts.footer')
     @stack('script')

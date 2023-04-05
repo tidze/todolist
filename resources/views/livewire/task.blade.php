@@ -1,4 +1,4 @@
-<div class="border border-sky-300">
+<div class="border border-sky-300 flex flex-col text-white p-1">
     {{-- Components Debugger Information --}}
     <p class="text-amber-600 text-[8px]">
         {{-- taskCategory= <span class='text-amber-100'>{{ ($taskCategory ?? 'Not Set') }}</span> <br> --}}
@@ -17,8 +17,7 @@
         {{-- date_default_timezone_get=<span class="text-amber-100">{{ date_default_timezone_get() }}</span><br> --}}
         {{-- timezone= <span class="text-amber-100">{{ ($timezone??'Not Set')}}</span><br> --}}
     </p>
-    <input type="hidden" id="targetTaskIdEdit" name="targetTaskIdEdit" wire:model.defer="targetTaskIdEdit" class="w-32 border-2 border-indigo-500" value="{{ $targetTaskIdEdit }}"
-        readonly>
+    <input type="hidden" id="targetTaskIdEdit" name="targetTaskIdEdit" wire:model.defer="targetTaskIdEdit" class="w-32 border-2 border-indigo-500" value="{{ $targetTaskIdEdit }}" readonly>
     {{-- <label for="targetTaskIdEdit">targetTaskId</label>
     @error('targetTaskIdEdit')
         <span class="text-red-500 text-[9px]">{{ $message }}</span>
@@ -30,97 +29,110 @@
         <p>targetTaskIdEdit <span class="underline">Not</span> empty</p>
     @endempty
     <br> --}}
-    <div id="targetDateContainer">
-        <input type="date" id="targetDate" value="{{ $startingDatepoint }}">
-        <label for="targetDate" class="text-teal-600">targetDate</label>
+    <div id="targetDateContainer" class="flex items-center justify-center p-2">
+        <input type="date" id="targetDate" class="inline-block border-2 border-sky-800" value="{{ $startingDatepoint }}">
+        <label for="targetDate" class="px-1">Date</label>
     </div>
     <form wire:submit.prevent="storeOrUpdate({{ str_contains($detector, 9) ? $_99 : $_88 }})">
         @csrf
-        {{-- startingTimepoint Component --}}
-        <div>
-            <div id="startingDateContainer" class="inline-block border-2 border-sky-500">
-                <input {{-- wire:ignore --}} id="startingDate" type="date" class="" value="{{ $startingDatepoint }}">
-            </div>
-            <input id="startingTimepoint" wire:model.defer="startingTimepoint" class="time startingTimepoint bg-black text-white text-center w-40" type="text" />
-            <label for="startingTimepoint" class="text-teal-600">startingTimepoint</label>
-            {{-- <label for="startingTimepoint">d</label> --}}
-            <input id="startingTimepoint_unix" wire:model.defer="startingTimepoint_unix" name="startingTimepoint_unix" class="bg-black text-white text-center w-52 p-0 text-[10px]"
-                type="hidden" value="" />
-            {{-- <lable for="startingTimepoint_unix">startingTimepoint_unix</lable>
-            @error('startingTimepoint_unix')
-                <span class="text-red-500 text-[9px]">{{ $message }}</span>
-            @enderror --}}
-        </div>
+        <div class="flex flex-col flex-grow">
 
-        {{-- endingTimepoint Component --}}
-        <div>
-            <div id="endingDateContainer" class="inline-block border-2 border-sky-500">
-                <input {{-- wire:ignore --}} id="endingDate" type="date" class="" value="{{ $endingDatepoint }}">
+            {{-- Component startingTimepoint --}}
+            <div class="flex">
+                <div id="startingDateContainer" class="inline-block border-2 border-sky-500">
+                    <input {{-- wire:ignore --}} id="startingDate" type="date" class="" value="{{ $startingDatepoint }}">
+                </div>
+                <input class="w-40 bg-black text-center startingTimepoint border-2 h-full border-sky-600" id="startingTimepoint" wire:model.defer="startingTimepoint" type="text" />
+                <label class="self-center" for="startingTimepoint" >Start</label>
+
+                <input class="bg-black text-center text-[8px]" id="startingTimepoint_unix" wire:model.defer="startingTimepoint_unix" name="startingTimepoint_unix" type="hidden" value="" />
+                {{-- <label for="startingTimepoint_unix">startingTimepoint_unix</label> --}}
+                {{-- @error('startingTimepoint_unix') --}}
+                {{-- <span class="text-red-500 text-[9px]">{{ $message }}</span> --}}
+                {{-- @enderror --}}
             </div>
-            <input id="endingTimepoint" wire:model.defer="endingTimepoint" class="time endingTimepoint bg-black text-white text-center w-40" type="text"
-                value={{ $endingTimepoint }} onchange="" />
-            <label for="endingTimepoint" class="text-teal-600">endingTimepoint</label>
-            <input name="endingTimepoint_unix" wire:model.defer="endingTimepoint_unix" id="endingTimepoint_unix" class="bg-black text-white text-center w-52 p-0 text-[10px]"
-                type="hidden" value="0" />
-            {{-- <lable for="startingTimepoint_unix">startingTimepoint_unix</lable>
-            @error('endingTimepoint_unix')
-                <span class="text-red-500 text-[9px]">{{ $message }}</span>
-            @enderror --}}
-        </div>
-        <div>
-            <input id="fullDuration_obj" wire:model="fullDuration_obj" class="bg-black text-white text-center w-64 p-0 text-[10px]" type="text" value="sdf" />
-            <label for="fullDuration" class="text-teal-600">fullDuration</label>
-        </div>
-        <div class="inline-block w-52 py-5 mr-9 relative">
-            <div class="absolute flex left-full mx-2">
-                <label id="rangeValue" class="">
-                    @if (empty($desiredDuration))
-                        0
-                    @else
-                        @php print(''.$desiredDuration.'') @endphp
-                    @endif
-                </label>
-                <span class="mx-1">m</span>
+
+            {{-- Component endingTimepoint --}}
+            <div class="flex">
+                <div id="endingDateContainer" class="inline-block border-2 border-sky-500">
+                    <input {{-- wire:ignore --}} id="endingDate" type="date" class="" value="{{ $endingDatepoint }}">
+                </div>
+                <input class="w-40 bg-black text-center endingTimepoint border-2 h-full border-sky-600" id="endingTimepoint" wire:model.defer="endingTimepoint" type="text" value={{ $endingTimepoint }} onchange="" />
+                <label class="self-center" for="endingTimepoint">End</label>
+
+                <input name="endingTimepoint_unix" wire:model.defer="endingTimepoint_unix" id="endingTimepoint_unix" class="bg-black text-center w-52 p-0 text-[10px]" type="hidden" value="0" />
+                {{-- <label for="startingTimepoint_unix">startingTimepoint_unix</label> --}}
+                {{-- @error('endingTimepoint_unix') --}}
+                {{-- <span class="text-red-500 text-[9px]">{{ $message }}</span> --}}
+                {{-- @enderror --}}
             </div>
-            <input name="desiredDuration" wire:model.defer="desiredDuration" id="desiredDuration" min="0"
-                max=@if (empty($desiredDuration)) 0 @else @php print('\''.$desiredDuration.'\'') @endphp @endif type="range"
-                value=@if (empty($desiredDuration)) 0 @else @php print('\''.$desiredDuration.'\'') @endphp @endif
-                class="inline-block w-full h-2 bg-gray-700 p-1 rounded-lg appearance-none cursor-pointer range-lg" oninput="rangeValue.innerText = this.value">
-        </div>
-        <lable for="desiredDuration">desiredDuration</lable>
-        @error('desiredDuration')
-            <span class="text-red-500 text-[9px]">{{ $message }}</span>
-        @enderror
-        <div>
-            <input id="taskCategory" wire:model.defer="taskCategory" name="taskCategory" type="text" class="bg-black text-white text-center w-64 p-0 text-[10px]">
-            <label for="taskCategory">taskCategory</label>
-            @error('taskCategory')
-                <span class="text-red-500 text-sm">{{ $message }}</span>
-            @enderror
-            <br>
-            <input id="taskDescription" wire:model.defer="taskDescription" name="taskDescription" type="text" class="bg-black text-white text-center w-64 p-0 text-[10px]">
-            <label for="taskDescription">taskDescription</label>
-            @error('taskDescription')
-                <span class="text-red-500 text-sm">{{ $message }}</span>
-            @enderror
-        </div>
-        <button wire:click="storeOrUpdate({{ $_99 }})"
-            class="px-3 py-1 text-xs font-medium mr-2 mb-2 text-gray-900
-        focus:outline-none bg-white rounded-lg border border-gray-200
+            {{-- Component `Full Duration` --}}
+            <div class="flex py-2">
+                <input class="flex-1 bg-black text-center p-0 text-[10px] rounded-sm" id="fullDuration_obj" wire:model="fullDuration_obj" type="text" value="sdf" readonly />
+                <label class="px-2 py-1 text-[10px]" for="fullDuration" >fullDuration</label>
+            </div>
+            {{-- Component `Desired Duration input range` --}}
+            <div class="flex flex-col py-2 px-1">
+                <div class="flex flex-row">
+                    <input class="flex-grow flex-shrink basis-60" name="desiredDuration" wire:model.defer="desiredDuration" id="desiredDuration" min="0" max=@if (empty($desiredDuration)) 0 @else @php print('\''.$desiredDuration.'\'') @endphp @endif
+                        type="range" value=@if (empty($desiredDuration)) 0 @else @php print('\''.$desiredDuration.'\'') @endphp @endif oninput="rangeValue.innerText = this.value">
+                    <label class="flex-grow flex-shrink basis-1 text-center" id="rangeValue">
+                        @if (empty($desiredDuration))
+                            0
+                        @else
+                            @php print(''.$desiredDuration.'') @endphp
+                        @endif
+                    </label>
+                    <div class="flex-shrink">m</div>
+                </div>
+                <label for="desiredDuration" class="text-center">desiredDuration</label>
+                @error('desiredDuration')
+                    <span class="text-red-500 text-[9px] text-center">{{ $message }}</span>
+                @enderror
+
+            </div>
+            <div class="flex-auto w-full">
+                <div class="flex flex-auto justify-center items-center text-center py-1">
+                    <input id="taskCategory" wire:model.defer="taskCategory" name="taskCategory" type="text"
+                        class="rounded-sm text-lg inline-block flex-auto bg-black first-letter:bg-black text-center text-[9px] py-1">
+                    <label class="flex-auto" for="taskCategory">taskCategory</label>
+                </div>
+                <div class="flex-auto w-full text-center">
+                    @error('taskCategory')
+                        <div class="text-red-500 text-[10px]">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="flex flex-auto justify-center items-center text-center py-1">
+                    <input id="taskDescription" wire:model.defer="taskDescription" name="taskDescription" type="text" class="rounded-sm text-lg inline-block flex-auto bg-black text-center text-[9px] py-1">
+                    <label class="flex-auto" for="taskDescription">taskDescription</label>
+                </div>
+                <div class="flex-auto w-full text-center">
+                    @error('taskDescription')
+                        <div class="text-red-500 text-[10px]">{{ $message }}</div>
+                    @enderror
+                </div>
+
+            </div>
+            <button wire:click="storeOrUpdate({{ $_99 }})"
+                class="flex-1 px-3 py-2 text-sm font-medium mb-2 text-gray-900
+        focus:outline-none bg-white border border-gray-200 rounded-sm
         hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4
         focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800
         dark:text-gray-400 dark:border-gray-600 dark:hover:text-white
         dark:hover:bg-gray-700">Add
-            Task</button>
-        <button wire:click="storeOrUpdate({{ $_88 }})"
-            class="px-3 py-1 text-xs font-medium mr-2 mb-2 text-gray-900
-        focus:outline-none bg-white rounded-lg border border-gray-200
+                Task</button>
+            <button wire:click="storeOrUpdate({{ $_88 }})"
+                class="flex-1 px-3 py-2 text-sm font-medium mb-2 text-gray-900
+        focus:outline-none bg-white border border-gray-200 rounded-sm
         hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4
         focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800
         dark:text-gray-400 dark:border-gray-600 dark:hover:text-white
         dark:hover:bg-gray-700">Update
-            Task</button>
+                Task</button>
+        </div>
+
     </form>
+
 </div>
 
 @push('script')

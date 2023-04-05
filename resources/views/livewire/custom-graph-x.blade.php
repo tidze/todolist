@@ -1,5 +1,5 @@
 <div class="relative border border-emerald-700">
-    <div class="text-amber-500 text-[10px]">
+    <div>
         {{-- Components Debugger Information --}}
         <p class="text-teal-600 text-[9px]">
             {{-- $x_startingDatepoint_unix = <span class="text-teal-100">{{ isset($x_startingDatepoint_unix) ? $x_startingDatepoint_unix : 'Not Set' }}</span> <br> --}}
@@ -11,18 +11,15 @@
             {{-- $$x_tasksGraphArray --> = <pre class="text-teal-100">{{ isset($x_tasksGraphArray) ? print_r($x_tasksGraphArray) : 'Not Set' }}</pre><br> --}}
             {{-- $x_flattened = <span class="text-teal-100">{{ var_dump($x_flattened) }}</span><br> --}}
         </p>
-        <div class="relative z-20">
-            <span class="inline-block border border-amber-600 p-0.5 rounded hover:bg-yellow-500 hover:text-black cursor-pointer" wire:click="getTask()">x_getTask()</span>
-            {{-- <span id="x_customDebug" class="inline-block border border-amber-600 p-0.5 rounded hover:bg-yellow-500 hover:text-black cursor-pointer" wire:click>x_customDebug</span> --}}
-            <br>
+        <div class="relative z-20 flex flex-col items-center" >
             <div>
                 {{-- for input date overlay to be clickable every where --}}
-                <div id="x_startingDateContainer" class="inline-block border-2 border-sky-500">
+                <div id="x_startingDateContainer" class="text-emerald-500 inline-block border-2 border-sky-500">
                     <input id="x_startingDate" wire:ignore type="date" value="{{ date('Y-m-d', (substr($x_startingDatepoint_unix, 0, 10)+12600)) }}">
                 </div>
                 <input id="x_startingHourpoint" class="w-40 text-center text-white bg-black time" wire:model.defer="x_startingHourpoint" type="text">
-                <label class="text-teal-600" for="x_startingHourpoint">x_startingHourpoint</label>
-                <input id="x_startingDatepoint_unix" name="x_startingDatepoint_unix" class="bg-black text-white text-center w-52 p-0 text-[10px]" type="text" wire:model.defer="x_startingDatepoint_unix" value="0">
+                <label class="text-emerald-600" for="x_startingHourpoint">Start</label>
+                <input id="x_startingDatepoint_unix" name="x_startingDatepoint_unix" class="bg-black text-white text-center w-52 p-0 text-[10px]" wire:model.defer="x_startingDatepoint_unix" type="hidden" value="0">
                 {{-- <label for="x_startingDatepoint_unix">x_startingDatepoint_unix</label> --}}
                 {{-- @error('x_startingDatepoint_unix') --}}
                 {{-- <span class="text-red-500 text-[9px]">{{ $message }}</span> --}}
@@ -30,18 +27,20 @@
             </div>
             <div>
                 {{-- for input date overlay to be clickable every where --}}
-                <div id="x_endingDateContainer" class="inline-block border-2 border-sky-500">
+                <div id="x_endingDateContainer" class="text-emerald-500 inline-block border-2 border-sky-500">
                     <input id="x_endingDate" type="date" value="{{ date('Y-m-d', (substr($x_endingDatepoint_unix, 0, 10)+12600)) }}">
                 </div>
                 <input id="x_endingHourpoint" class="w-40 text-center text-white bg-black time" wire:model.defer="x_endingHourpoint" type="text">
-                <label class="text-teal-600" for="x_endtingHourpoint">x_endingHourpoint</label>
-                <input id="x_endingDatepoint_unix" name="x_endingDatepoint_unix" class="bg-black text-white text-center w-52 p-0 text-[10px]" wire:model.defer="x_endingDatepoint_unix" type="text" value="0">
+                <label class="text-emerald-600" for="x_endtingHourpoint">End</label>
+                <input id="x_endingDatepoint_unix" name="x_endingDatepoint_unix" class="bg-black text-white text-center w-52 p-0 text-[10px]" wire:model.defer="x_endingDatepoint_unix" type="hidden" value="0">
                 {{-- <label for="x_endingDatepoint_unix">x_endingDatepoint_unix</label> --}}
                 {{-- @error('x_endingDatepoint_unix') --}}
                 {{-- <span class="text-red-500 text-[9px]">{{ $message }}</span> --}}
                 {{-- @enderror --}}
             </div>
+            <div class="inline-block border border-emerald-600 text-emerald-500 p-0.5 rounded hover:bg-emerald-600 hover:text-black cursor-pointer" wire:click="getTask()">Days Report</div>
         </div>
+        {{-- <span id="x_customDebug" class="inline-block border border-amber-600 p-0.5 rounded hover:bg-yellow-500 hover:text-black cursor-pointer" wire:click>x_customDebug</span> --}}
     </div>
     {{-- Graph Chart --}}
     <div class="flex flex-col items-center p-1">

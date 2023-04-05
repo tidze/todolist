@@ -35,8 +35,8 @@ class Task extends Component
 
     public function mount()
     {
-        $this->endingTimepoint_unix = '';
-        $this->startingTimepoint_unix = '';
+        $this->endingTimepoint_unix = time();
+        $this->startingTimepoint_unix = time();
         // the starting time for "clock time picker" ought to be current time. for now we leave it at 00:00
         $this->startingTimepoint = '00:00';
         $this->endingTimepoint = '00:00';
