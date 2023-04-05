@@ -1,6 +1,6 @@
 <div class="">
     {{-- they need to be together `w-screen` `overflow-x-auto` --}}
-    <div class="relative w-screen overflow-x-auto inline-block shadow-md sm:rounded-lg box-border border-2 border-teal-800">
+    <div class="relative w-full overflow-x-auto inline-block shadow-md sm:rounded-lg box-border border-2 border-teal-800">
         <table class="text-[9px]">
             <thead class="uppercase bg-gray-50 dark:bg-gray-700 text-white">
                 <tr>

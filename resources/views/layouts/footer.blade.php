@@ -1,4 +1,4 @@
-<div class="ml-4 text-center text-sm text-gray-500 sm:text-right sm:ml-0">
+<div class="text-center text-sm text-gray-500 sm:text-right box-border">
     <a href="#" class="text-blue-600 hover:underline">Home</a>
     {{-- <a href="#" class="text-blue-600 hover:underline">fa</a> --}}
     <span>

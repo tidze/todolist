@@ -14,7 +14,7 @@
         <div class="relative z-20 flex flex-col items-center" >
             <div>
                 {{-- for input date overlay to be clickable every where --}}
-                <div id="x_startingDateContainer" class="text-emerald-500 inline-block border-2 border-sky-500">
+                <div id="x_startingDateContainer" class="text-white inline-block border-2 border-emerald-600">
                     <input id="x_startingDate" wire:ignore type="date" value="{{ date('Y-m-d', (substr($x_startingDatepoint_unix, 0, 10)+12600)) }}">
                 </div>
                 <input id="x_startingHourpoint" class="w-40 text-center text-white bg-black time" wire:model.defer="x_startingHourpoint" type="text">
@@ -27,7 +27,7 @@
             </div>
             <div>
                 {{-- for input date overlay to be clickable every where --}}
-                <div id="x_endingDateContainer" class="text-emerald-500 inline-block border-2 border-sky-500">
+                <div id="x_endingDateContainer" class="text-white inline-block border-2 border-emerald-600">
                     <input id="x_endingDate" type="date" value="{{ date('Y-m-d', (substr($x_endingDatepoint_unix, 0, 10)+12600)) }}">
                 </div>
                 <input id="x_endingHourpoint" class="w-40 text-center text-white bg-black time" wire:model.defer="x_endingHourpoint" type="text">
@@ -42,7 +42,7 @@
         </div>
         {{-- <span id="x_customDebug" class="inline-block border border-amber-600 p-0.5 rounded hover:bg-yellow-500 hover:text-black cursor-pointer" wire:click>x_customDebug</span> --}}
     </div>
-    {{-- Graph Chart --}}
+    {{-- Days Graph Chart --}}
     <div class="flex flex-col items-center p-1">
         {{-- <div id="x_flattenTasksGraph" class="relative z-10 text-amber-600 text-[9px] w-60 text-center
             inline-block border border-amber-600 p-0.5 rounded
@@ -51,7 +51,7 @@
         </div> --}}
         @isset($x_seperatedTasks)
             @foreach ($x_seperatedTasks as $index => $tasksOfDay)
-                <div class="border-2 border-cyan-900 h-[6vh] flex flex-row relative right-0 box-border border-opacity-100 " style="width:700px">
+                <div class="border-2 border-cyan-900 h-[6vh] flex flex-row relative right-0 box-border border-opacity-100 w-full">
                     <div class="flex flex-row w-full">
                         <div class="text-[10px] text-green-400">{{ date('Y-m-d', substr($x_startingDatepoint_unix, 0, 10) + 86400 * ($index + 1)) }}</div>
                         <pre> </pre>
