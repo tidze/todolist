@@ -45,7 +45,7 @@
                 <input class="w-40 bg-black text-center startingTimepoint border-2 h-full border-sky-600" id="startingTimepoint" wire:model.defer="startingTimepoint" type="text" />
                 <label class="self-center" for="startingTimepoint" >Start</label>
 
-                <input class="bg-black text-center text-[8px]" id="startingTimepoint_unix" wire:model.defer="startingTimepoint_unix" name="startingTimepoint_unix" type="hidden" value="" />
+                <input class="bg-black text-center text-[8px]" id="startingTimepoint_unix" wire:model.defer="startingTimepoint_unix" name="startingTimepoint_unix" type="text" value="" />
                 {{-- <label for="startingTimepoint_unix">startingTimepoint_unix</label> --}}
                 {{-- @error('startingTimepoint_unix') --}}
                 {{-- <span class="text-red-500 text-[9px]">{{ $message }}</span> --}}

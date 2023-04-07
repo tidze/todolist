@@ -1,7 +1,7 @@
 <div class="">
     {{-- they need to be together `w-screen` `overflow-x-auto` --}}
     <div class="relative w-full overflow-x-auto inline-block shadow-md sm:rounded-lg box-border border-2 border-teal-800">
-        <table class="text-[9px]">
+        <table class="text-[14px]">
             <thead class="uppercase bg-gray-50 dark:bg-gray-700 text-white">
                 <tr>
                     {{-- <th scope="col" class="px-1 py-0"> --}}

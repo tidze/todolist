@@ -1,13 +1,14 @@
+
 <div class="relative border border-emerald-700">
     <div>
         {{-- Components Debugger Information --}}
-        <p class="text-teal-600 text-[9px]">
-            {{-- $x_startingDatepoint_unix = <span class="text-teal-100">{{ isset($x_startingDatepoint_unix) ? $x_startingDatepoint_unix : 'Not Set' }}</span> <br> --}}
-            {{-- $x_endingDatepoint_unix = <span class="text-teal-100">{{ isset($x_endingDatepoint_unix) ? $x_endingDatepoint_unix : 'Not Set' }}</span><br> --}}
-            {{-- $x_startingDate = <span class="text-teal-100">{{ isset($x_startingDate) ? $x_startingDate : 'Not Set' }}</span><br> --}}
-            {{-- $x_endingDate = <span class="text-teal-100">{{ isset($x_endingDate) ? $x_endingDate : 'Not Set' }}</span><br> --}}
-            {{-- $x_startingHourpoint = <span class="text-teal-100">{{ isset($x_startingHourpoint) ? $x_startingHourpoint : 'Not Set' }}</span><br> --}}
-            {{-- $x_endingHourpoint = <span class="text-teal-100">{{ isset($x_endingHourpoint) ? $x_endingHourpoint : 'Not Set' }}</span><br> --}}
+        <p class="text-teal-600 text-[12px]">
+            $x_startingDatepoint_unix = <span class="text-teal-100">{{ isset($x_startingDatepoint_unix) ? $x_startingDatepoint_unix .' '. date('Y-m-d H:i',$x_startingDatepoint_unix) : 'Not Set' }}</span> <br>
+            $x_endingDatepoint_unix = <span class="text-teal-100">{{ isset($x_endingDatepoint_unix) ? $x_endingDatepoint_unix .' '. date('Y-m-d H:i',$x_endingDatepoint_unix): 'Not Set' }}</span><br>
+            $x_startingDate = <span class="text-teal-100">{{ isset($x_startingDate) ? $x_startingDate : 'Not Set' }}</span><br>
+            $x_endingDate = <span class="text-teal-100">{{ isset($x_endingDate) ? $x_endingDate : 'Not Set' }}</span><br>
+            $x_startingHourpoint = <span class="text-teal-100">{{ isset($x_startingHourpoint) ? $x_startingHourpoint : 'Not Set' }}</span><br>
+            $x_endingHourpoint = <span class="text-teal-100">{{ isset($x_endingHourpoint) ? $x_endingHourpoint : 'Not Set' }}</span><br>
             {{-- $$x_tasksGraphArray --> = <pre class="text-teal-100">{{ isset($x_tasksGraphArray) ? print_r($x_tasksGraphArray) : 'Not Set' }}</pre><br> --}}
             {{-- $x_flattened = <span class="text-teal-100">{{ var_dump($x_flattened) }}</span><br> --}}
         </p>
@@ -38,7 +39,9 @@
                 {{-- <span class="text-red-500 text-[9px]">{{ $message }}</span> --}}
                 {{-- @enderror --}}
             </div>
-            <div class="inline-block border border-emerald-600 text-emerald-500 p-0.5 rounded hover:bg-emerald-600 hover:text-black cursor-pointer" wire:click="getTask()">Days Report</div>
+            <div class="inline-block border border-emerald-600 text-emerald-500 p-0.5 rounded hover:bg-emerald-600 hover:text-black cursor-pointer" wire:click="getTask()">Custom Days Report</div>
+            <div class="inline-block border border-emerald-600 text-emerald-500 p-0.5 rounded hover:bg-emerald-600 hover:text-black cursor-pointer" wire:click="getTaskForPastSevenDays()">7 Days Report</div>
+            <div class="inline-block border border-emerald-600 text-emerald-500 p-0.5 rounded hover:bg-emerald-600 hover:text-black cursor-pointer" wire:click="getTaskForPastThirtyDays()">30 Days Report</div>
         </div>
         {{-- <span id="x_customDebug" class="inline-block border border-amber-600 p-0.5 rounded hover:bg-yellow-500 hover:text-black cursor-pointer" wire:click>x_customDebug</span> --}}
     </div>
@@ -53,15 +56,15 @@
             @foreach ($x_seperatedTasks as $index => $tasksOfDay)
                 <div class="border-2 border-cyan-900 h-[6vh] flex flex-row relative right-0 box-border border-opacity-100 w-full">
                     <div class="flex flex-row w-full">
-                        <div class="text-[10px] text-green-400">{{ date('Y-m-d', substr($x_startingDatepoint_unix, 0, 10) + 86400 * ($index + 1)) }}</div>
+                        <div class="text-[10px] text-green-400">{{ date('Y-m-d', substr($x_startingDatepoint_unix, 0, 10) + 86400 * ($index)) }}</div>
                         <pre> </pre>
-                        <div class="text-[10px] text-teal-400">{{ $x_startingHourpoint }}</div>
-                        <div class="ml-auto text-[10px] text-green-400">{{ date('Y-m-d', substr($x_endingDatepoint_unix, 0, 10) + 86400 * (- count($x_seperatedTasks) + $index + 2)) }}</div>
+                        <div class="text-[10px] text-teal-400">{{ date('H:i', substr($x_startingDatepoint_unix, 0, 10)+12600 + 86400 * ($index + 1)) }}</div>
+                        <div class="ml-auto text-[10px] text-green-400">{{ date('Y-m-d', substr($x_endingDatepoint_unix, 0, 10) + 86400 * (- count($x_seperatedTasks) + $index + 1)) }}</div>
                         <pre> </pre>
-                        <div class="text-[10px] text-teal-400" style>{{ ' ' . $x_endingHourpoint }}</div>
+                        <div class="text-[10px] text-teal-400" style>{{ date('H:i', substr($x_endingDatepoint_unix, 0, 10)+ 12600 + 86400 * ($index + 1)) }}</div>
                     </div>
                     @foreach ($tasksOfDay as $index => $_task)
-                        <div class="border border-fuchsia-400 w-1/2 h-full flex flex-row absolute box-border" style="{{ $_task['width'] }};{{ $_task['left'] }}"></div>
+                        <div class="border border-fuchsia-400 w-1/2 h-full flex flex-row absolute box-border diagonal-stripes-x" style="{{ $_task['width'] }};{{ $_task['left'] }}"></div>
                     @endforeach
                 </div>
             @endforeach

@@ -18,8 +18,8 @@ class CustomChart extends Component
 
     public function mount()
     {
-        $this->c_startingDatepoint_unix = '1679927400000';
-        $this->c_endingDatepoint_unix = '1679948940000';
+        $this->c_startingDatepoint_unix = '1680703200' + (0 * 86400);
+        $this->c_endingDatepoint_unix = '1680726480';
         $this->c_flattened = false;
         $this->c_startingHourpoint = '18:00';
         $this->c_endingHourpoint = '23:59';

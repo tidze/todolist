@@ -26,13 +26,15 @@ class CustomGraphX extends Component
     }
     public function mount()
     {
-        $this->x_startingDatepoint_unix = '1679927400';
-        $this->x_endingDatepoint_unix = 1679948940 + (4* 86400);
+        $this->x_startingDatepoint_unix = '1680703200' + (0 * 86400);
+        $this->x_endingDatepoint_unix = 1680726480 + (4 * 86400);
         $this->x_flattened = false;
-        $this->x_startingHourpoint = '18:00';
-        $this->x_endingHourpoint = '23:59';
-        $this->x_startingDate = '2023-03-27';
-        $this->x_endingDate = '2023-03-27';
+        // $this->x_startingHourpoint = '18:00';
+        // $this->x_endingHourpoint = '23:59';
+        $this->x_startingHourpoint = date('H:i',$this->x_startingDatepoint_unix+12600);
+        $this->x_endingHourpoint = date('H:i',$this->x_endingDatepoint_unix+12600);
+        $this->x_startingDate = date('Y-m-d',$this->x_startingDatepoint_unix+12600);
+        $this->x_endingDate = date('Y-m-d',$this->x_startingDatepoint_unix+12600);
     }
 
     /**
@@ -44,7 +46,7 @@ class CustomGraphX extends Component
     public function seperateTasksIntoDays($array)
     {
         if (empty($array)) {
-            dd('seperateTasksIntoDays: Given array is empty', $array);
+            dd('seperateTasksIntoDays: Given array is empty','It may have been no tasks in the zone', $array);
         }
         $modified_array = array();
         $days = $this->modByDays($this->x_startingDatepoint_unix, $this->x_endingDatepoint_unix);
@@ -53,8 +55,7 @@ class CustomGraphX extends Component
                 array_filter(
                     $array,
                     function ($task) use ($x) {
-                        return (
-                            $task['starting_time'] >= $this->addDays($this->x_startingDatepoint_unix, $x)
+                        return ($task['starting_time'] >= $this->addDays($this->x_startingDatepoint_unix, $x)
                             &&
                             $task['starting_time'] < $this->addDays($this->x_startingDatepoint_unix, $x + 1)
                         );
@@ -114,48 +115,48 @@ class CustomGraphX extends Component
      * @param array 2D Array
      */
 
-    public function calcTaskWidthForSeperatedTasks($array)
-    {
-        if (empty($array)) {
-            dd('calcTaskWidthForSeperatedTasks: Given array is empty', $array);
-        }
-        if (!($this->is_multi_array($array))) {
-            dd('calcTaskWidthForSeperatedTasks: Given array is not multi dimention', $array);
-        }
-        $rows = count($array);
-        $cols = count($array[0]);
+     public function calcTaskWidthForSeperatedTasks($array)
+     {
+         if (empty($array)) {
+             dd('calcTaskWidthForSeperatedTasks: Given array is empty', $array);
+         }
+         if (!($this->is_multi_array($array))) {
+             dd('calcTaskWidthForSeperatedTasks: Given array is not multi dimention', $array);
+         }
+         $rows = count($array);
+         $cols = count($array[0]);
 
-        for ($x = 0; $x < $rows; $x++) {
-            for ($y = 0; $y < (count($array[$x])); $y++) {
-                $deltaForNumerator = abs(
-                    substr($array[$x][$y]['ending_time'], 0, 10)
-                    -
-                    substr($array[$x][$y]['starting_time'], 0, 10)
-                );
-                $deltaForDenumerator = abs(
-                    substr($this->addDays($this->x_startingDatepoint_unix, $x), 0, 10)
-                    -
-                    substr($this->addDays($this->x_endingDatepoint_unix, (-1 * $rows) + 1 + $x), 0, 10)
-                );
-                $array[$x][$y]['width'] = "width:" .
-                    (
-                        substr(
-                            (100 *
-                                abs(
-                                    ($deltaForNumerator)
-                                    /
-                                    ($deltaForDenumerator)
-                                )
-                            ),
-                            0,
-                            5
-                        )
-                    )
-                    . "%";
-            }
-        }
-        return $array;
-    }
+         for ($x = 0; $x < $rows; $x++) {
+             for ($y = 0; $y < (count($array[$x])); $y++) {
+                 $deltaForNumerator = abs(
+                     substr($array[$x][$y]['ending_time'], 0, 10)
+                     -
+                     substr($array[$x][$y]['starting_time'], 0, 10)
+                 );
+                 $deltaForDenumerator = abs(
+                     substr($this->addDays($this->x_startingDatepoint_unix, $x), 0, 10)
+                     -
+                     substr($this->addDays($this->x_endingDatepoint_unix, (-1 * $rows) + 1 + $x), 0, 10)
+                 );
+                 $array[$x][$y]['width'] = "width:" .
+                     (
+                         substr(
+                             (100 *
+                                 abs(
+                                     ($deltaForNumerator)
+                                     /
+                                     ($deltaForDenumerator)
+                                 )
+                             ),
+                             0,
+                             5
+                         )
+                     )
+                     . "%";
+             }
+         }
+         return $array;
+     }
 
     public function calcTaskOffsetForSeperatedTasks($array)
     {
@@ -172,29 +173,35 @@ class CustomGraphX extends Component
             for ($y = 0; $y < (count($array[$x])); $y++) {
                 $deltaForNumerator = abs(
                     substr($array[$x][$y]['starting_time'], 0, 10)
-                    -
-                    substr($this->addDays($this->x_startingDatepoint_unix, $x), 0, 10)
+                        -
+                        substr($this->addDays($this->x_startingDatepoint_unix, $x), 0, 10)
                 );
                 $deltaForDenumerator = abs(
                     substr($this->addDays($this->x_startingDatepoint_unix, $x), 0, 10)
-                    -
-                    substr($this->addDays($this->x_endingDatepoint_unix, (-1 * $rows) + 1 + $x), 0, 10)
+                        -
+                        substr($this->addDays($this->x_endingDatepoint_unix, (-1 * $rows) + 1 + $x), 0, 10)
                 );
-                $array[$x][$y]['left'] = "left:" .
-                    (
-                        substr(
-                            (100 *
-                                abs(
-                                    ($deltaForNumerator)
+                // dd(substr($this->addDays($this->x_startingDatepoint_unix, $x), 0, 10),substr($this->addDays($this->x_endingDatepoint_unix, (-1 * $rows) + 1 + $x), 0, 10));
+                if($deltaForDenumerator==0){
+                    $array[$x][$y]['left'] = "left:" . 0 . "%";
+                }else{
+                    $array[$x][$y]['left'] = "left:" .
+                    (substr(
+                        (100 *
+                            abs(
+                                ($deltaForNumerator)
                                     /
+
                                     ($deltaForDenumerator)
-                                )
-                            ),
-                            0,
-                            5
-                        )
+                            )
+                        ),
+                        0,
+                        5
+                    )
                     )
                     . "%";
+                }
+
             }
         }
         return $array;
@@ -206,19 +213,19 @@ class CustomGraphX extends Component
         (is_null($this->x_startingDatepoint_unix) || is_null($this->x_endingDatepoint_unix)) ?
             dd('Parameter has not been found!') :
             $this->x_tasksGraphArray = DB::table('tasks')
-                ->where('starting_time', '>=', substr($this->x_startingDatepoint_unix, 0, 10))
-                ->where('starting_time', '<', substr($this->x_endingDatepoint_unix, 0, 10))
-                ->orderBy('starting_time')
-                ->get()->toArray();
-                // dd($this->x_tasksGraphArray);
-                // You may wonder: Why did I add this custom made foreach loop, while I could have used the `setTaskPositionType()`?
-                // Because of the initial state and timeline. The timeline does not match the correct corresponding according to the `x_flattened :bool`
-                // foreach ($this->x_tasksGraphArray as &$task) {
-                    // $task['position'] = 'absolute';
-                    // }
+            // date('Y-m-d', (substr($x_startingDatepoint_unix, 0, 10)+12600))
+            ->where('starting_time', '>=', substr($this->x_startingDatepoint_unix, 0, 10))
+            ->where('starting_time', '<', substr($this->x_endingDatepoint_unix, 0, 10))
+            ->orderBy('starting_time')
+            ->get()->toArray();
+            // dd($this->x_tasksGraphArray);
+            // You may wonder: Why did I add this custom made foreach loop, while I could have used the `setTaskPositionType()`?
+            // Because of the initial state and timeline. The timeline does not match the correct corresponding according to the `x_flattened :bool`
+            // foreach ($this->x_tasksGraphArray as &$task) {
+        // $task['position'] = 'absolute';
+        // }
         $this->x_tasksGraphArray = $this->stdclassToArray($this->x_tasksGraphArray);
         $this->x_seperatedTasks = $this->seperateTasksIntoDays($this->x_tasksGraphArray);
-        // dd($this->x_tasksGraphArray,$this->x_seperatedTasks);
         $this->x_seperatedTasks = $this->calcTaskWidthForSeperatedTasks($this->x_seperatedTasks);
         $this->x_seperatedTasks = $this->calcTaskOffsetForSeperatedTasks($this->x_seperatedTasks);
 
@@ -227,6 +234,42 @@ class CustomGraphX extends Component
         // ['starting_time', '>=', substr($this->x_startingDatepoint_unix, 0, 10)],
         // ['starting_time', '<', substr($this->x_endingDatepoint_unix, 0, 10)]
         // ])->get());
+    }
+
+    public function getTaskForPastSevenDays()
+    {
+        $this->x_flattened = false;
+        $this->x_startingDatepoint_unix = $this->addDays(time(), -7);
+        $this->x_endingDatepoint_unix = $this->addDays(time(), 0);
+        (is_null($this->x_startingDatepoint_unix) || is_null($this->x_endingDatepoint_unix)) ?
+            dd('Parameter has not been found!') :
+            $this->x_tasksGraphArray = DB::table('tasks')
+            ->where('starting_time', '>=', substr($this->x_startingDatepoint_unix, 0, 10))
+            ->where('starting_time', '<', substr($this->x_endingDatepoint_unix, 0, 10))
+            ->orderBy('starting_time')
+            ->get()->toArray();
+        $this->x_tasksGraphArray = $this->stdclassToArray($this->x_tasksGraphArray);
+        $this->x_seperatedTasks = $this->seperateTasksIntoDays($this->x_tasksGraphArray);
+        $this->x_seperatedTasks = $this->calcTaskWidthForSeperatedTasks($this->x_seperatedTasks);
+        $this->x_seperatedTasks = $this->calcTaskOffsetForSeperatedTasks($this->x_seperatedTasks);
+    }
+
+    public function getTaskForPastThirtyDays()
+    {
+        $this->x_flattened = false;
+        $this->x_startingDatepoint_unix = $this->addDays(time(), -30);
+        $this->x_endingDatepoint_unix = $this->addDays(time(), 0);
+        (is_null($this->x_startingDatepoint_unix) || is_null($this->x_endingDatepoint_unix)) ?
+            dd('Parameter has not been found!') :
+            $this->x_tasksGraphArray = DB::table('tasks')
+            ->where('starting_time', '>=', substr($this->x_startingDatepoint_unix, 0, 10))
+            ->where('starting_time', '<', substr($this->x_endingDatepoint_unix, 0, 10))
+            ->orderBy('starting_time')
+            ->get()->toArray();
+        $this->x_tasksGraphArray = $this->stdclassToArray($this->x_tasksGraphArray);
+        $this->x_seperatedTasks = $this->seperateTasksIntoDays($this->x_tasksGraphArray);
+        $this->x_seperatedTasks = $this->calcTaskWidthForSeperatedTasks($this->x_seperatedTasks);
+        $this->x_seperatedTasks = $this->calcTaskOffsetForSeperatedTasks($this->x_seperatedTasks);
     }
 
     public function stdclassToArray($array)
@@ -270,6 +313,4 @@ class CustomGraphX extends Component
         // rsort($array);
         return isset($array[0]) && is_array($array[0]);
     }
-
-
 }

@@ -89,7 +89,7 @@
                     </div>
                     @isset($c_tasksGraphArray)
                         @foreach ($c_tasksGraphArray as $_task)
-                            <div class="taskGraphItem box-border {{ $_task['translate'] ?? '' }} {{ $_task['position'] ?? '' }} w-full text-[9px] border border-yellow-400 border-opacity-70"
+                            <div class="taskGraphItem box-border {{ $_task['translate'] ?? '' }} {{ $_task['position'] ?? '' }} w-full text-[9px] border border-yellow-400 border-opacity-70 diagonal-stripes"
                                 style=" {{ $_task['top'] ?? '' }} ; {{ $_task['height'] ?? '' }};" {{-- The Starting point is 100% off by Y Axis so i added translate transform --}}>
                                 {{-- time indicator --}}
                                 <div class="box-border border border-b-transparent border-r-transparent border-l-transparent border-t-yellow-400 h-[20px] w-1/5 absolute -left-[20%]">

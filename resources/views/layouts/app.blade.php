@@ -24,28 +24,38 @@
         .debug-border * {
             border: 1px solid tomato;
         }
+
+        .diagonal-stripes {
+            background: repeating-linear-gradient(-45deg, #facc15, #facc15 2px, #ffffff00 0, #ffffff00 11px);
+        }
+        .diagonal-stripes-x {
+            background: repeating-linear-gradient(-45deg, #e879f97a, #e879f97a 2px, #ffffff00 0, #ffffff00 9px);
+        }
     </style>
 </head>
 
-<body class="antialiased font-Rubik">
+<body class="antialiased font-Rubik bg-gray-900">
     @livewireScripts
-    {{-- {{ public_path() }}<br> --}}
-    {{-- {{ base_path() }}<br> --}}
-    {{-- {{ storage_path() }}<br> --}}
-    {{-- {{ app_path() }}<br> --}}
+    <div class="sm:w-[500px] sm:ml-auto sm:mr-auto sm:block py-4">
 
-    @livewire('task')
+        {{-- {{ public_path() }}<br> --}}
+        {{-- {{ base_path() }}<br> --}}
+        {{-- {{ storage_path() }}<br> --}}
+        {{-- {{ app_path() }}<br> --}}
 
-    @livewire('tasks-table')
+        @livewire('task')
 
-    @livewire('custom-chart')
+        @livewire('tasks-table')
 
-    @livewire('custom-graph-x')
+        @livewire('custom-chart')
 
-    {{-- @yield('content') --}}
+        @livewire('custom-graph-x')
 
-    @include('layouts.footer')
+        {{-- @yield('content') --}}
 
+        @include('layouts.footer')
+
+    </div>
     @stack('script')
     <script></script>
 </body>
