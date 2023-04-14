@@ -23,9 +23,14 @@ class Task extends Model
         'ending_time',
     ];
 
-    public function task():HasOne
+    public function category():HasOne
     {
         return $this->hasOne(Category::class,'id');
+        // return $this->hasOne(User::class,'id');
+    }
+    public function user():HasOne
+    {
+        return $this->hasOne(User::class,'id');
         // return $this->hasOne(User::class,'id');
     }
 }

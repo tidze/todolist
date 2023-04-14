@@ -1,19 +1,20 @@
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
     content: [
-        "./resources/**/*.blade.php",
-        "./resources/**/*.js",
-        "./resources/**/*.vue",
+        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
+        './storage/framework/views/*.php',
+        './resources/views/**/*.blade.php',
     ],
+
     theme: {
         extend: {
             fontFamily: {
-                'Rubik': ['Rubik', 'sans-serif'],
-                'Zeyada': ['Zeyada', 'cursive'],
-            }
+                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+            },
         },
     },
-    plugins: [
-        // require('prettier-plugin-tailwindcss')
-    ],
-}
+
+    plugins: [require('@tailwindcss/forms')],
+};

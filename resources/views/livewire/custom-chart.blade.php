@@ -1,14 +1,15 @@
 <div class="relative border-2 border-yellow-900 box-border text-white text-[10px]">
     {{-- Components Debugger Information --}}
-    <div class="text-yellow-500 text-[9px] w-full">
-        {{-- $c_startingDatepoint_unix = <span class="text-yellow-100">{{ isset($c_startingDatepoint_unix) ? $c_startingDatepoint_unix : 'Not Set' }}</span> <br> --}}
-        {{-- $c_endingDatepoint_unix = <span class="text-yellow-100">{{ isset($c_endingDatepoint_unix) ? $c_endingDatepoint_unix : 'Not Set' }}</span><br> --}}
+    <div class="text-yellow-500 text-[11px] w-full">
+        {{-- date_default_timezone_get=<span class="text-amber-100">{{ date_default_timezone_get() }}</span><br> --}}
+        {{-- $c_startingDatepoint_unix = <span class="text-yellow-100">{{ isset($c_startingDatepoint_unix) ? $c_startingDatepoint_unix .' '. date('Y-m-d H:i',$c_startingDatepoint_unix) : 'Not Set' }}</span> <br> --}}
+        {{-- $c_endingDatepoint_unix = <span class="text-yellow-100">{{ isset($c_endingDatepoint_unix) ? $c_endingDatepoint_unix .' '. date('Y-m-d H:i',$c_endingDatepoint_unix) : 'Not Set' }}</span><br> --}}
         {{-- $c_startingDate = <span class="text-yellow-100">{{ isset($c_startingDate) ? $c_startingDate : 'Not Set' }}</span><br> --}}
         {{-- $c_endingDate = <span class="text-yellow-100">{{ isset($c_endingDate) ? $c_endingDate : 'Not Set' }}</span><br> --}}
         {{-- $c_startingHourpoint = <span class="text-yellow-100">{{ isset($c_startingHourpoint) ? $c_startingHourpoint : 'Not Set' }}</span><br> --}}
         {{-- $c_endingHourpoint = <span class="text-yellow-100">{{ isset($c_endingHourpoint) ? $c_endingHourpoint : 'Not Set' }}</span><br> --}}
-        {{-- $$c_tasksGraphArray --> =<pre class="text-yellow-100">{{ isset($c_tasksGraphArray) ? print_r($c_tasksGraphArray) : 'Not Set' }}</pre><br> --}}
-        {{-- date_default_timezone_get=<span class="text-amber-100">{{ date_default_timezone_get() }}</span><br> --}}
+        {{-- $c_tasksGraphArray --> =<pre class="text-yellow-100">{{ isset($c_tasksGraphArray) ? print_r($c_tasksGraphArray) : 'Not Set' }}</pre><br> --}}
+        {{-- $c_flattened --> =<span class="text-yellow-100">{{ isset($c_flattened) ? print_r($c_flattened) : 'Not Set' }}</span><br> --}}
         {{-- $flattened = <span class="text-yellow-100">{{ var_dump($flattened) }}</span><br> --}}
         {{-- timezone= <span class="text-yellow-100">{{ $timezone ?? 'Not Set' }}</span><br> --}}
     </div>
@@ -16,7 +17,7 @@
         {{-- <span id="c_customDebug" class="inline-block border border-amber-600 p-0.5 rounded hover:bg-yellow-500 hover:text-black cursor-pointer" wire:click>c_customDebug</span> --}}
         {{-- <br> --}}
         <div id="c_targetDate_Container" class="flex justify-center p-2">
-            <input class="h-full border-2 border-amber-600 " id="c_targetDate" type="date" value="{{ date('Y-m-d', substr($c_startingDatepoint_unix, 0, 10) + 12600) }}">
+            <input class="h-full border-2 border-amber-600 flex" id="c_targetDate" type="date" value="{{ date('Y-m-d', substr($c_startingDatepoint_unix, 0, 10) + 12600) }}">
             <label class="text-amber-600 self-center" for="c_targetDate">Date</label>
         </div>
         <div class="flex">
@@ -89,8 +90,11 @@
                     </div>
                     @isset($c_tasksGraphArray)
                         @foreach ($c_tasksGraphArray as $_task)
-                            <div class="taskGraphItem box-border {{ $_task['translate'] ?? '' }} {{ $_task['position'] ?? '' }} w-full text-[9px] border border-yellow-400 border-opacity-70 diagonal-stripes"
-                                style=" {{ $_task['top'] ?? '' }} ; {{ $_task['height'] ?? '' }};" {{-- The Starting point is 100% off by Y Axis so i added translate transform --}}>
+                            <div class="taskGraphItem box-border {{ $_task['translate'] ?? '' }} {{ $_task['position'] ?? '' }} w-full text-[9px] border border-yellow-400 border-opacity-70"
+                                style=" {{ $_task['top'] ?? '' }} ;
+                                        {{ $_task['height'] ?? '' }};
+                                        background: repeating-linear-gradient(-45deg, {{$_task['color']}}, {{$_task['color']}} 2px, #ffffff00 0, #ffffff00 11px);
+                                        border-color: {{$_task['color']}}" {{-- The Starting point is 100% off by Y Axis so i added translate transform --}}>
                                 {{-- time indicator --}}
                                 <div class="box-border border border-b-transparent border-r-transparent border-l-transparent border-t-yellow-400 h-[20px] w-1/5 absolute -left-[20%]">
                                     <div class="flex justify-end">

@@ -8,6 +8,7 @@ use App\Models\Task as TaskModel;
 use App\Models\Category as CategoryModel;
 use DateTimeZone;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class Task extends Component
 {
@@ -63,18 +64,21 @@ class Task extends Component
     public function editTask($id)
     {
         $this->targetTaskIdEdit = $id;
-
-        $task = TaskModel::select('tasks.*', 'categories.category', 'categories.description')->join('categories', 'tasks.category_id', '=', 'categories.id')->get()->find($this->targetTaskIdEdit);
+        $task = DB::table('tasks')->select('tasks.*', 'categories.category', 'categories.description', 'categories.color')
+            ->join('categories', 'tasks.category_id', '=', 'categories.id')
+            ->where('tasks.user_id', Auth::user()->id)
+            ->where('tasks.id',$id)
+            ->first();
         $this->taskCategory = $task->category;
         $this->taskDescription = $task->description;
         $this->desiredDuration = $task->desired_duration;
         // turn it into each time zone , this fix is temporary
         $this->startingTimepoint_unix = $task->starting_time * 1000;
         $this->endingTimepoint_unix = $task->ending_time * 1000;
-        $this->startingTimepoint =  date("H:i", $task->starting_time+12600);
-        $this->endingTimepoint = date("H:i", $task->ending_time+12600);
-        $this->startingDatepoint =  date("Y-m-d", $task->starting_time+12600);
-        $this->endingDatepoint = date("Y-m-d", $task->ending_time+12600);
+        $this->startingTimepoint =  date("H:i", $task->starting_time + 12600);
+        $this->endingTimepoint = date("H:i", $task->ending_time + 12600);
+        $this->startingDatepoint =  date("Y-m-d", $task->starting_time + 12600);
+        $this->endingDatepoint = date("Y-m-d", $task->ending_time + 12600);
         // send back the targetTaskIdEdit to tasks-table
         $this->emitTo('tasks-table', 'sendBackId', $this->targetTaskIdEdit);
     }
@@ -89,14 +93,14 @@ class Task extends Component
             'taskCategory' => ['required'],
             'taskDescription' => ['required'],
         ]);
-        $category = Task::checkForExistingCategory(trim($this->taskCategory), trim($this->taskDescription));
+        $category = $this->checkForExistingCategory(Auth::user()->id,trim($this->taskCategory), trim($this->taskDescription));
         if (is_null($category)) {
             // if the category not exists, add the category to the categories table and then update the task
-            Task::insertIntoCategories(trim($this->taskCategory), trim($this->taskDescription));
-            Task::updateIntoTasks(trim($this->targetTaskIdEdit), trim($this->taskCategory), trim($this->taskDescription));
+            $this->insertIntoCategories(Auth::user()->id,trim($this->taskCategory), trim($this->taskDescription));
+            $this->updateIntoTasks(trim($this->targetTaskIdEdit), trim($this->taskCategory), trim($this->taskDescription));
         } else {
             // if the category exists, just retrive the id from categories table and update it with category_id
-            Task::updateIntoTasks(trim($this->targetTaskIdEdit), trim($this->taskCategory), trim($this->taskDescription));
+            $this->updateIntoTasks(trim($this->targetTaskIdEdit), trim($this->taskCategory), trim($this->taskDescription));
         }
         $this->resetErrorBag();
     }
@@ -116,14 +120,14 @@ class Task extends Component
             'taskDescription' => ['required'],
         ]);
 
-        $category = Task::checkForExistingCategory(trim($this->taskCategory), trim($this->taskDescription));
+        $category = $this->checkForExistingCategory(Auth::user()->id, trim($this->taskCategory), trim($this->taskDescription));
         if (is_null($category)) {
-            // if the category not exists, add the category to the categories table and then add the task
-            Task::insertIntoCategories(trim($this->taskCategory), trim($this->taskDescription));
-            Task::insertIntoTasks(trim($this->taskCategory), trim($this->taskDescription));
+            // if the category does not exist, add the category to the categories table and then add the task
+            $this->insertIntoCategories(Auth::user()->id, trim($this->taskCategory), trim($this->taskDescription));
+            $this->insertIntoTasks(Auth::user()->id, trim($this->taskCategory), trim($this->taskDescription));
         } else {
             // if the category exists, just retrive the id from categories table and insert it as category_id
-            Task::insertIntoTasks(trim($this->taskCategory), trim($this->taskDescription));
+            $this->insertIntoTasks(Auth::user()->id, trim($this->taskCategory), trim($this->taskDescription));
         }
         $this->emitTo('tasks-table', '$refresh');
         $this->taskCategory = '';
@@ -138,23 +142,25 @@ class Task extends Component
         $this->resetErrorBag();
     }
 
-    public function checkForExistingCategory($category, $description)
+    public function checkForExistingCategory($user_id, $category, $description)
     {
-        return CategoryModel::where('category', $category)->where('description', $description)->first();
+        return CategoryModel::where('user_id', $user_id)->where('category', $category)->where('description', $description)->first();
     }
 
-    public function insertIntoCategories($category, $description)
+    public function insertIntoCategories($user_id, $category, $description)
     {
         $categoryModel = new CategoryModel;
+        $categoryModel->user_id = $user_id;
         $categoryModel->category = $category;
         $categoryModel->description = $description;
         $categoryModel->save();
     }
 
-    public function insertIntoTasks($category, $description)
+    public function insertIntoTasks($user_id, $category, $description)
     {
         $taskModel = new TaskModel;
-        $retrievedCategory = Task::checkForExistingCategory($category, $description);
+        $retrievedCategory = $this->checkForExistingCategory(Auth::user()->id, $category, $description);
+        $taskModel->user_id = $user_id;
         $taskModel->category_id = $retrievedCategory->id;
         $taskModel->desired_duration = $this->desiredDuration;
         // The UnixEpoch in js is in miliseconds, while php is in seconds.
@@ -165,7 +171,7 @@ class Task extends Component
 
     public function updateIntoTasks($taskId, $category, $description)
     {
-        $retrievedCategory = Task::checkForExistingCategory($category, $description);
+        $retrievedCategory = $this->checkForExistingCategory(Auth::user()->id, $category, $description);
         DB::table('tasks')->where('id', $taskId)
             ->update([
                 'category_id' => $retrievedCategory->id,

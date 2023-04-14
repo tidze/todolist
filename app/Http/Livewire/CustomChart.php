@@ -18,8 +18,8 @@ class CustomChart extends Component
 
     public function mount()
     {
-        $this->c_startingDatepoint_unix = '1680703200' + (0 * 86400);
-        $this->c_endingDatepoint_unix = '1680726480';
+        $this->c_startingDatepoint_unix = '1680703200' + (9 * 86400);
+        $this->c_endingDatepoint_unix = '1680726480' + (9 * 86400);
         $this->c_flattened = false;
         $this->c_startingHourpoint = '18:00';
         $this->c_endingHourpoint = '23:59';
@@ -81,23 +81,22 @@ class CustomChart extends Component
             $task = json_decode(json_encode($task), true);
             $deltaForNumerator = abs(
                 substr($task['ending_time'], 0, 10)
-                -
-                substr($task['starting_time'], 0, 10)
+                    -
+                    substr($task['starting_time'], 0, 10)
             );
             $deltaForDenumerator = abs(
                 substr($this->c_startingDatepoint_unix, 0, 10)
-                -
-                substr($this->c_endingDatepoint_unix, 0, 10)
+                    -
+                    substr($this->c_endingDatepoint_unix, 0, 10)
             );
 
             $task['height'] = "height:" .
-                (
-                    substr(
+                (substr(
                         (100 *
                             abs(
                                 ($deltaForNumerator)
-                                /
-                                ($deltaForDenumerator)
+                                    /
+                                    ($deltaForDenumerator)
                             )
                         ),
                         0,
@@ -113,13 +112,13 @@ class CustomChart extends Component
             $task = json_decode(json_encode($task), true);
             $deltaForNumerator = abs(
                 substr($this->c_startingDatepoint_unix, 0, 10)
-                -
-                substr($task['starting_time'], 0, 10)
+                    -
+                    substr($task['starting_time'], 0, 10)
             );
             $deltaForDenumerator = abs(
                 substr($this->c_startingDatepoint_unix, 0, 10)
-                -
-                substr($this->c_endingDatepoint_unix, 0, 10)
+                    -
+                    substr($this->c_endingDatepoint_unix, 0, 10)
             );
             $task['top'] = "top:" .
                 substr(
@@ -144,10 +143,12 @@ class CustomChart extends Component
         (is_null($this->c_startingDatepoint_unix) || is_null($this->c_endingDatepoint_unix)) ?
             dd('Parameter has not been found!') :
             $this->c_tasksGraphArray = DB::table('tasks')
-                ->where('starting_time', '>=', substr($this->c_startingDatepoint_unix, 0, 10))
-                ->where('starting_time', '<', substr($this->c_endingDatepoint_unix, 0, 10))
-                ->orderBy('starting_time')
-                ->get()->toArray();
+            ->select('tasks.*', 'categories.category', 'categories.description', 'categories.color')
+            ->join('categories', 'tasks.category_id', '=', 'categories.id')
+            ->where('starting_time', '>=', substr($this->c_startingDatepoint_unix, 0, 10))
+            ->where('starting_time', '<', substr($this->c_endingDatepoint_unix, 0, 10))
+            ->orderBy('starting_time')
+            ->get()->toArray();
         $this->calcTaskHeight();
         // You may wonder: Why did I add this custom made foreach loop, while I could have used the `setTaskPositionType()`?
         // Because of the initial state and timeline. The timeline does not match the correct corresponding according to the `c_flattened :bool`
@@ -155,7 +156,7 @@ class CustomChart extends Component
             $task['position'] = 'absolute';
         }
         $this->calcTaskTopOffset();
-
+        // dd($this->c_tasksGraphArray);
         // dd(DB::table('tasks')
         // ->where([
         // ['starting_time', '>=', substr($this->c_startingDatepoint_unix, 0, 10)],

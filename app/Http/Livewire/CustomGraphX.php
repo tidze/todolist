@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
+use Ramsey\Uuid\Type\Time;
 
 class CustomGraphX extends Component
 {
@@ -26,8 +27,8 @@ class CustomGraphX extends Component
     }
     public function mount()
     {
-        $this->x_startingDatepoint_unix = '1680703200' + (0 * 86400);
-        $this->x_endingDatepoint_unix = 1680726480 + (4 * 86400);
+        $this->x_startingDatepoint_unix ='1680703200' + (9 * 86400);
+        $this->x_endingDatepoint_unix = '1680726480' + (9 * 86400);
         $this->x_flattened = false;
         // $this->x_startingHourpoint = '18:00';
         // $this->x_endingHourpoint = '23:59';
@@ -213,6 +214,8 @@ class CustomGraphX extends Component
         (is_null($this->x_startingDatepoint_unix) || is_null($this->x_endingDatepoint_unix)) ?
             dd('Parameter has not been found!') :
             $this->x_tasksGraphArray = DB::table('tasks')
+            ->select('tasks.*', 'categories.category', 'categories.description', 'categories.color')
+            ->join('categories', 'tasks.category_id', '=', 'categories.id')
             // date('Y-m-d', (substr($x_startingDatepoint_unix, 0, 10)+12600))
             ->where('starting_time', '>=', substr($this->x_startingDatepoint_unix, 0, 10))
             ->where('starting_time', '<', substr($this->x_endingDatepoint_unix, 0, 10))

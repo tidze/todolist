@@ -1,27 +1,31 @@
 <?php
 
-use App\Http\Controllers\CGCareer;
-use App\Http\Controllers\GameDevelopment;
-use App\Http\Controllers\WebDevelopment;
-use App\Http\Controllers\Task;
-use App\Http\Livewire\LivewireBase;
-use App\Http\Livewire\Scroller;
-use App\Http\Livewire\Task as TaskLivewire;
-use App\Http\Livewire\Chart as ChartLivewire;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-// classes of controllers must load, if you want to use bellow
-// Route::get('/', TaskLivewire::class);
-Route::get('/', function (){
-    return view('layouts.app');
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
+
+Route::get('/', function () {
+    return view('welcome');
 });
-Route::get('/duck', LivewireBase::class)->name('duck');
-Route::post('/duck-post', LivewireBase::class)->name('duck-post');
 
-// Route::post('/addtask', [Task::class,'store'])->name('task');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
 
-// Route::post('/addtask', TaskLivewire::class)->name('TaskAdd');
-// Route::post('/addtask',  [TaskLivewire::class,'store'])->name('TaskAdd');
-// Route::post('/deletetask', [TaskLivewire::class,'deleteId'])->name('TaskDelete');
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
-// Route::view('/scroller', 'livewire.scroller');
-// Route::get('/chart',ChartLivewire::class);
+require __DIR__.'/auth.php';
