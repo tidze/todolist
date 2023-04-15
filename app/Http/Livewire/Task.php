@@ -50,7 +50,11 @@ class Task extends Component
 
     public function render()
     {
-        return view('livewire.task');
+        return view('livewire.task',[
+                    'allCategories'=>DB::table('categories')
+                    ->select('categories.category', 'categories.description', 'categories.color')
+                    ->where('user_id',Auth::user()->id)->get()->toArray()
+        ]);
     }
 
     public function storeOrUpdate($detector)

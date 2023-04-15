@@ -15,7 +15,6 @@
         </div>
     </div>
 
-    asdf
 
     <div class="sm:w-[500px] sm:ml-auto sm:mr-auto sm:block py-4">
 

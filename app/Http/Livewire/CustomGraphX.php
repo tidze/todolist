@@ -29,8 +29,8 @@ class CustomGraphX extends Component
     }
     public function mount()
     {
-        $this->x_startingDatepoint_unix = '1680703200' + (6 * 86400);
-        $this->x_endingDatepoint_unix = '1680726480' + (10 * 86400);
+        $this->x_startingDatepoint_unix = '1680703200' + (8 * 86400);
+        $this->x_endingDatepoint_unix = '1680726480' + (11 * 86400);
         $this->x_flattened = false;
         // $this->x_startingHour = '18:00';
         // $this->x_endingHour = '23:59';

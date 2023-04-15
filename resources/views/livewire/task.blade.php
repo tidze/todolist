@@ -97,6 +97,12 @@
                         class="rounded-sm text-lg inline-block flex-auto bg-black first-letter:bg-black text-center text-[9px] py-1">
                     <label class="flex-auto" for="taskCategory">taskCategory</label>
                 </div>
+                <div class="flex w-full">
+                    @foreach ($allCategories as $category)
+                        <div class="py-1 px-2 border-2 cursor-pointer rounded-lg mr-1 select-none categoryAutoSetter" style="border-color:{{$category->color}};color:{{$category->color}}">{{$category->category}}</div>
+                    @endforeach
+                </div>
+
                 <div class="flex-auto w-full text-center">
                     @error('taskCategory')
                         <div class="text-red-500 text-[10px]">{{ $message }}</div>
@@ -105,6 +111,11 @@
                 <div class="flex flex-auto justify-center items-center text-center py-1">
                     <input id="taskDescription" wire:model.defer="taskDescription" name="taskDescription" type="text" class="rounded-sm text-lg inline-block flex-auto bg-black text-center text-[9px] py-1">
                     <label class="flex-auto" for="taskDescription">taskDescription</label>
+                </div>
+                <div class="flex w-full">
+                    @foreach ($allCategories as $category)
+                        <div class="py-1 px-2 border-2 cursor-pointer rounded-lg mr-1 select-none descriptionAutoSetter" style="border-color:{{$category->color}};color:{{$category->color}}">{{$category->description}}</div>
+                    @endforeach
                 </div>
                 <div class="flex-auto w-full text-center">
                     @error('taskDescription')
@@ -305,5 +316,14 @@
         function copyDate(input, output) {
             $(output).val($(input).val());
         }
+
+        $('.categoryAutoSetter').on('click',function(){
+            console.log();
+            $('#taskCategory').val($(this).text());
+        });
+        $('.descriptionAutoSetter').on('click',function(){
+            console.log();
+            $('#taskDescription').val($(this).text());
+        });
     </script>
 @endpush

@@ -47,14 +47,14 @@
             {{-- @enderror --}}
         </div>
         <div class="flex flex-col">
-            <div class=" my-1 self-center relative z-10 text-amber-600 text-[12px] w-60 text-center
-                    inline-block border border-amber-600 p-0.5 rounded
+            <div class=" my-1 self-center relative z-10 text-amber-600 text-[16px] w-60 text-center
+                    inline-block border border-amber-600 p-2 rounded
                     hover:bg-yellow-500 hover:text-black cursor-pointer"
                 wire:click="getTask()">
                 Daily Report</div>
             <div id="c_flattenTasksGraph"
-                class=" my-1 self-center relative z-10 text-amber-600 text-[12px] w-60 text-center
-                     inline-block border border-amber-600 p-0.5 rounded
+                class=" my-1 self-center relative z-10 text-amber-600 text-[16px] w-60 text-center
+                     inline-block border border-amber-600 p-2 rounded
                    hover:bg-yellow-500 hover:text-black cursor-pointer"
                 wire:click="flattenTasksGraph">
                 Flat
@@ -65,7 +65,7 @@
     <div class="flex flex-col">
         <div class="flex justify-center">
             <div class=" relative p-2 border-2 border-red-400 border-opacity-0 ">
-                <div class="border-2 border-orange-800 border-opacity-50 w-80 h-[58vh] relative right-0 box-border">
+                <div class="border-2 border-orange-800 border-opacity-50 w-64 h-[58vh] relative right-0 box-border">
                     {{-- startTimepointHandle --}}
                     <div class="w-[10%] h-[2px] bg-amber-700 border-t-2 border-t-amber-700 absolute right-full">
                         <div class="relative flex flex-row justify-center items-center w-[140px] -translate-x-2/4 -translate-y-2/4 -rotate-90 h-10">
