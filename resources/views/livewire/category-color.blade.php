@@ -75,8 +75,8 @@
                     <td class="box-border border-b bg-gray-900 border-gray-700 border text-teal-600 px-3">{{ $category->category }}</td>
                     <td class="box-border border-b bg-gray-900 border-gray-700 border text-teal-600 px-3">{{ $category->description }}</td>
                     <td class="box-border border-b bg-gray-900 border-gray-700 border text-teal-600 px-3">
-                        {{ $category->color }}
-                        <div style="background-color:{{ $category->color }}" class="w-full h-2"></div>
+                        {{-- {{ $category->color }} --}}
+                        <div style="background-color:{{ $category->color }}" class="w-full h-4"></div>
                     </td>
                     <td class="box-border border-b bg-gray-900 border-gray-700 border text-teal-600 px-3">
 

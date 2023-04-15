@@ -2,16 +2,18 @@
 
 namespace App\Http\Livewire;
 
+use DateInterval;
+use DateTime;
+use DateTimeZone;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Type\Time;
 
 class CustomGraphX extends Component
 {
-    public $x_startingHourpoint;
-    public $x_endingHourpoint;
-    // public $x_startingDatepoint_unix = '1679927400';
-    // public $x_endingDatepoint_unix = 1679948940 + (4* 86400);
+    public $x_startingHour;
+    public $x_endingHour;
     public $x_startingDatepoint_unix;
     public $x_endingDatepoint_unix;
     public $x_tasksGraphArray;
@@ -27,15 +29,15 @@ class CustomGraphX extends Component
     }
     public function mount()
     {
-        $this->x_startingDatepoint_unix ='1680703200' + (9 * 86400);
-        $this->x_endingDatepoint_unix = '1680726480' + (9 * 86400);
+        $this->x_startingDatepoint_unix = '1680703200' + (6 * 86400);
+        $this->x_endingDatepoint_unix = '1680726480' + (10 * 86400);
         $this->x_flattened = false;
-        // $this->x_startingHourpoint = '18:00';
-        // $this->x_endingHourpoint = '23:59';
-        $this->x_startingHourpoint = date('H:i',$this->x_startingDatepoint_unix+12600);
-        $this->x_endingHourpoint = date('H:i',$this->x_endingDatepoint_unix+12600);
-        $this->x_startingDate = date('Y-m-d',$this->x_startingDatepoint_unix+12600);
-        $this->x_endingDate = date('Y-m-d',$this->x_startingDatepoint_unix+12600);
+        // $this->x_startingHour = '18:00';
+        // $this->x_endingHour = '23:59';
+        $this->x_startingHour = date('H:i', substr($this->x_startingDatepoint_unix, 0, 10) + 12600);
+        $this->x_endingHour = date('H:i', substr($this->x_endingDatepoint_unix, 0, 10) + 12600);
+        $this->x_startingDate = date('Y-m-d', substr($this->x_startingDatepoint_unix, 0, 10) + 12600);
+        $this->x_endingDate = date('Y-m-d', substr($this->x_startingDatepoint_unix, 0, 10) + 12600);
     }
 
     /**
@@ -44,21 +46,22 @@ class CustomGraphX extends Component
      * @param array $array
      * @return array $2dArray
      */
-    public function seperateTasksIntoDays($array)
+    public function seperateTasksIntoDays($array, $starting_unix, $ending_unix)
     {
+
         if (empty($array)) {
-            dd('seperateTasksIntoDays: Given array is empty','It may have been no tasks in the zone', $array);
+            dd('seperateTasksIntoDays: Given array is empty', 'It may be no tasks in the zone', $array);
         }
         $modified_array = array();
-        $days = $this->modByDays($this->x_startingDatepoint_unix, $this->x_endingDatepoint_unix);
+        $days = $this->modByDays($starting_unix, $ending_unix);
         for ($x = 0; $x < $days + 1; $x++) {
             $modified_array[$x] = array_values(
                 array_filter(
                     $array,
-                    function ($task) use ($x) {
-                        return ($task['starting_time'] >= $this->addDays($this->x_startingDatepoint_unix, $x)
+                    function ($task) use ($x, $starting_unix) {
+                        return ($task['starting_time'] >= $this->addDays($starting_unix, $x)
                             &&
-                            $task['starting_time'] < $this->addDays($this->x_startingDatepoint_unix, $x + 1)
+                            $task['starting_time'] < $this->addDays($starting_unix, $x + 1)
                         );
                     }
                 )
@@ -115,51 +118,49 @@ class CustomGraphX extends Component
     /**
      * @param array 2D Array
      */
+    public function calcTaskWidthForSeperatedTasks($array, $starting_unix, $ending_unix)
+    {
+        if (empty($array)) {
+            dd('calcTaskWidthForSeperatedTasks: Given array is empty', $array);
+        }
+        if (!($this->is_multi_array($array))) {
+            dd('calcTaskWidthForSeperatedTasks: Given array is not multi dimention', $array);
+        }
+        $rows = count($array);
+        $cols = count($array[0]);
 
-     public function calcTaskWidthForSeperatedTasks($array)
-     {
-         if (empty($array)) {
-             dd('calcTaskWidthForSeperatedTasks: Given array is empty', $array);
-         }
-         if (!($this->is_multi_array($array))) {
-             dd('calcTaskWidthForSeperatedTasks: Given array is not multi dimention', $array);
-         }
-         $rows = count($array);
-         $cols = count($array[0]);
+        for ($x = 0; $x < $rows; $x++) {
+            for ($y = 0; $y < (count($array[$x])); $y++) {
+                $deltaForNumerator = abs(
+                    substr($array[$x][$y]['ending_time'], 0, 10)
+                        -
+                        substr($array[$x][$y]['starting_time'], 0, 10)
+                );
+                $deltaForDenumerator = abs(
+                    substr($this->addDays($starting_unix, $x), 0, 10)
+                        -
+                        substr($this->addDays($ending_unix, (-1 * $rows) + 1 + $x), 0, 10)
+                );
+                $array[$x][$y]['width'] = "width:" .
+                    (substr(
+                        (100 *
+                            abs(
+                                ($deltaForNumerator)
+                                    /
+                                    ($deltaForDenumerator)
+                            )
+                        ),
+                        0,
+                        5
+                    )
+                    )
+                    . "%";
+            }
+        }
+        return $array;
+    }
 
-         for ($x = 0; $x < $rows; $x++) {
-             for ($y = 0; $y < (count($array[$x])); $y++) {
-                 $deltaForNumerator = abs(
-                     substr($array[$x][$y]['ending_time'], 0, 10)
-                     -
-                     substr($array[$x][$y]['starting_time'], 0, 10)
-                 );
-                 $deltaForDenumerator = abs(
-                     substr($this->addDays($this->x_startingDatepoint_unix, $x), 0, 10)
-                     -
-                     substr($this->addDays($this->x_endingDatepoint_unix, (-1 * $rows) + 1 + $x), 0, 10)
-                 );
-                 $array[$x][$y]['width'] = "width:" .
-                     (
-                         substr(
-                             (100 *
-                                 abs(
-                                     ($deltaForNumerator)
-                                     /
-                                     ($deltaForDenumerator)
-                                 )
-                             ),
-                             0,
-                             5
-                         )
-                     )
-                     . "%";
-             }
-         }
-         return $array;
-     }
-
-    public function calcTaskOffsetForSeperatedTasks($array)
+    public function calcTaskOffsetForSeperatedTasks($array, $starting_unix, $ending_unix)
     {
         if (empty($array)) {
             dd('calcTaskWidthForSeperatedTasks: Given array is empty', $array);
@@ -175,34 +176,33 @@ class CustomGraphX extends Component
                 $deltaForNumerator = abs(
                     substr($array[$x][$y]['starting_time'], 0, 10)
                         -
-                        substr($this->addDays($this->x_startingDatepoint_unix, $x), 0, 10)
+                        substr($this->addDays($starting_unix, $x), 0, 10)
                 );
                 $deltaForDenumerator = abs(
-                    substr($this->addDays($this->x_startingDatepoint_unix, $x), 0, 10)
+                    substr($this->addDays($starting_unix, $x), 0, 10)
                         -
-                        substr($this->addDays($this->x_endingDatepoint_unix, (-1 * $rows) + 1 + $x), 0, 10)
+                        substr($this->addDays($ending_unix, (-1 * $rows) + 1 + $x), 0, 10)
                 );
                 // dd(substr($this->addDays($this->x_startingDatepoint_unix, $x), 0, 10),substr($this->addDays($this->x_endingDatepoint_unix, (-1 * $rows) + 1 + $x), 0, 10));
-                if($deltaForDenumerator==0){
+                if ($deltaForDenumerator == 0) {
                     $array[$x][$y]['left'] = "left:" . 0 . "%";
-                }else{
+                } else {
                     $array[$x][$y]['left'] = "left:" .
-                    (substr(
-                        (100 *
-                            abs(
-                                ($deltaForNumerator)
-                                    /
+                        (substr(
+                            (100 *
+                                abs(
+                                    ($deltaForNumerator)
+                                        /
 
-                                    ($deltaForDenumerator)
-                            )
-                        ),
-                        0,
-                        5
-                    )
-                    )
-                    . "%";
+                                        ($deltaForDenumerator)
+                                )
+                            ),
+                            0,
+                            5
+                        )
+                        )
+                        . "%";
                 }
-
             }
         }
         return $array;
@@ -216,22 +216,23 @@ class CustomGraphX extends Component
             $this->x_tasksGraphArray = DB::table('tasks')
             ->select('tasks.*', 'categories.category', 'categories.description', 'categories.color')
             ->join('categories', 'tasks.category_id', '=', 'categories.id')
+            ->where('tasks.user_id', Auth::user()->id)
             // date('Y-m-d', (substr($x_startingDatepoint_unix, 0, 10)+12600))
             ->where('starting_time', '>=', substr($this->x_startingDatepoint_unix, 0, 10))
             ->where('starting_time', '<', substr($this->x_endingDatepoint_unix, 0, 10))
             ->orderBy('starting_time')
             ->get()->toArray();
-            // dd($this->x_tasksGraphArray);
-            // You may wonder: Why did I add this custom made foreach loop, while I could have used the `setTaskPositionType()`?
-            // Because of the initial state and timeline. The timeline does not match the correct corresponding according to the `x_flattened :bool`
-            // foreach ($this->x_tasksGraphArray as &$task) {
+        // dd($this->x_tasksGraphArray);
+        // You may wonder: Why did I add this custom made foreach loop, while I could have used the `setTaskPositionType()`?
+        // Because of the initial state and timeline. The timeline does not match the correct corresponding according to the `x_flattened :bool`
+        // foreach ($this->x_tasksGraphArray as &$task) {
         // $task['position'] = 'absolute';
         // }
         $this->x_tasksGraphArray = $this->stdclassToArray($this->x_tasksGraphArray);
-        $this->x_seperatedTasks = $this->seperateTasksIntoDays($this->x_tasksGraphArray);
-        $this->x_seperatedTasks = $this->calcTaskWidthForSeperatedTasks($this->x_seperatedTasks);
-        $this->x_seperatedTasks = $this->calcTaskOffsetForSeperatedTasks($this->x_seperatedTasks);
-
+        $this->x_seperatedTasks = $this->seperateTasksIntoDays($this->x_tasksGraphArray, substr($this->x_startingDatepoint_unix, 0, 10), substr($this->x_endingDatepoint_unix, 0, 10));
+        $this->x_seperatedTasks = $this->calcTaskWidthForSeperatedTasks($this->x_seperatedTasks, substr($this->x_startingDatepoint_unix, 0, 10), substr($this->x_endingDatepoint_unix, 0, 10));
+        $this->x_seperatedTasks = $this->calcTaskOffsetForSeperatedTasks($this->x_seperatedTasks, substr($this->x_startingDatepoint_unix, 0, 10), substr($this->x_endingDatepoint_unix, 0, 10));
+        $this->x_seperatedTasks = array_reverse($this->x_seperatedTasks);
         // dd(DB::table('tasks')
         // ->where([
         // ['starting_time', '>=', substr($this->x_startingDatepoint_unix, 0, 10)],
@@ -241,38 +242,81 @@ class CustomGraphX extends Component
 
     public function getTaskForPastSevenDays()
     {
+        $ending_datetime = new DateTime();
+        $timezone = new DateTimeZone('asia/tehran');
+        $ending_datetime->setTimezone($timezone);
+        $ending_datetime->setTimestamp(time());
+        $ending_datetime->setTime(23, 59, 00);
+        // Agha , timezone ro set bokonan dg. badesh timestamp begiran.
+        $starting_datetime = new DateTime();
+        $starting_datetime->setTimezone($timezone);
+        $starting_datetime->setTimestamp(time());
+        $starting_datetime->setTime(16, 15, 00);
+
+        $interval = new DateInterval('P7D');
+        $starting_datetime->sub($interval);
         $this->x_flattened = false;
-        $this->x_startingDatepoint_unix = $this->addDays(time(), -7);
-        $this->x_endingDatepoint_unix = $this->addDays(time(), 0);
-        (is_null($this->x_startingDatepoint_unix) || is_null($this->x_endingDatepoint_unix)) ?
-            dd('Parameter has not been found!') :
-            $this->x_tasksGraphArray = DB::table('tasks')
-            ->where('starting_time', '>=', substr($this->x_startingDatepoint_unix, 0, 10))
-            ->where('starting_time', '<', substr($this->x_endingDatepoint_unix, 0, 10))
-            ->orderBy('starting_time')
+
+        $this->x_tasksGraphArray = DB::table('tasks')
+            ->join('categories', 'tasks.category_id', '=', 'categories.id')
+            ->where('tasks.user_id', Auth::user()->id)
+            ->where('starting_time', '>=', $starting_datetime->getTimestamp())
+            ->where('starting_time', '<', $ending_datetime->getTimestamp())
+            ->orderBy('starting_time', 'desc')
             ->get()->toArray();
+        // dd($this->x_tasksGraphArray);
+        // dd('We are here: getTaskForPastSevenDays()',
+        //    '$this->x_tasksGraphArray',
+        //    $this->x_tasksGraphArray,
+        //    '$ending_datetime',
+        //    $ending_datetime,
+        //    $ending_datetime->getTimestamp(),
+        //    '$starting_datetime',
+        //    $starting_datetime,
+        //    $starting_datetime->getTimestamp(),
+        // );
         $this->x_tasksGraphArray = $this->stdclassToArray($this->x_tasksGraphArray);
-        $this->x_seperatedTasks = $this->seperateTasksIntoDays($this->x_tasksGraphArray);
-        $this->x_seperatedTasks = $this->calcTaskWidthForSeperatedTasks($this->x_seperatedTasks);
-        $this->x_seperatedTasks = $this->calcTaskOffsetForSeperatedTasks($this->x_seperatedTasks);
+        $this->x_seperatedTasks = $this->seperateTasksIntoDays($this->x_tasksGraphArray, $starting_datetime->getTimestamp(), $ending_datetime->getTimestamp());
+        $this->x_seperatedTasks = $this->calcTaskWidthForSeperatedTasks($this->x_seperatedTasks, $starting_datetime->getTimestamp(), $ending_datetime->getTimestamp());
+        $this->x_seperatedTasks = $this->calcTaskOffsetForSeperatedTasks($this->x_seperatedTasks, $starting_datetime->getTimestamp(), $ending_datetime->getTimestamp());
+        $this->x_seperatedTasks = array_reverse($this->x_seperatedTasks);
+        $this->x_startingDatepoint_unix = $starting_datetime->getTimestamp();
+        $this->x_endingDatepoint_unix = $ending_datetime->getTimestamp();
+        // dd($this->x_seperatedTasks);
     }
 
     public function getTaskForPastThirtyDays()
     {
+        $ending_datetime = new DateTime();
+        $timezone = new DateTimeZone('asia/tehran');
+        $ending_datetime->setTimezone($timezone);
+        $ending_datetime->setTimestamp(time());
+        $ending_datetime->setTime(23, 59, 00);
+        // Agha , timezone ro set bokonan dg. badesh timestamp begiran.
+        $starting_datetime = new DateTime();
+        $starting_datetime->setTimezone($timezone);
+        $starting_datetime->setTimestamp(time());
+        $starting_datetime->setTime(16, 30, 00);
+
+        $interval = new DateInterval('P30D');
+        $starting_datetime->sub($interval);
         $this->x_flattened = false;
-        $this->x_startingDatepoint_unix = $this->addDays(time(), -30);
-        $this->x_endingDatepoint_unix = $this->addDays(time(), 0);
-        (is_null($this->x_startingDatepoint_unix) || is_null($this->x_endingDatepoint_unix)) ?
-            dd('Parameter has not been found!') :
-            $this->x_tasksGraphArray = DB::table('tasks')
-            ->where('starting_time', '>=', substr($this->x_startingDatepoint_unix, 0, 10))
-            ->where('starting_time', '<', substr($this->x_endingDatepoint_unix, 0, 10))
-            ->orderBy('starting_time')
+
+        $this->x_tasksGraphArray = DB::table('tasks')
+            ->join('categories', 'tasks.category_id', '=', 'categories.id')
+            ->where('tasks.user_id', Auth::user()->id)
+            ->where('starting_time', '>=', $starting_datetime->getTimestamp())
+            ->where('starting_time', '<', $ending_datetime->getTimestamp())
+            ->orderBy('starting_time', 'desc')
             ->get()->toArray();
         $this->x_tasksGraphArray = $this->stdclassToArray($this->x_tasksGraphArray);
-        $this->x_seperatedTasks = $this->seperateTasksIntoDays($this->x_tasksGraphArray);
-        $this->x_seperatedTasks = $this->calcTaskWidthForSeperatedTasks($this->x_seperatedTasks);
-        $this->x_seperatedTasks = $this->calcTaskOffsetForSeperatedTasks($this->x_seperatedTasks);
+        $this->x_seperatedTasks = $this->seperateTasksIntoDays($this->x_tasksGraphArray, $starting_datetime->getTimestamp(), $ending_datetime->getTimestamp());
+        $this->x_seperatedTasks = $this->calcTaskWidthForSeperatedTasks($this->x_seperatedTasks, $starting_datetime->getTimestamp(), $ending_datetime->getTimestamp());
+        $this->x_seperatedTasks = $this->calcTaskOffsetForSeperatedTasks($this->x_seperatedTasks, $starting_datetime->getTimestamp(), $ending_datetime->getTimestamp());
+        $this->x_seperatedTasks = array_reverse($this->x_seperatedTasks);
+        $this->x_startingDatepoint_unix = $starting_datetime->getTimestamp();
+        $this->x_endingDatepoint_unix = $ending_datetime->getTimestamp();
+        // dd($this->x_seperatedTasks);
     }
 
     public function stdclassToArray($array)

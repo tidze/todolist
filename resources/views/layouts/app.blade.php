@@ -59,31 +59,9 @@
             {{ $slot }}
         </main>
 
-        <div class="sm:w-[500px] sm:ml-auto sm:mr-auto sm:block py-4">
 
-            {{-- {{ public_path() }}<br> --}}
-            {{-- {{ base_path() }}<br> --}}
-            {{-- {{ storage_path() }}<br> --}}
-            {{-- {{ app_path() }}<br> --}}
-
-            @livewire('task')
-
-            @livewire('tasks-table')
-
-            @livewire('category-color')
-
-            @livewire('custom-chart')
-
-            @livewire('custom-graph-x')
-
-            {{-- @yield('content') --}}
-
-            @include('layouts.footer')
-
-        </div>
         @stack('script')
         <script></script>
-
     </div>
 </body>
 

@@ -42,8 +42,8 @@ class CategoryColor extends Component
             ->where('user_id', Auth::user()->id)
             ->where('id', $this->categoryId)
             ->update([
-                'category' => $this->category,
-                'description' => $this->categoryDescription,
+                'category' => trim($this->category),
+                'description' => trim($this->categoryDescription),
                 'color' => $this->categoryColor,
             ]);
 

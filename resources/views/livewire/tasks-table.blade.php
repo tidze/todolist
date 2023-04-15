@@ -4,15 +4,15 @@
         <table class="text-[14px]">
             <thead class="uppercase bg-gray-50 dark:bg-gray-700 text-white">
                 <tr class="">
-                    <th scope="col" class="px-1 py-0">
-                        id
-                    </th>
-                    <th scope="col" class="px-1 py-0">
-                        user_id
-                    </th>
-                    <th scope="col" class="px-1 py-0">
-                        C.id
-                    </th>
+                    {{-- <th scope="col" class="px-1 py-0"> --}}
+                        {{-- id --}}
+                    {{-- </th> --}}
+                    {{-- <th scope="col" class="px-1 py-0"> --}}
+                        {{-- user_id --}}
+                    {{-- </th> --}}
+                    {{-- <th scope="col" class="px-1 py-0"> --}}
+                        {{-- C.id --}}
+                    {{-- </th> --}}
                     <th scope="col" class="px-1 py-0">
                         C.category
                     </th>
@@ -49,15 +49,15 @@
                 @foreach ($allTasks as $task)
                     <tr @if ($task->id == $sendBackId) @class(['box-border','border','border-indigo-500','bg-gray-900','text-indigo-500']) @endif
                         class="box-border border-b bg-gray-900 border-gray-700 border text-teal-600">
-                        <td scope="row" class="box-border hover:box-content px-2 py-1 font-medium whitespace-nowrap text-white">
-                            {{ $task->id }}
-                        </td>
-                        <td class="px-2 py-0">
-                            {{ $task->user_id }}
-                        </td>
-                        <td class="px-2 py-0">
-                            {{ $task->category_id }}
-                        </td>
+                        {{-- <td scope="row" class="box-border hover:box-content px-2 py-1 font-medium whitespace-nowrap text-white"> --}}
+                            {{-- {{ $task->id }} --}}
+                        {{-- </td> --}}
+                        {{-- <td class="px-2 py-0"> --}}
+                            {{-- {{ $task->user_id }} --}}
+                        {{-- </td> --}}
+                        {{-- <td class="px-2 py-0"> --}}
+                            {{-- {{ $task->category_id }} --}}
+                        {{-- </td> --}}
                         <td class="px-2 py-4">
                             {{ $task->category }}
                         </td>
@@ -65,8 +65,8 @@
                             {{ $task->description }}
                         </td>
                         <td class="px-2 py-0 whitespace-nowrap">
-                            {{ $task->color }}
-                            <div style="background-color:{{$task->color}}" class="w-full h-2"></div>
+                            {{-- {{ $task->color }} --}}
+                            <div style="background-color:{{$task->color}}" class="w-full h-4"></div>
                         </td>
                         <td class="px-2 py-0">
                             {{ $task->desired_duration }}

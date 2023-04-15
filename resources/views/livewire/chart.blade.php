@@ -27,7 +27,7 @@
     <label for="startingDatepoint" class="text-teal-600">startingDatepoint</label>
     <input name="startingDatepoint_unix" wire:model.defer="startingDatepoint_unix" id="startingDatepoint_unix" class="bg-black text-white text-center w-52 p-0 text-[10px]"
         type="text" value="0" />
-    <lable for="startingDatepoint_unix">startingDatepoint_unix</lable>
+    <label for="startingDatepoint_unix">startingDatepoint_unix</label>
     @error('startingDatepoint_unix')
         <span class="text-red-500 text-[9px]">{{ $message }}</span>
     @enderror
@@ -42,7 +42,7 @@
     <label for="endingDatepoint" class="text-teal-600">endingDatepoint</label>
     <input name="endingDatepoint_unix" wire:model.defer="endingDatepoint_unix" id="endingDatepoint_unix" class="bg-black text-white text-center w-52 p-0 text-[10px]" type="text"
         value="0" />
-    <lable for="endingDatepoint_unix">endingDatepoint_unix</lable>
+    <label for="endingDatepoint_unix">endingDatepoint_unix</label>
     @error('endingDatepoint_unix')
         <span class="text-red-500 text-[9px]">{{ $message }}</span>
     @enderror

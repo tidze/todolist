@@ -46,6 +46,8 @@
 
         @livewire('tasks-table')
 
+        @livewire('category-color')
+
         @livewire('custom-chart')
 
         @livewire('custom-graph-x')
@@ -57,6 +59,7 @@
     </div>
     @stack('script')
     <script></script>
+
 </body>
 
 </html>

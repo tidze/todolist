@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 
@@ -145,6 +146,7 @@ class CustomChart extends Component
             $this->c_tasksGraphArray = DB::table('tasks')
             ->select('tasks.*', 'categories.category', 'categories.description', 'categories.color')
             ->join('categories', 'tasks.category_id', '=', 'categories.id')
+            ->where('tasks.user_id', Auth::user()->id)
             ->where('starting_time', '>=', substr($this->c_startingDatepoint_unix, 0, 10))
             ->where('starting_time', '<', substr($this->c_endingDatepoint_unix, 0, 10))
             ->orderBy('starting_time')
