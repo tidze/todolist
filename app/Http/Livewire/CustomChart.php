@@ -19,8 +19,8 @@ class CustomChart extends Component
 
     public function mount()
     {
-        $this->c_startingDatepoint_unix = '1680703200' + (9 * 86400);
-        $this->c_endingDatepoint_unix = '1680726480' + (9 * 86400);
+        $this->c_startingDatepoint_unix = '1680703200' + (13 * 86400) - (9  * 60 *60);
+        $this->c_endingDatepoint_unix = '1680726480' + (13   * 86400);
         $this->c_flattened = false;
         $this->c_startingHourpoint = '18:00';
         $this->c_endingHourpoint = '23:59';
@@ -93,16 +93,16 @@ class CustomChart extends Component
 
             $task['height'] = "height:" .
                 (substr(
-                        (100 *
-                            abs(
-                                ($deltaForNumerator)
-                                    /
-                                    ($deltaForDenumerator)
-                            )
-                        ),
-                        0,
-                        5
-                    )
+                    (100 *
+                        abs(
+                            ($deltaForNumerator)
+                                /
+                                ($deltaForDenumerator)
+                        )
+                    ),
+                    0,
+                    5
+                )
                 )
                 . "%";
         }

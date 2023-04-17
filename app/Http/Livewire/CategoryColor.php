@@ -5,15 +5,18 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Livewire\WithPagination;
 
 class CategoryColor extends Component
 {
+    use WithPagination;
     public $targetCategoryId;
     public $categoryColor;
     public $categoryId;
     public $user_id;
     public $category;
     public $categoryDescription;
+
     public function render()
     {
         return view('livewire.category-color', [

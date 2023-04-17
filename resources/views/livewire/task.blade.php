@@ -30,7 +30,7 @@
     @endempty
     <br> --}}
     <div id="targetDateContainer" class="flex items-center justify-center p-2">
-        <input type="date" id="targetDate" class="inline-block border-2 border-sky-800" value="{{ $startingDatepoint }}">
+        <input type="date" id="targetDate" class="inline-block border-2 rounded-xl border-gray-500 bg-gray-800" value="{{ $startingDatepoint }}">
         <label for="targetDate" class="px-1">Date</label>
     </div>
     <form wire:submit.prevent="storeOrUpdate({{ str_contains($detector, 9) ? $_99 : $_88 }})">
@@ -38,14 +38,16 @@
         <div class="flex flex-col flex-grow">
 
             {{-- Component startingTimepoint --}}
-            <div class="flex">
-                <div id="startingDateContainer" class="inline-block border-2 border-sky-500">
-                    <input {{-- wire:ignore --}} id="startingDate" type="date" class="" value="{{ $startingDatepoint }}">
+            <div class="flex flex-row">
+                <div id="startingDateContainer" class="basis-2/5 inline-block border rounded-xl border-transparent">
+                    <input {{-- wire:ignore --}} id="startingDate" type="date" class="border-2 rounded-xl border-gray-500 bg-gray-800" value="{{ $startingDatepoint }}">
                 </div>
-                <input class="w-40 bg-black text-center startingTimepoint border-2 h-full border-sky-600" id="startingTimepoint" wire:model.defer="startingTimepoint" type="text" />
-                <label class="self-center" for="startingTimepoint" >Start</label>
+                <div class="basis-2/5 flex">
+                    <input class=" inline-block w-40 bg-black text-center startingTimepoint border-2 h-full rounded-xl border-gray-500" id="startingTimepoint" wire:model.defer="startingTimepoint" type="text" />
+                </div>
+                <label class="basis-1/5 self-center" for="startingTimepoint">Start</label>
 
-                <input class="bg-black text-center text-[8px]" id="startingTimepoint_unix" wire:model.defer="startingTimepoint_unix" name="startingTimepoint_unix" type="hidden" value="" />
+                <input class="bg-black text-center text-[8px] " id="startingTimepoint_unix" wire:model.defer="startingTimepoint_unix" name="startingTimepoint_unix" type="hidden" value="" />
                 {{-- <label for="startingTimepoint_unix">startingTimepoint_unix</label> --}}
                 {{-- @error('startingTimepoint_unix') --}}
                 {{-- <span class="text-red-500 text-[9px]">{{ $message }}</span> --}}
@@ -53,12 +55,15 @@
             </div>
 
             {{-- Component endingTimepoint --}}
-            <div class="flex">
-                <div id="endingDateContainer" class="inline-block border-2 border-sky-500">
-                    <input {{-- wire:ignore --}} id="endingDate" type="date" class="" value="{{ $endingDatepoint }}">
+            <div class="flex justify-row" >
+                <div id="endingDateContainer" class="basis-2/5 inline-block border-2 rounded-xl border-transparent">
+                    <input {{-- wire:ignore --}} id="endingDate" type="date" class="border-2 rounded-xl border-gray-500 bg-gray-800" value="{{ $endingDatepoint }}">
                 </div>
-                <input class="w-40 bg-black text-center endingTimepoint border-2 h-full border-sky-600" id="endingTimepoint" wire:model.defer="endingTimepoint" type="text" value={{ $endingTimepoint }} onchange="" />
-                <label class="self-center" for="endingTimepoint">End</label>
+                <div class="basis-2/5 flex">
+                    <input class="w-40 bg-black text-center endingTimepoint border-2 h-full rounded-xl border-gray-500" id="endingTimepoint" wire:model.defer="endingTimepoint" type="text" value={{ $endingTimepoint }}
+                    onchange="" />
+                </div>
+                <label class="basis-1/5 self-center" for="endingTimepoint">End</label>
 
                 <input name="endingTimepoint_unix" wire:model.defer="endingTimepoint_unix" id="endingTimepoint_unix" class="bg-black text-center w-52 p-0 text-[10px]" type="hidden" value="0" />
                 {{-- <label for="startingTimepoint_unix">startingTimepoint_unix</label> --}}
@@ -68,14 +73,15 @@
             </div>
             {{-- Component `Full Duration` --}}
             <div class="flex py-2">
-                <input class="flex-1 bg-black text-center p-0 text-[16px] rounded-sm" id="fullDuration_obj" wire:model="fullDuration_obj" type="text" value="sdf" readonly />
-                <label class="px-2 py-1 text-[16px]" for="fullDuration" >fullDuration</label>
+                <input class="flex-1 bg-black text-center p-0 text-[16px] rounded-md" id="fullDuration_obj" wire:model="fullDuration_obj" type="text" value="sdf" readonly />
+                <label class="px-2 py-1 text-[16px]" for="fullDuration">Full Duration</label>
             </div>
             {{-- Component `Desired Duration input range` --}}
             <div class="flex flex-col py-2 px-1">
                 <div class="flex flex-row">
-                    <input class="flex-grow flex-shrink basis-60" name="desiredDuration" wire:model.defer="desiredDuration" id="desiredDuration" min="0" max=@if (empty($desiredDuration)) 0 @else @php print('\''.$desiredDuration.'\'') @endphp @endif
-                        type="range" value=@if (empty($desiredDuration)) 0 @else @php print('\''.$desiredDuration.'\'') @endphp @endif oninput="rangeValue.innerText = this.value">
+                    <input class="flex-grow flex-shrink basis-60" name="desiredDuration" wire:model.defer="desiredDuration" id="desiredDuration" min="0"
+                        max=@if (empty($desiredDuration)) 0 @else @php print('\''.$desiredDuration.'\'') @endphp @endif type="range"
+                        value=@if (empty($desiredDuration)) 0 @else @php print('\''.$desiredDuration.'\'') @endphp @endif oninput="rangeValue.innerText = this.value">
                     <label class="flex-grow flex-shrink basis-1 text-center" id="rangeValue">
                         @if (empty($desiredDuration))
                             0
@@ -85,7 +91,7 @@
                     </label>
                     <div class="flex-shrink">m</div>
                 </div>
-                <label for="desiredDuration" class="text-center">desiredDuration</label>
+                <label for="desiredDuration" class="text-center">Desired Duration</label>
                 @error('desiredDuration')
                     <span class="text-red-500 text-[9px] text-center">{{ $message }}</span>
                 @enderror
@@ -94,12 +100,15 @@
             <div class="flex-auto w-full">
                 <div class="flex flex-auto justify-center items-center text-center py-1">
                     <input id="taskCategory" wire:model.defer="taskCategory" name="taskCategory" type="text"
-                        class="rounded-sm text-lg inline-block flex-auto bg-black first-letter:bg-black text-center text-[9px] py-1">
-                    <label class="flex-auto" for="taskCategory">taskCategory</label>
+                        class="rounded-xl text-lg inline-block flex-auto bg-black first-letter:bg-black text-center text-[9px] py-2">
+                    <label class="flex-auto" for="taskCategory">Category</label>
                 </div>
-                <div class="flex w-full">
-                    @foreach ($allCategories as $category)
-                        <div class="py-1 px-2 border-2 cursor-pointer rounded-lg mr-1 select-none categoryAutoSetter" style="border-color:{{$category->color}};color:{{$category->color}}">{{$category->category}}</div>
+
+                {{-- Component `Select Category` --}}
+                <div class="flex w-full overflow-auto pb-2">
+                    @foreach ($category_Distinct as $category)
+                        <div class="py-1 px-2 border border-l-4 border-white text-white cursor-pointer rounded-lg mr-1 select-none whitespace-nowrap categoryAutoSetter" style="">{{ $category->category }}
+                        </div>
                     @endforeach
                 </div>
 
@@ -109,12 +118,17 @@
                     @enderror
                 </div>
                 <div class="flex flex-auto justify-center items-center text-center py-1">
-                    <input id="taskDescription" wire:model.defer="taskDescription" name="taskDescription" type="text" class="rounded-sm text-lg inline-block flex-auto bg-black text-center text-[9px] py-1">
-                    <label class="flex-auto" for="taskDescription">taskDescription</label>
+                    <input id="taskDescription" wire:model.defer="taskDescription" name="taskDescription" type="text"
+                        class="rounded-xl text-lg inline-block flex-auto bg-black first-letter:bg-black text-center text-[9px] py-2">
+                    <label class="flex-auto" for="taskDescription">Description</label>
                 </div>
-                <div class="flex w-full">
+
+                {{-- Component `Select Description` --}}
+                <div class="flex w-full overflow-auto pb-2">
                     @foreach ($allCategories as $category)
-                        <div class="py-1 px-2 border-2 cursor-pointer rounded-lg mr-1 select-none descriptionAutoSetter" style="border-color:{{$category->color}};color:{{$category->color}}">{{$category->description}}</div>
+                        <div class="py-1 px-2 border border-l-4 border-l-transparent cursor-pointer rounded-lg mr-1 select-none whitespace-nowrap descriptionAutoSetter"
+                            style="border-color:{{ $category->color }};color:{{ $category->color }}">
+                            {{ $category->description }}</div>
                     @endforeach
                 </div>
                 <div class="flex-auto w-full text-center">
@@ -124,22 +138,36 @@
                 </div>
 
             </div>
-            <button wire:click="storeOrUpdate({{ $_99 }})"
-                class="flex-1 px-3 py-2 text-sm font-medium mb-2 text-gray-900
-        focus:outline-none bg-white border border-gray-200 rounded-sm
-        hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4
-        focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800
-        dark:text-gray-400 dark:border-gray-600 dark:hover:text-white
-        dark:hover:bg-gray-700">Add
-                Task</button>
-            <button wire:click="storeOrUpdate({{ $_88 }})"
-                class="flex-1 px-3 py-2 text-sm font-medium mb-2 text-gray-900
-        focus:outline-none bg-white border border-gray-200 rounded-sm
-        hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4
-        focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800
-        dark:text-gray-400 dark:border-gray-600 dark:hover:text-white
-        dark:hover:bg-gray-700">Update
-                Task</button>
+            <div class="flex my-2">
+                <button wire:click="storeOrUpdate({{ $_99 }})"
+                    class="flex-1 px-3 py-3 m-1 text-sm font-medium text-gray-900
+                          focus:outline-none bg-white border border-gray-200 rounded-xl
+                        hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4
+                        focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800
+                        dark:text-gray-400 dark:border-gray-600 dark:hover:text-white
+                        dark:hover:bg-gray-700">Add
+                    Task</button>
+                <button wire:click="storeOrUpdate({{ $_88 }})"
+                    class="flex-1 px-3 py-3 m-1 text-sm font-medium text-gray-900
+                          focus:outline-none bg-white border border-gray-200 rounded-xl
+                        hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4
+                        focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800
+                        dark:text-gray-400 dark:border-gray-600 dark:hover:text-white
+                        dark:hover:bg-gray-700">Update
+                    Task</button>
+            </div>
+            <div>
+                @if (session()->has('successfull_message'))
+                    <div class="text-green-500">
+                        {{ session('successfull_message') }}
+                    </div>
+                @endif
+                @if (session()->has('unsuccessfull_message'))
+                    <div class="text-red-500">
+                        {{ session('unsuccessfull_message') }}
+                    </div>
+                @endif
+            </div>
         </div>
 
     </form>
@@ -317,13 +345,15 @@
             $(output).val($(input).val());
         }
 
-        $('.categoryAutoSetter').on('click',function(){
+        $('.categoryAutoSetter').on('click', function() {
             console.log();
-            $('#taskCategory').val($(this).text());
+            $('#taskCategory').val($(this).text().trim());
+            document.getElementById("taskCategory").dispatchEvent(new Event('input'));
         });
-        $('.descriptionAutoSetter').on('click',function(){
+        $('.descriptionAutoSetter').on('click', function() {
             console.log();
-            $('#taskDescription').val($(this).text());
+            $('#taskDescription').val($(this).text().trim());
+            document.getElementById("taskDescription").dispatchEvent(new Event('input'));
         });
     </script>
 @endpush

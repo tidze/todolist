@@ -50,11 +50,14 @@ class Task extends Component
 
     public function render()
     {
-        return view('livewire.task',[
-                    'allCategories'=>DB::table('categories')
-                    ->select('categories.category', 'categories.description', 'categories.color')
-                    ->where('user_id',Auth::user()->id)->get()->toArray()
+        return view('livewire.task', [
+            'allCategories' => DB::table('categories')
+                ->select('categories.category', 'categories.description', 'categories.color')
+                ->where('user_id', Auth::user()->id)->get()->toArray(),
+            'category_Distinct' => DB::table('categories')->where('user_id', Auth::user()->id)->distinct()->select('category')->get(),
         ]);
+
+        // 'allDescription'=>DB::table('categories')->where('user_id',Auth::user()->id)->distinct()->select('description')->ge
     }
 
     public function storeOrUpdate($detector)
@@ -71,7 +74,7 @@ class Task extends Component
         $task = DB::table('tasks')->select('tasks.*', 'categories.category', 'categories.description', 'categories.color')
             ->join('categories', 'tasks.category_id', '=', 'categories.id')
             ->where('tasks.user_id', Auth::user()->id)
-            ->where('tasks.id',$id)
+            ->where('tasks.id', $id)
             ->first();
         $this->taskCategory = $task->category;
         $this->taskDescription = $task->description;
@@ -97,10 +100,10 @@ class Task extends Component
             'taskCategory' => ['required'],
             'taskDescription' => ['required'],
         ]);
-        $category = $this->checkForExistingCategory(Auth::user()->id,trim($this->taskCategory), trim($this->taskDescription));
+        $category = $this->checkForExistingCategory(Auth::user()->id, trim($this->taskCategory), trim($this->taskDescription));
         if (is_null($category)) {
             // if the category not exists, add the category to the categories table and then update the task
-            $this->insertIntoCategories(Auth::user()->id,trim($this->taskCategory), trim($this->taskDescription));
+            $this->insertIntoCategories(Auth::user()->id, trim($this->taskCategory), trim($this->taskDescription));
             $this->updateIntoTasks(trim($this->targetTaskIdEdit), trim($this->taskCategory), trim($this->taskDescription));
         } else {
             // if the category exists, just retrive the id from categories table and update it with category_id
@@ -171,18 +174,28 @@ class Task extends Component
         $taskModel->starting_time = substr($this->startingTimepoint_unix, 0, 10);
         $taskModel->ending_time = substr($this->endingTimepoint_unix, 0, 10);
         $taskModel->save();
+        if ($taskModel) {
+            session()->flash('successfull_message', 'Task Added Successfully.');
+        } else {
+            session()->flash('unsuccessfull_message', 'Adding Task Was Unsuccessfull.');
+        }
     }
 
     public function updateIntoTasks($taskId, $category, $description)
     {
         $retrievedCategory = $this->checkForExistingCategory(Auth::user()->id, $category, $description);
-        DB::table('tasks')->where('id', $taskId)
+        $update = DB::table('tasks')->where('id', $taskId)
             ->update([
                 'category_id' => $retrievedCategory->id,
                 'desired_duration' => $this->desiredDuration,
                 'starting_time' => substr($this->startingTimepoint_unix, 0, 10),
                 'ending_time' => substr($this->endingTimepoint_unix, 0, 10),
             ]);
+        if ($update) {
+            session()->flash('successfull_message', 'Task Updated Successfully.');
+        } else {
+            session()->flash('unsuccessfull_message', 'Updating Task Was Unsuccessfull.');
+        }
         $this->emitTo('tasks-table', '$refresh');
         $this->taskCategory = '';
         $this->taskDescription = '';

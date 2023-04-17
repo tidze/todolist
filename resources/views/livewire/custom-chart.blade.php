@@ -17,13 +17,13 @@
         {{-- <span id="c_customDebug" class="inline-block border border-amber-600 p-0.5 rounded hover:bg-yellow-500 hover:text-black cursor-pointer" wire:click>c_customDebug</span> --}}
         {{-- <br> --}}
         <div id="c_targetDate_Container" class="flex justify-center p-2">
-            <input class="h-full border-2 border-amber-600 flex" id="c_targetDate" type="date" value="{{ date('Y-m-d', substr($c_startingDatepoint_unix, 0, 10) + 12600) }}">
+            <input class="bg-black h-full border-2 border-amber-600 flex" id="c_targetDate" type="date" value="{{ date('Y-m-d', substr($c_startingDatepoint_unix, 0, 10) + 12600) }}">
             <label class="text-amber-600 self-center" for="c_targetDate">Date</label>
         </div>
         <div class="flex">
             {{-- for input date overlay to be clickable every where --}}
             <div id="c_startingDateContainer" class="inline-block border-2 border-amber-500">
-                <input id="c_startingDate" wire:ignore type="date" value="{{ date('Y-m-d', substr($c_startingDatepoint_unix, 0, 10) + 12600) }}">
+                <input id="c_startingDate" class="bg-black" wire:ignore type="date" value="{{ date('Y-m-d', substr($c_startingDatepoint_unix, 0, 10) + 12600) }}">
             </div>
             <input id="c_startingHourpoint" class="w-40 h-full text-center border-2 border-amber-500 text-white bg-black time" wire:model.defer="c_startingHourpoint" type="text">
             <label class="self-center text-amber-600" for="c_startingHourpoint">Start</label>
@@ -36,7 +36,7 @@
         <div class="flex">
             {{-- for input date overlay to be clickable every where --}}
             <div id="c_endingDateContainer" class="inline-block border-2 border-amber-500">
-                <input id="c_endingDate" type="date" value="{{ date('Y-m-d', substr($c_endingDatepoint_unix, 0, 10) + 12600) }}">
+                <input id="c_endingDate" class="bg-black" type="date" value="{{ date('Y-m-d', substr($c_endingDatepoint_unix, 0, 10) + 12600) }}">
             </div>
             <input id="c_endingHourpoint" class="w-40 h-full text-center border-2 border-amber-500 text-white bg-black time" wire:model.defer="c_endingHourpoint" type="text">
             <label class="self-center text-amber-600" for="c_endingHourpoint">End</label>

@@ -8,7 +8,7 @@
     <meta name="robots" content="noindex">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
-        <!-- Fonts -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
     <!-- Scripts -->
@@ -27,6 +27,19 @@
             border: 1px solid tomato;
         }
 
+        /* For Webkit-based browsers (Chrome, Safari and Opera) */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* For IE, Edge and Firefox */
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
         /* .diagonal-stripes {
             background: repeating-linear-gradient(-45deg, #facc15, #facc15 2px, #ffffff00 0, #ffffff00 11px);
         }
@@ -34,9 +47,9 @@
         .diagonal-stripes-x {
             background: repeating-linear-gradient(-45deg, #e879f97a, #e879f97a 2px, #ffffff00 0, #ffffff00 9px);
         } */
-        input[type=date]{
-            background-color:black;
-        }
+        /* input[type=date]{ */
+        /* background-color:black; */
+        /* } */
     </style>
 </head>
 
