@@ -1,4 +1,3 @@
-
 <div class="relative border border-emerald-700">
     <div>
         {{-- Components Debugger Information --}}
@@ -13,36 +12,45 @@
             {{-- $x_seperatedTasks --> =''  <pre class="text-teal-100 text-[10px]">{{ isset($x_seperatedTasks) ? print_r($x_seperatedTasks) : 'Not Set' }}</pre><br> --}}
             {{-- $x_flattened = <span class="text-teal-100">{{ var_dump($x_flattened) }}</span><br> --}}
         </p>
-        <div class="relative z-20 flex flex-col items-center" >
-            <div>
+        <div class="relative z-20 flex flex-col items-center text-white">
+            {{-- Component x_startingTimepoint --}}
+            <div class="flex w-full">
                 {{-- for input date overlay to be clickable every where --}}
-                <div id="x_startingDateContainer" class="text-white inline-block border-2 border-emerald-600">
-                    <input id="x_startingDate" type="date" value="{{ date('Y-m-d', (substr($x_startingDatepoint_unix, 0, 10)+12600)) }}">
+                <div id="x_startingDateContainer" class="basis-2/5 inline-block border rounded-xl border-transparent">
+                    <input id="x_startingDate" class="border-2 rounded-xl border-gray-500 bg-gray-800" type="date" value="{{ date('Y-m-d', substr($x_startingDatepoint_unix, 0, 10) + 12600) }}">
                 </div>
-                <input id="x_startingHour" class="w-40 text-center text-white bg-black time" wire:model.defer="x_startingHour" type="text">
-                <label class="text-emerald-600" for="x_startingHour">Start</label>
-                <input id="x_startingDatepoint_unix" name="x_startingDatepoint_unix" class="bg-black text-white text-center w-52 p-0 text-[10px]" wire:model.defer="x_startingDatepoint_unix" type="hidden" value="0">
+                <div class="basis-2/5 flex">
+                    <input class="inline-block w-40 bg-black text-center startingTimepoint border-2 h-full rounded-xl border-gray-500" id="x_startingHour" wire:model.defer="x_startingHour" type="text">
+                </div>
+                <label class="basis-1/5 self-center" for="x_startingHour">Start</label>
+                <input id="x_startingDatepoint_unix" name="x_startingDatepoint_unix" class="bg-black text-center w-52 p-0 text-[10px]" wire:model.defer="x_startingDatepoint_unix" type="hidden" value="0">
                 {{-- <label for="x_startingDatepoint_unix">x_startingDatepoint_unix</label> --}}
                 {{-- @error('x_startingDatepoint_unix') --}}
                 {{-- <span class="text-red-500 text-[9px]">{{ $message }}</span> --}}
                 {{-- @enderror --}}
             </div>
-            <div>
+
+            {{-- Component x_startingTimepoint --}}
+            <div class="flex w-full">
                 {{-- for input date overlay to be clickable every where --}}
-                <div id="x_endingDateContainer" class="text-white inline-block border-2 border-emerald-600">
-                    <input id="x_endingDate" type="date" value="{{ date('Y-m-d', (substr($x_endingDatepoint_unix, 0, 10)+12600)) }}">
+                <div id="x_endingDateContainer" class="basis-2/5 inline-block border rounded-xl border-transparent">
+                    <input id="x_endingDate" class="border-2 rounded-xl border-gray-500 bg-gray-800" type="date" value="{{ date('Y-m-d', substr($x_endingDatepoint_unix, 0, 10) + 12600) }}">
                 </div>
-                <input id="x_endingHour" class="w-40 text-center text-white bg-black time" wire:model.defer="x_endingHour" type="text">
-                <label class="text-emerald-600" for="x_endtingHourpoint">End</label>
-                <input id="x_endingDatepoint_unix" name="x_endingDatepoint_unix" class="bg-black text-white text-center w-52 p-0 text-[10px]" wire:model.defer="x_endingDatepoint_unix" type="hidden" value="0">
-                {{-- <label for="x_endingDatepoint_unix">x_endingDatepoint_unix</label> --}}
-                {{-- @error('x_endingDatepoint_unix') --}}
+                <div class="basis-2/5 flex">
+                    <input class="inline-block w-40 bg-black text-center endingTimepoint border-2 h-full rounded-xl border-gray-500" id="x_endingHour" wire:model.defer="x_endingHour" type="text">
+                </div>
+                <label class="basis-1/5 self-center" for="x_endingHour">End</label>
+                <input id="x_endingDatepoint_unix" name="x_endingDatepoint_unix" class="bg-black text-center w-52 p-0 text-[10px]" wire:model.defer="x_endingDatepoint_unix" type="hidden" value="0">
+                {{-- <label for="x_startingDatepoint_unix">x_startingDatepoint_unix</label> --}}
+                {{-- @error('x_startingDatepoint_unix') --}}
                 {{-- <span class="text-red-500 text-[9px]">{{ $message }}</span> --}}
                 {{-- @enderror --}}
             </div>
-            <div class="p-2 mt-1 inline-block border border-emerald-600 text-emerald-500 rounded hover:bg-emerald-600 hover:text-black cursor-pointer" wire:click="getTask()">Custom Days Report</div>
-            <div class="p-2 mt-1 inline-block border border-emerald-600 text-emerald-500 rounded hover:bg-emerald-600 hover:text-black cursor-pointer" wire:click="getTaskForPastSevenDays()">7 Days Report</div>
-            <div class="p-2 mt-1 inline-block border border-emerald-600 text-emerald-500 rounded hover:bg-emerald-600 hover:text-black cursor-pointer" wire:click="getTaskForPastThirtyDays()">30 Days Report</div>
+            <div class="flex flex-row justify-around mt-1 w-full">
+                <div class="p-2 inline-block border border-emerald-600 text-emerald-500 rounded hover:bg-emerald-600 hover:text-black cursor-pointer" wire:click="getTask()">Custom Days Report</div>
+                <div class="p-2 inline-block border border-emerald-600 text-emerald-500 rounded hover:bg-emerald-600 hover:text-black cursor-pointer" wire:click="getTaskForPastSevenDays()">7 Days Report</div>
+                <div class="p-2 inline-block border border-emerald-600 text-emerald-500 rounded hover:bg-emerald-600 hover:text-black cursor-pointer" wire:click="getTaskForPastThirtyDays()">30 Days Report</div>
+            </div>
         </div>
         {{-- <span id="x_customDebug" class="inline-block border border-amber-600 p-0.5 rounded hover:bg-yellow-500 hover:text-black cursor-pointer" wire:click>x_customDebug</span> --}}
     </div>
@@ -57,16 +65,17 @@
             @foreach ($x_seperatedTasks as $index => $tasksOfDay)
                 <div class="border-2 border-cyan-900 h-[6vh] flex flex-row relative right-0 box-border border-opacity-100 w-full">
                     <div class="flex flex-row w-full">
-                        <div class="text-[10px] text-green-400">{{ date('Y-m-d', substr($x_startingDatepoint_unix, 0, 10)+12600 + 86400 * (count($x_seperatedTasks)-($index+1))) }}</div>
+                        <div class="text-[10px] text-green-400">{{ date('Y-m-d', substr($x_startingDatepoint_unix, 0, 10) + 12600 + 86400 * (count($x_seperatedTasks) - ($index + 1))) }}</div>
                         <pre> </pre>
-                        <div class="text-[10px] text-teal-400">{{ date('H:i', substr($x_startingDatepoint_unix, 0, 10)+12600 + 86400 * ($index + 1)) }}</div>
-                        <div class="ml-auto text-[10px] text-green-400">{{ date('Y-m-d', substr($x_endingDatepoint_unix, 0, 10)+12600 + 86400 *(-$index)) }}</div>
+                        <div class="text-[10px] text-teal-400">{{ date('H:i', substr($x_startingDatepoint_unix, 0, 10) + 12600 + 86400 * ($index + 1)) }}</div>
+                        <div class="ml-auto text-[10px] text-green-400">{{ date('Y-m-d', substr($x_endingDatepoint_unix, 0, 10) + 12600 + 86400 * -$index) }}</div>
                         <pre> </pre>
-                        <div class="text-[10px] text-teal-400" style>{{ date('H:i', substr($x_endingDatepoint_unix, 0, 10)+12600 + 86400 *(-$index)) }}</div>
+                        <div class="text-[10px] text-teal-400" style>{{ date('H:i', substr($x_endingDatepoint_unix, 0, 10) + 12600 + 86400 * -$index) }}</div>
                     </div>
                     @foreach ($tasksOfDay as $index => $_task)
                         <div class="border w-1/2 h-full flex flex-row absolute box-border diagonal-stripes-x"
-                        style="{{ $_task['width'] }};{{ $_task['left'] }};border-color: {{$_task['color']}};background: repeating-linear-gradient(-45deg, {{$_task['color']}}, {{$_task['color']}} 2px, #ffffff00 0, #ffffff00 9px);"></div>
+                            style="{{ $_task['width'] }};{{ $_task['left'] }};border-color: {{ $_task['color'] }};background: repeating-linear-gradient(-45deg, {{ $_task['color'] }}, {{ $_task['color'] }} 2px, #ffffff00 0, #ffffff00 9px);">
+                        </div>
                     @endforeach
                 </div>
             @endforeach

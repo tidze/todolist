@@ -45,15 +45,15 @@
       dark:hover:bg-gray-700">Update
         Task</button>
     {{-- Alert Message for Success or Unsuccuss of Category update record --}}
-    <div>
+    <div class="m-1">
         @if (session()->has('successfull_message'))
-            <div class="text-green-500">
-                {{ session('successfull_message') }}
+            <div class="bg-green-500 bg-opacity-20 border-l-8 border-green-600 text-green-500 p-2">
+                {{ session('successfull_message') }} <span class="text-green-500">&#10003</span>
             </div>
         @endif
         @if (session()->has('unsuccessfull_message'))
-            <div class="text-red-500">
-                {{ session('unsuccessfull_message') }}
+            <div class="bg-red-500 bg-opacity-20 border-l-8 border-red-700 border-opacity-90 text-red-600 text-opacity-80 p-2">
+                {{ session('unsuccessfull_message') }} <span class="text-red-600">&#10005</span>
             </div>
         @endif
     </div>

@@ -16,55 +16,73 @@
     <div class="relative z-20 flex flex-col text-base">
         {{-- <span id="c_customDebug" class="inline-block border border-amber-600 p-0.5 rounded hover:bg-yellow-500 hover:text-black cursor-pointer" wire:click>c_customDebug</span> --}}
         {{-- <br> --}}
-        <div id="c_targetDate_Container" class="flex justify-center p-2">
-            <input class="bg-black h-full border-2 border-amber-600 flex" id="c_targetDate" type="date" value="{{ date('Y-m-d', substr($c_startingDatepoint_unix, 0, 10) + 12600) }}">
-            <label class="text-amber-600 self-center" for="c_targetDate">Date</label>
+        <div class="flex justify-center">
+            <div id="c_targetDate_Container" class="flex items-center justify-center p-2">
+                <input class="inline-block border-2 rounded-xl border-gray-500 bg-gray-800" id="c_targetDate" type="date" value="{{ date('Y-m-d', substr($c_startingDatepoint_unix, 0, 10) + 12600) }}">
+                <label class="px-1" for="c_targetDate">Date</label>
+            </div>
         </div>
+
+        {{-- Component c_startingTimepoint --}}
         <div class="flex">
             {{-- for input date overlay to be clickable every where --}}
-            <div id="c_startingDateContainer" class="inline-block border-2 border-amber-500">
-                <input id="c_startingDate" class="bg-black" wire:ignore type="date" value="{{ date('Y-m-d', substr($c_startingDatepoint_unix, 0, 10) + 12600) }}">
+            <div id="c_startingDateContainer" class="basis-2/5 inline-block border rounded-xl border-transparent">
+                <input id="c_startingDate" class="border-2 rounded-xl border-gray-500 bg-gray-800" wire:ignore type="date" value="{{ date('Y-m-d', substr($c_startingDatepoint_unix, 0, 10) + 12600) }}">
             </div>
-            <input id="c_startingHourpoint" class="w-40 h-full text-center border-2 border-amber-500 text-white bg-black time" wire:model.defer="c_startingHourpoint" type="text">
-            <label class="self-center text-amber-600" for="c_startingHourpoint">Start</label>
-            <input id="c_startingDatepoint_unix" name="c_startingDatepoint_unix" class="bg-black text-white text-center w-52 p-0 text-[10px]" wire:model.defer="c_startingDatepoint_unix" type="hidden" value="0">
+            <div class="basis-2/5 flex">
+                <input class="inline-block w-40 bg-black text-center startingTimepoint border-2 h-full rounded-xl border-gray-500"
+                id="c_startingHourpoint" wire:model.defer="c_startingHourpoint" type="text">
+            </div>
+            <label class="basis-1/5 self-center" for="c_startingHourpoint">Start</label>
+            <input id="c_startingDatepoint_unix" name="c_startingDatepoint_unix" class="bg-black text-center text-[8px]" wire:model.defer="c_startingDatepoint_unix" type="hidden" value="0">
             {{-- <label for="c_startingDatepoint_unix">c_startingDatepoint_unix</label> --}}
             {{-- @error('c_startingDatepoint_unix') --}}
             {{-- <span class="text-red-500 text-[9px]">{{ $message }}</span> --}}
             {{-- @enderror --}}
         </div>
+
+        {{-- Component c_endingTimepoint --}}
         <div class="flex">
             {{-- for input date overlay to be clickable every where --}}
-            <div id="c_endingDateContainer" class="inline-block border-2 border-amber-500">
-                <input id="c_endingDate" class="bg-black" type="date" value="{{ date('Y-m-d', substr($c_endingDatepoint_unix, 0, 10) + 12600) }}">
+            <div id="c_endingDateContainer" class="basis-2/5 inline-block border rounded-xl border-transparent">
+                <input id="c_endingDate" class="border-2 rounded-xl border-gray-500 bg-gray-800" type="date" value="{{ date('Y-m-d', substr($c_endingDatepoint_unix, 0, 10) + 12600) }}">
             </div>
-            <input id="c_endingHourpoint" class="w-40 h-full text-center border-2 border-amber-500 text-white bg-black time" wire:model.defer="c_endingHourpoint" type="text">
-            <label class="self-center text-amber-600" for="c_endingHourpoint">End</label>
+            <div class="basis-2/5 flex">
+                <input id="c_endingHourpoint" class="w-40 bg-black text-center endingTimepoint border-2 h-full rounded-xl border-gray-500" wire:model.defer="c_endingHourpoint" type="text">
+            </div>
+            <label class="basis-1/5 self-center" for="c_endingHourpoint">End</label>
             <input id="c_endingDatepoint_unix" name="c_endingDatepoint_unix" class="bg-black text-white text-center w-52 p-0 text-[10px]" wire:model.defer="c_endingDatepoint_unix" type="hidden" value="0">
             {{-- <label for="c_endingDatepoint_unix">c_endingDatepoint_unix</label> --}}
             {{-- @error('c_endingDatepoint_unix') --}}
             {{-- <span class="text-red-500 text-[9px]">{{ $message }}</span> --}}
             {{-- @enderror --}}
         </div>
-        <div class="flex flex-col">
-            <div class=" my-1 self-center relative z-10 text-amber-600 text-[16px] w-60 text-center
-                    inline-block border border-amber-600 p-2 rounded
-                    hover:bg-yellow-500 hover:text-black cursor-pointer"
+
+        <div class="flex flex-row">
+            <button class="flex-1 px-3 py-3 m-1 text-center text-sm font-medium text-gray-900
+            focus:outline-none bg-white border border-gray-200 rounded-xl
+          hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4
+          focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800
+          dark:text-gray-400 dark:border-gray-600 dark:hover:text-white
+          dark:hover:bg-gray-700"
                 wire:click="getTask()">
-                Daily Report</div>
-            <div id="c_flattenTasksGraph"
-                class=" my-1 self-center relative z-10 text-amber-600 text-[16px] w-60 text-center
-                     inline-block border border-amber-600 p-2 rounded
-                   hover:bg-yellow-500 hover:text-black cursor-pointer"
+                Daily Report</button>
+            <button id="c_flattenTasksGraph"
+                class="flex-1 px-3 py-3 m-1 text-center text-sm font-medium text-gray-900
+                focus:outline-none bg-white border border-gray-200 rounded-xl
+              hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4
+              focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800
+              dark:text-gray-400 dark:border-gray-600 dark:hover:text-white
+              dark:hover:bg-gray-700"
                 wire:click="flattenTasksGraph">
                 Flat
-            </div>
+            </button>
         </div>
     </div>
     {{-- Dayily Graph Chart --}}
     <div class="flex flex-col">
-        <div class="flex justify-center">
-            <div class=" relative p-2 border-2 border-red-400 border-opacity-0 ">
+        <div class="flex justify-end">
+            <div class="relative py-2 px-9 border-2 border-red-400 border-opacity-0">
                 <div class="border-2 border-orange-800 border-opacity-50 w-64 h-[58vh] relative right-0 box-border">
                     {{-- startTimepointHandle --}}
                     <div class="w-[10%] h-[2px] bg-amber-700 border-t-2 border-t-amber-700 absolute right-full">
@@ -90,18 +108,28 @@
                     </div>
                     @isset($c_tasksGraphArray)
                         @foreach ($c_tasksGraphArray as $_task)
-                            <div class="taskGraphItem box-border {{ $_task['translate'] ?? '' }} {{ $_task['position'] ?? '' }} w-full text-[9px] border border-yellow-400 border-opacity-70"
+                            <div class="flex taskGraphItem box-border {{ $_task['translate'] ?? '' }} {{ $_task['position'] ?? '' }} w-full text-[9px] border-2 border-opacity-70"
                                 style=" {{ $_task['top'] ?? '' }} ;
                                         {{ $_task['height'] ?? '' }};
-                                        background: repeating-linear-gradient(-45deg, {{$_task['color']}}, {{$_task['color']}} 2px, #ffffff00 0, #ffffff00 11px);
-                                        border-color: {{$_task['color']}}" {{-- The Starting point is 100% off by Y Axis so i added translate transform --}}>
-                                {{-- time indicator --}}
-                                <div class="box-border border border-b-transparent border-r-transparent border-l-transparent border-t-yellow-400 h-[20px] w-1/5 absolute -left-[20%]">
-                                    <div class="flex justify-end">
-                                        <div class="mx-1">{{ date('H:i', $_task['starting_time'] + 12600) }}</div>
-                                        <div class="">{{ date('H:i', $_task['ending_time'] + 12600) }}</div>
+                                        background: repeating-linear-gradient(-45deg, {{ $_task['color'] }}, {{ $_task['color'] }} 2px, #ffffff00 0, #ffffff00 6px);
+                                        border-color: {{ $_task['color'] }}"
+                                {{-- The Starting point is 100% off by Y Axis so i added translate transform --}}>
+
+                                <div class="absolute flex flex-row -translate-x-full">
+
+                                    <div class="text-white-500 text-[8px] -translate-y-[40%] mx-1">
+                                        {{ $_task['description'] }}
+                                    </div>
+
+                                    {{-- time indicator --}}
+                                    <div class="box-border border border-b-transparent border-r-transparent border-l-transparent border-t-yellow-400 ">
+                                        <div class="flex justify-between bg-gray-500 bg-opacity-60 rounded-sm">
+                                            <div class="mx-0.5">{{ date('H:i', $_task['starting_time'] + 12600) }}</div>
+                                            <div class="mr-1">{{ date('H:i', $_task['ending_time'] + 12600) }}</div>
+                                        </div>
                                     </div>
                                 </div>
+
                             </div>
                         @endforeach
                     @endisset
@@ -210,6 +238,16 @@
             document.getElementById("c_endingDatepoint_unix").dispatchEvent(new Event('input'));
             document.getElementById("c_endingHourpoint").dispatchEvent(new Event('input'));
 
+        });
+        // for all input[date], to be selectable with just clicking anywhere on input. (not just date picker icon)
+        $("#c_targetDate_Container").on("click", () => {
+            document.querySelector("#c_targetDate").showPicker();
+        });
+        $("#c_startingDateContainer").on("click", () => {
+            document.querySelector("#c_startingDate").showPicker();
+        });
+        $("#c_endingDateContainer").on("click", () => {
+            document.querySelector("#c_endingDate").showPicker();
         });
     </script>
 @endpush

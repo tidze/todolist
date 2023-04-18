@@ -53,9 +53,9 @@ class CategoryColor extends Component
         // Refresh the `tasks-table.blade.php`
         $this->emitTo('tasks-table','$refresh');
         if($update){
-            session()->flash('successfull_message', 'Category Updated Successfully.');
+            session()->flash('successfull_message', 'Category Updated Successfully');
         }else{
-            session()->flash('unsuccessfull_message', 'Updated Was Unsuccessfull.');
+            session()->flash('unsuccessfull_message', 'Update Was Unsuccessfull');
         }
         // Clear the livewire variables
         $this->user_id ='';

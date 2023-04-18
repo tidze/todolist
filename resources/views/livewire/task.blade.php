@@ -16,6 +16,15 @@
         {{-- _99= <span class="text-amber-100">{{ ($_99??'Not Set') }}</span><br> --}}
         {{-- date_default_timezone_get=<span class="text-amber-100">{{ date_default_timezone_get() }}</span><br> --}}
         {{-- timezone= <span class="text-amber-100">{{ ($timezone??'Not Set')}}</span><br> --}}
+        {{-- @if ($errors->any()) --}}
+            {{-- <div class="alert alert-danger"> --}}
+                {{-- <ul> --}}
+                    {{-- @foreach ($errors->all() as $error) --}}
+                        {{-- <li>{{ $error }}</li> --}}
+                    {{-- @endforeach --}}
+                {{-- </ul> --}}
+            {{-- </div> --}}
+        {{-- @endif --}}
     </p>
     <input type="hidden" id="targetTaskIdEdit" name="targetTaskIdEdit" wire:model.defer="targetTaskIdEdit" class="w-32 border-2 border-indigo-500" value="{{ $targetTaskIdEdit }}" readonly>
     {{-- <label for="targetTaskIdEdit">targetTaskId</label>
@@ -29,25 +38,29 @@
         <p>targetTaskIdEdit <span class="underline">Not</span> empty</p>
     @endempty
     <br> --}}
-    <div id="targetDateContainer" class="flex items-center justify-center p-2">
-        <input type="date" id="targetDate" class="inline-block border-2 rounded-xl border-gray-500 bg-gray-800" value="{{ $startingDatepoint }}">
-        <label for="targetDate" class="px-1">Date</label>
+    <div class="flex justify-center">
+        <div id="targetDateContainer" class="flex items-center justify-center p-2">
+            <input type="date" id="targetDate" class="inline-block border-2 rounded-xl border-gray-500 bg-gray-800" value="{{ $startingDatepoint }}">
+            <label for="targetDate" class="px-1">Date</label>
+        </div>
     </div>
     <form wire:submit.prevent="storeOrUpdate({{ str_contains($detector, 9) ? $_99 : $_88 }})">
         @csrf
         <div class="flex flex-col flex-grow">
 
             {{-- Component startingTimepoint --}}
-            <div class="flex flex-row">
+            <div class="flex">
+                {{-- for input date overlay to be clickable every where --}}
                 <div id="startingDateContainer" class="basis-2/5 inline-block border rounded-xl border-transparent">
                     <input {{-- wire:ignore --}} id="startingDate" type="date" class="border-2 rounded-xl border-gray-500 bg-gray-800" value="{{ $startingDatepoint }}">
                 </div>
                 <div class="basis-2/5 flex">
-                    <input class=" inline-block w-40 bg-black text-center startingTimepoint border-2 h-full rounded-xl border-gray-500" id="startingTimepoint" wire:model.defer="startingTimepoint" type="text" />
+                    <input class="inline-block w-40 bg-black text-center startingTimepoint border-2 h-full rounded-xl border-gray-500"
+                    id="startingTimepoint" wire:model.defer="startingTimepoint" type="text"/>
                 </div>
                 <label class="basis-1/5 self-center" for="startingTimepoint">Start</label>
 
-                <input class="bg-black text-center text-[8px] " id="startingTimepoint_unix" wire:model.defer="startingTimepoint_unix" name="startingTimepoint_unix" type="hidden" value="" />
+                <input class="bg-black text-center text-[8px]" id="startingTimepoint_unix" wire:model.defer="startingTimepoint_unix" name="startingTimepoint_unix" type="hidden" value="" />
                 {{-- <label for="startingTimepoint_unix">startingTimepoint_unix</label> --}}
                 {{-- @error('startingTimepoint_unix') --}}
                 {{-- <span class="text-red-500 text-[9px]">{{ $message }}</span> --}}
@@ -55,13 +68,13 @@
             </div>
 
             {{-- Component endingTimepoint --}}
-            <div class="flex justify-row" >
-                <div id="endingDateContainer" class="basis-2/5 inline-block border-2 rounded-xl border-transparent">
+            <div class="flex">
+                <div id="endingDateContainer" class="basis-2/5 inline-block border rounded-xl border-transparent">
                     <input {{-- wire:ignore --}} id="endingDate" type="date" class="border-2 rounded-xl border-gray-500 bg-gray-800" value="{{ $endingDatepoint }}">
                 </div>
                 <div class="basis-2/5 flex">
                     <input class="w-40 bg-black text-center endingTimepoint border-2 h-full rounded-xl border-gray-500" id="endingTimepoint" wire:model.defer="endingTimepoint" type="text" value={{ $endingTimepoint }}
-                    onchange="" />
+                        onchange="" />
                 </div>
                 <label class="basis-1/5 self-center" for="endingTimepoint">End</label>
 
@@ -112,11 +125,11 @@
                     @endforeach
                 </div>
 
-                <div class="flex-auto w-full text-center">
-                    @error('taskCategory')
+                @error('taskCategory')
+                    <div class="flex-auto w-full text-center">
                         <div class="text-red-500 text-[10px]">{{ $message }}</div>
-                    @enderror
-                </div>
+                    </div>
+                @enderror
                 <div class="flex flex-auto justify-center items-center text-center py-1">
                     <input id="taskDescription" wire:model.defer="taskDescription" name="taskDescription" type="text"
                         class="rounded-xl text-lg inline-block flex-auto bg-black first-letter:bg-black text-center text-[9px] py-2">
@@ -131,11 +144,11 @@
                             {{ $category->description }}</div>
                     @endforeach
                 </div>
-                <div class="flex-auto w-full text-center">
-                    @error('taskDescription')
+                @error('taskDescription')
+                    <div class="flex-auto w-full text-center">
                         <div class="text-red-500 text-[10px]">{{ $message }}</div>
-                    @enderror
-                </div>
+                    </div>
+                @enderror
 
             </div>
             <div class="flex my-2">
@@ -158,13 +171,13 @@
             </div>
             <div>
                 @if (session()->has('successfull_message'))
-                    <div class="text-green-500">
-                        {{ session('successfull_message') }}
+                    <div class="bg-green-500 bg-opacity-20 border-l-8 border-green-600 text-green-500 p-2">
+                        {{ session('successfull_message') }} <span class="text-green-500">&#10003</span>
                     </div>
                 @endif
                 @if (session()->has('unsuccessfull_message'))
-                    <div class="text-red-500">
-                        {{ session('unsuccessfull_message') }}
+                    <div class="bg-red-500 bg-opacity-20 border-l-8 border-red-700 border-opacity-90 text-red-600 text-opacity-80 p-2">
+                        {{ session('unsuccessfull_message') }} <span class="text-red-600">&#10005</span>
                     </div>
                 @endif
             </div>

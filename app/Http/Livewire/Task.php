@@ -33,7 +33,14 @@ class Task extends Component
     public $timezone;
     // since we're calling editTask from tasks-table component's controller we need to register our function controller
     protected $listeners = ['editTask'];
-
+    protected $rules = [
+        'targetTaskIdEdit' => ['required'],
+        'startingTimepoint_unix' => ['required'],
+        'endingTimepoint_unix' => ['required'],
+        'desiredDuration' => ['required'],
+        'taskCategory' => ['required'],
+        'taskDescription' => ['required'],
+    ];
     public function mount()
     {
         $this->endingTimepoint_unix = time();
@@ -56,8 +63,6 @@ class Task extends Component
                 ->where('user_id', Auth::user()->id)->get()->toArray(),
             'category_Distinct' => DB::table('categories')->where('user_id', Auth::user()->id)->distinct()->select('category')->get(),
         ]);
-
-        // 'allDescription'=>DB::table('categories')->where('user_id',Auth::user()->id)->distinct()->select('description')->ge
     }
 
     public function storeOrUpdate($detector)
@@ -92,14 +97,15 @@ class Task extends Component
 
     public function update()
     {
-        $this->validate([
-            'targetTaskIdEdit' => ['required'],
-            'startingTimepoint_unix' => ['required'],
-            'endingTimepoint_unix' => ['required'],
-            'desiredDuration' => ['required'],
-            'taskCategory' => ['required'],
-            'taskDescription' => ['required'],
-        ]);
+        // $this->validate([
+        //     'targetTaskIdEdit' => ['required'],
+        //     'startingTimepoint_unix' => ['required'],
+        //     'endingTimepoint_unix' => ['required'],
+        //     'desiredDuration' => ['required'],
+        //     'taskCategory' => ['required'],
+        //     'taskDescription' => ['required'],
+        // ]);
+        $this->validate();
         $category = $this->checkForExistingCategory(Auth::user()->id, trim($this->taskCategory), trim($this->taskDescription));
         if (is_null($category)) {
             // if the category not exists, add the category to the categories table and then update the task
@@ -110,6 +116,8 @@ class Task extends Component
             $this->updateIntoTasks(trim($this->targetTaskIdEdit), trim($this->taskCategory), trim($this->taskDescription));
         }
         $this->resetErrorBag();
+
+        $this->resetValidation();
     }
 
     public function deleteTask($id)
@@ -175,9 +183,9 @@ class Task extends Component
         $taskModel->ending_time = substr($this->endingTimepoint_unix, 0, 10);
         $taskModel->save();
         if ($taskModel) {
-            session()->flash('successfull_message', 'Task Added Successfully.');
+            session()->flash('successfull_message', 'Task Added Successfully');
         } else {
-            session()->flash('unsuccessfull_message', 'Adding Task Was Unsuccessfull.');
+            session()->flash('unsuccessfull_message', 'Adding Task Was Unsuccessfull');
         }
     }
 
@@ -192,9 +200,9 @@ class Task extends Component
                 'ending_time' => substr($this->endingTimepoint_unix, 0, 10),
             ]);
         if ($update) {
-            session()->flash('successfull_message', 'Task Updated Successfully.');
+            session()->flash('successfull_message', 'Task Updated Successfully');
         } else {
-            session()->flash('unsuccessfull_message', 'Updating Task Was Unsuccessfull.');
+            session()->flash('unsuccessfull_message', 'Updating Task Was Unsuccessfull');
         }
         $this->emitTo('tasks-table', '$refresh');
         $this->taskCategory = '';
