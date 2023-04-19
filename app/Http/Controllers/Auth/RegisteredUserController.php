@@ -44,9 +44,9 @@ class RegisteredUserController extends Controller
         ]);
 
         // Add user settings
-        DB::table('user_settings')->insert([
-            'user_id'=>$user->id,
-        ]);
+        // DB::table('user_settings')->insert([
+            // 'user_id'=>$user->id,
+        // ]);
 
         event(new Registered($user));
 
