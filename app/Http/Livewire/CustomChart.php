@@ -2,34 +2,51 @@
 
 namespace App\Http\Livewire;
 
+use DateInterval;
+use DateTime;
+use DateTimeZone;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 
 class CustomChart extends Component
 {
-    public $c_startingHourpoint;
-    public $c_endingHourpoint;
+    // 1681892041 ▼
     public $c_startingDatepoint_unix;
     public $c_endingDatepoint_unix;
-    public $c_tasksGraphArray;
+    // 2023-04-19 ▼
     public $c_startingDate;
     public $c_endingDate;
+    // 00:00 ▼
+    public $c_startingHourpoint;
+    public $c_endingHourpoint;
+
+    public $c_tasksGraphArray;
     public $c_flattened;
+
+    public $is_date_different;
 
     public function mount()
     {
-        $this->c_startingDatepoint_unix = '1680703200' + (13 * 86400) - (9  * 60 *60);
-        $this->c_endingDatepoint_unix = '1680726480' + (13   * 86400);
+        $date = new DateTime();
+        $date->setTimezone(new DateTimeZone('asia/tehran'));
+        $date->setTime(9, 30, 0);
+        $this->c_startingDatepoint_unix = $date->format('U');
+        $this->c_startingHourpoint = $date->format('H:i');
+        $this->c_startingDate = $date->format('Y-m-d');
+
+        $date->add(new DateInterval('P1D'));
+        $date->setTime(03, 00, 0);
+        $this->c_endingDatepoint_unix = $date->format('U');
+        $this->c_endingHourpoint = $date->format('H:i');
+        $this->c_endingDate = $date->format('Y-m-d');
+
         $this->c_flattened = false;
-        $this->c_startingHourpoint = '18:00';
-        $this->c_endingHourpoint = '23:59';
-        $this->c_startingDate = '2023-03-27';
-        $this->c_endingDate = '2023-03-27';
     }
 
     public function render()
     {
+        $this->getTimeAndDate();
         return view('livewire.custom-chart');
     }
 
@@ -137,6 +154,69 @@ class CustomChart extends Component
     }
     public function getTask()
     {
+        // $user_settings = DB::table('user_settings')->where('user_id', Auth::user()->id)->first();
+        // Manual → Auto ▼
+        // $dateTimezone = new DateTimeZone('asia/tehran');
+        // $dateTimezone = new DateTimeZone('$user_settings');
+        // $starting_hour = $user_settings->starting_hour;
+        // $starting_minute = $user_settings->starting_minute;
+        // $starting_second = 0;
+        // $starting_dateTime = new DateTime();
+        // $starting_dateTime->setTimestamp(time());
+        // $starting_dateTime->setTimezone($dateTimezone);
+        // $starting_dateTime->setTime($starting_hour, $starting_minute, $starting_second);
+
+        // $ending_hour = $user_settings->ending_hour;
+        // $ending_minute = $user_settings->ending_minute;
+        // $ending_second = 00;
+        // $ending_dateTime = new DateTime();
+        // $ending_dateTime->setTimestamp(time());
+        // $ending_dateTime->setTimezone($dateTimezone);
+        // $ending_dateTime->setTime($ending_hour, $ending_minute, $ending_second);
+
+        // dd($starting_dateTime, $ending_dateTime);
+        // Set the database variables into livewire variables
+
+        // $this->c_startingDatepoint_unix = $starting_dateTime->format('U');
+        // $this->c_endingDatepoint_unix = $ending_dateTime->format('U');
+
+        // $this->c_startingDate = $starting_dateTime->format('Y-m-d');
+        // $this->c_endingDate = $ending_dateTime->format('Y-m-d');
+
+        // $this->c_startingHourpoint = $starting_dateTime->format('H:i');
+        // $this->c_endingHourpoint =  $ending_dateTime->format('H:i');
+
+        // $this->is_date_different = $user_settings->is_date_different;
+
+        // Setting variables into database is here //
+        // if ($this->c_startingDate == $this->c_endingDate) {
+            // If the `is_date_different` is true, then change it to false. Otherwise do not call the database.
+            // if ($user_settings->is_date_different) {
+                // If the dates are equal, they are not different
+                // DB::table('user_settings')->update([
+                    // 'is_date_different' => false
+                // ]);
+            // }
+        // } else {
+            // If the `is_date_different` is false, then change it to true. Otherwise do not call the database.
+            // if (!($user_settings->is_date_different)) {
+                // If the dates are not equal, they are different
+                // DB::table('user_settings')->update([
+                    // 'is_date_different' => true
+                // ]);
+            // }
+        // }
+
+        // dd($this->c_startingHourpoint, $starting_dateTime->format('H:i'));
+        // if (!($this->c_startingHourpoint == $starting_dateTime->format('H:i'))) {
+            // dd(($this->c_startingHourpoint == $starting_dateTime->format('H:i')));
+            // DB::table('user_settings')->update([
+                // 'starting_hour' => substr($this->c_startingHourpoint, 0, 2),
+                // 'starting_minute' => substr($this->c_endingHourpoint, 3, 2),
+            // ]);
+        // }
+
+
         $this->c_flattened = false;
 
         // dd($this->c_startingDatepoint_unix,$this->c_endingDatepoint_unix);
@@ -158,11 +238,18 @@ class CustomChart extends Component
             $task['position'] = 'absolute';
         }
         $this->calcTaskTopOffset();
-        // dd($this->c_tasksGraphArray);
-        // dd(DB::table('tasks')
-        // ->where([
-        // ['starting_time', '>=', substr($this->c_startingDatepoint_unix, 0, 10)],
-        // ['starting_time', '<', substr($this->c_endingDatepoint_unix, 0, 10)]
-        // ])->get());
+    }
+
+    public function getTimeAndDate()
+    {
+    }
+
+    public function setTimeAndDate()
+    {
+    }
+
+    public function isDateDifferent_Changer()
+    {
+        // detects if the dates are not equal
     }
 }

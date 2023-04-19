@@ -154,6 +154,7 @@ class Task extends Component
         $this->endingTimepoint = '00:00';
         $this->targetTaskIdEdit = '';
         $this->emitTo('tasks-table', 'sendBackId', $this->targetTaskIdEdit);
+        $this->emitTo('category-color', '$refresh');
         $this->resetErrorBag();
     }
 

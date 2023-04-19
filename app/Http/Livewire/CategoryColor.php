@@ -17,6 +17,8 @@ class CategoryColor extends Component
     public $category;
     public $categoryDescription;
 
+    protected $listeners = ['$refresh'];
+
     public function render()
     {
         return view('livewire.category-color', [

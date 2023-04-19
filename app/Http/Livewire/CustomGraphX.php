@@ -29,15 +29,21 @@ class CustomGraphX extends Component
     }
     public function mount()
     {
-        $this->x_startingDatepoint_unix = '1680703200' + (8 * 86400);
-        $this->x_endingDatepoint_unix = '1680726480' + (11 * 86400);
+        $date = new DateTime();
+        $date->setTimezone(new DateTimeZone('asia/tehran'));
+        $date->add(new DateInterval('P1D'));
+        $date->setTime(3, 00, 0);
+        $this->x_endingDatepoint_unix = $date->format('U');
+        $this->x_endingHour = $date->format('H:i');
+        $this->x_endingDate = $date->format('Y-m-d');
+
+        $date->sub(new DateInterval('P3D'));
+        $date->setTime(9, 30, 0);
+        $this->x_startingDatepoint_unix = $date->format('U');
+        $this->x_startingHour = $date->format('H:i');
+        $this->x_startingDate = $date->format('Y-m-d');
+
         $this->x_flattened = false;
-        // $this->x_startingHour = '18:00';
-        // $this->x_endingHour = '23:59';
-        $this->x_startingHour = date('H:i', substr($this->x_startingDatepoint_unix, 0, 10) + 12600);
-        $this->x_endingHour = date('H:i', substr($this->x_endingDatepoint_unix, 0, 10) + 12600);
-        $this->x_startingDate = date('Y-m-d', substr($this->x_startingDatepoint_unix, 0, 10) + 12600);
-        $this->x_endingDate = date('Y-m-d', substr($this->x_startingDatepoint_unix, 0, 10) + 12600);
     }
 
     /**

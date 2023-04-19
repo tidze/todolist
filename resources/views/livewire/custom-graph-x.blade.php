@@ -46,10 +46,10 @@
                 {{-- <span class="text-red-500 text-[9px]">{{ $message }}</span> --}}
                 {{-- @enderror --}}
             </div>
-            <div class="flex flex-row justify-around mt-1 w-full">
-                <div class="p-2 inline-block border border-emerald-600 text-emerald-500 rounded hover:bg-emerald-600 hover:text-black cursor-pointer" wire:click="getTask()">Custom Days Report</div>
-                <div class="p-2 inline-block border border-emerald-600 text-emerald-500 rounded hover:bg-emerald-600 hover:text-black cursor-pointer" wire:click="getTaskForPastSevenDays()">7 Days Report</div>
-                <div class="p-2 inline-block border border-emerald-600 text-emerald-500 rounded hover:bg-emerald-600 hover:text-black cursor-pointer" wire:click="getTaskForPastThirtyDays()">30 Days Report</div>
+            <div class="flex flex-row justify-around mt-1 w-full flex-wrap">
+                <div class="p-2 text-[14px] inline-block border border-emerald-600 text-emerald-500 rounded hover:bg-emerald-600 hover:text-black cursor-pointer" wire:click="getTask()">Custom Days Report</div>
+                <div class="p-2 text-[14px] inline-block border border-emerald-600 text-emerald-500 rounded hover:bg-emerald-600 hover:text-black cursor-pointer" wire:click="getTaskForPastSevenDays()">7 Days Report</div>
+                <div class="p-2 text-[14px] inline-block border border-emerald-600 text-emerald-500 rounded hover:bg-emerald-600 hover:text-black cursor-pointer" wire:click="getTaskForPastThirtyDays()">30 Days Report</div>
             </div>
         </div>
         {{-- <span id="x_customDebug" class="inline-block border border-amber-600 p-0.5 rounded hover:bg-yellow-500 hover:text-black cursor-pointer" wire:click>x_customDebug</span> --}}
