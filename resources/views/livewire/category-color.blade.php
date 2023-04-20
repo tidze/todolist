@@ -19,7 +19,8 @@
             {{-- <label class="text-white" for="targetCategoryId">targetCategoryId</label> --}}
         </div>
         <div class="flex items-center">
-            <input class="border-2 border-gray-500 focus:border-blue-500 rounded-xl bg-black text-white w-52 h-10" type="color" name="categoryColor" id="categoryColor" value="{{ isset($categoryColor) ? $categoryColor : '' }}" wire:model.defer="categoryColor">
+            <input class="border-2 border-gray-500 focus:border-blue-500 rounded-xl bg-black text-white w-52 h-10" type="color" name="categoryColor" id="categoryColor"
+                value="{{ isset($categoryColor) ? $categoryColor : '' }}" wire:model.defer="categoryColor">
             <label class="text-white pl-1" for="categoryColor">Category's Color</label>
         </div>
         <div class="">
@@ -30,7 +31,7 @@
             <input class="border-2 rounded-xl bg-black text-white w-52" type="text" name="category" id="category" value="{{ isset($category) ? $category : '' }}" wire:model.defer="category">
             <label class="text-white" for="category">Category</label>
         </div>
-        <div  class="pt-1">
+        <div class="pt-1">
             <input class="border-2 rounded-xl bg-black text-white w-52" type="text" name="categoryDescription" id="categoryDescription" value="{{ isset($categoryDescription) ? $categoryDescription : '' }}"
                 wire:model.defer="categoryDescription">
             <label class="text-white" for="categoryDescription">Category's Description</label>
@@ -44,6 +45,11 @@
       dark:text-gray-400 dark:border-gray-600 dark:hover:text-white
       dark:hover:bg-gray-700">Update
         Task</button>
+    <div class="w-full flex items-center justify-center">
+        <div class="w-full p-1" wire:loading wire:target="storeOrUpdate">
+            <div class="text-blue-400 block border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Updating The Task ...</div>
+        </div>
+    </div>
     {{-- Alert Message for Success or Unsuccuss of Category update record --}}
     <div class="m-1">
         @if (session()->has('successfull_message'))

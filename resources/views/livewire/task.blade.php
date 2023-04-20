@@ -17,13 +17,13 @@
         {{-- date_default_timezone_get=<span class="text-amber-100">{{ date_default_timezone_get() }}</span><br> --}}
         {{-- timezone= <span class="text-amber-100">{{ ($timezone??'Not Set')}}</span><br> --}}
         {{-- @if ($errors->any()) --}}
-            {{-- <div class="alert alert-danger"> --}}
-                {{-- <ul> --}}
-                    {{-- @foreach ($errors->all() as $error) --}}
-                        {{-- <li>{{ $error }}</li> --}}
-                    {{-- @endforeach --}}
-                {{-- </ul> --}}
-            {{-- </div> --}}
+        {{-- <div class="alert alert-danger"> --}}
+        {{-- <ul> --}}
+        {{-- @foreach ($errors->all() as $error) --}}
+        {{-- <li>{{ $error }}</li> --}}
+        {{-- @endforeach --}}
+        {{-- </ul> --}}
+        {{-- </div> --}}
         {{-- @endif --}}
     </p>
     <input type="hidden" id="targetTaskIdEdit" name="targetTaskIdEdit" wire:model.defer="targetTaskIdEdit" class="w-32 border-2 border-indigo-500" value="{{ $targetTaskIdEdit }}" readonly>
@@ -55,8 +55,7 @@
                     <input {{-- wire:ignore --}} id="startingDate" type="date" class="border-2 rounded-xl border-gray-500 bg-gray-800" value="{{ $startingDatepoint }}">
                 </div>
                 <div class="basis-2/5 flex">
-                    <input class="inline-block w-40 bg-black text-center startingTimepoint border-2 h-full rounded-xl border-gray-500"
-                    id="startingTimepoint" wire:model.defer="startingTimepoint" type="text"/>
+                    <input class="inline-block w-40 bg-black text-center startingTimepoint border-2 h-full rounded-xl border-gray-500" id="startingTimepoint" wire:model.defer="startingTimepoint" type="text" />
                 </div>
                 <label class="basis-1/5 self-center" for="startingTimepoint">Start</label>
 
@@ -168,6 +167,9 @@
                         dark:text-gray-400 dark:border-gray-600 dark:hover:text-white
                         dark:hover:bg-gray-700">Update
                     Task</button>
+            </div>
+            <div class="m-1" wire:loading wire:target="storeOrUpdate({{ $_99 }})">
+                <div class="text-blue-400 i nline-block border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Adding/Updating The Task ...</div>
             </div>
             <div>
                 @if (session()->has('successfull_message'))

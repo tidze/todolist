@@ -46,7 +46,7 @@ class CustomChart extends Component
 
     public function render()
     {
-        $this->getTimeAndDate();
+        // $this->getTimeAndDate();
         return view('livewire.custom-chart');
     }
 

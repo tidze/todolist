@@ -1,4 +1,13 @@
 <div>
+
+
+    <div class="w-full flex">
+        <div class="m-1 flex w-full justify-center items-center" wire:loading wire:target="edit">
+            <div class="w-full flex justify-center items-center animate-pulse border-l-8 border-blue-700 bg-blue-400 bg-opacity-30 p-2 pt-4 text-blue-400">
+              <div class="inline-block h-8 w-8 animate-bounce rounded-full border border-blue-600 text-center leading-7">▲</div>
+            </div>
+          </div>
+    </div>
     {{-- they need to be together `w-screen` `overflow-x-auto` --}}
     <div class="overflow-x-auto relative w-full  inline-block shadow-md sm:rounded-lg box-border border-2 border-teal-800">
         <table class="text-[14px]">
@@ -8,13 +17,13 @@
                         Edit
                     </th>
                     {{-- <th scope="col" class="px-1 py-0"> --}}
-                        {{-- id --}}
+                    {{-- id --}}
                     {{-- </th> --}}
                     {{-- <th scope="col" class="px-1 py-0"> --}}
-                        {{-- user_id --}}
+                    {{-- user_id --}}
                     {{-- </th> --}}
                     {{-- <th scope="col" class="px-1 py-0"> --}}
-                        {{-- C.id --}}
+                    {{-- C.id --}}
                     {{-- </th> --}}
                     <th scope="col" class="px-1 py-0">
                         starting_date
@@ -35,10 +44,10 @@
                         duration
                     </th>
                     {{-- <th scope="col" class="px-1 py-0"> --}}
-                        {{-- starting_time --}}
+                    {{-- starting_time --}}
                     {{-- </th> --}}
                     {{-- <th scope="col" class="px-1 py-0"> --}}
-                        {{-- ending_time --}}
+                    {{-- ending_time --}}
                     {{-- </th> --}}
                     <th scope="col" class="px-1 py-0">
                         Delete
@@ -55,13 +64,13 @@
                             </form>
                         </td>
                         {{-- <td scope="row" class="box-border hover:box-content px-2 py-1 font-medium whitespace-nowrap text-white"> --}}
-                            {{-- {{ $task->id }} --}}
+                        {{-- {{ $task->id }} --}}
                         {{-- </td> --}}
                         {{-- <td class="px-2 py-0"> --}}
-                            {{-- {{ $task->user_id }} --}}
+                        {{-- {{ $task->user_id }} --}}
                         {{-- </td> --}}
                         {{-- <td class="px-2 py-0"> --}}
-                            {{-- {{ $task->category_id }} --}}
+                        {{-- {{ $task->category_id }} --}}
                         {{-- </td> --}}
                         <td class="px-2 py-0 whitespace-nowrap">
                             {{ date('Y-M(m)-d H:i', $task->starting_time + 12600) }}
@@ -77,16 +86,16 @@
                         </td>
                         <td class="px-2 py-0 whitespace-nowrap">
                             {{-- {{ $task->color }} --}}
-                            <div style="background-color:{{$task->color}}" class="w-full h-4"></div>
+                            <div style="background-color:{{ $task->color }}" class="w-full h-4"></div>
                         </td>
                         <td class="px-2 py-0">
                             {{ $task->desired_duration }}
                         </td>
                         {{-- <td class="px-2 py-0"> --}}
-                            {{-- {{ $task->starting_time }} --}}
+                        {{-- {{ $task->starting_time }} --}}
                         {{-- </td> --}}
                         {{-- <td class="px-2 py-0"> --}}
-                            {{-- {{ $task->ending_time }} --}}
+                        {{-- {{ $task->ending_time }} --}}
                         {{-- </td> --}}
                         <td class="px-4 py-0">
                             <form wire:submit.prevent="deleteTask({{ $task->id }})">

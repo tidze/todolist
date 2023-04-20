@@ -66,7 +66,7 @@
           focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800
           dark:text-gray-400 dark:border-gray-600 dark:hover:text-white
           dark:hover:bg-gray-700"
-                wire:click="getTask()">
+                wire:click="getTask">
                 Daily Report</button>
             <button id="c_flattenTasksGraph"
                 class="flex-1 px-3 py-3 m-1 text-center text-sm font-medium text-gray-900
@@ -89,12 +89,15 @@
                 getTimeAndDate
             </button>
         </div>
+        <div class="p-2" wire:loading>
+            <div class="text-blue-400 i nline-block  border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Loading Custom Graph ...</div>
+        </div>
     </div>
     {{-- Dayily Graph Chart --}}
     <div class="flex flex-col">
         <div class="flex justify-end">
             <div class="relative pt-11 pb-2 px-9 border-2 border-red-400 border-opacity-0">
-                <div class="border-2 border-orange-800 border-opacity-50 w-56 h-[64vh] relative right-0 box-border">
+                <div class="border-2 border-orange-800 border-opacity-50 w-52 h-[78vh] relative right-0 box-border">
                     {{-- startTimepointHandle --}}
                     <div class="w-[10%] h-[2px] bg-amber-700 border-t-2 border-t-amber-700 absolute right-full bottom-full">
                         <div class="relative flex flex-row justify-center items-center w-[45px] -translate-x-2/4 -translate-y-2/4 -rotate-90 h-10">
@@ -133,14 +136,15 @@
 
                                 <div class="absolute flex flex-row -translate-x-full ">
 
-                                    <div class="text-white-500 text-[8px] -translate-y-[40%] mx-1">
+                                    <div class="text-white-500 text-[14px] -translate-y-[40%] mx-1">
                                         {{ $_task['description'] }}
                                     </div>
 
                                     {{-- time indicator --}}
-                                    <div class="box-border border border-b-transparent border-r-transparent border-l-transparent border-t-yellow-400 pr-2 ">
-                                        <div class="flex justify-between bg-gray-500 bg-opacity-60 rounded-sm">
+                                    <div class="box-border border border-b-transparent border-r-transparent border-l-transparent border-t-yellow-400 pr-4 ">
+                                        <div class="flex justify-between bg-gray-500 bg-opacity-60 rounded-sm text-[14px]">
                                             <div class="mx-0.5">{{ date('H:i', $_task['starting_time'] + 12600) }}</div>
+                                            &nbsp
                                             <div class="mr-1">{{ date('H:i', $_task['ending_time'] + 12600) }}</div>
                                         </div>
                                     </div>
