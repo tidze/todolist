@@ -1,4 +1,4 @@
-<div class="border-2 border-sky-400 rounded-sm">
+<div class="border-4 border-sky-400 ">
     {{-- I added this class empty div because of livewire multiple root elements detected --}}
     <div>
         <p class="text-teal-600 text-[12px]">
@@ -94,7 +94,7 @@
             @endforeach
         </tbody>
     </table>
-    {{ $allCategories->links() }}
+    {{ $allCategories->links('livewire.pagination-livewire-simple') }}
 </div>
 
 @push('script')

@@ -1,15 +1,23 @@
 <div>
-
-
     <div class="w-full flex">
         <div class="m-1 flex w-full justify-center items-center" wire:loading wire:target="edit">
             <div class="w-full flex justify-center items-center animate-pulse border-l-8 border-blue-700 bg-blue-400 bg-opacity-30 p-2 pt-4 text-blue-400">
-              <div class="inline-block h-8 w-8 animate-bounce rounded-full border border-blue-600 text-center leading-7">▲</div>
+                <div class="inline-block h-8 w-8 animate-bounce rounded-full border border-blue-600 text-center leading-7">▲</div>
             </div>
-          </div>
+        </div>
+        <div class="m-1 flex w-full justify-center items-center" wire:loading wire:target="confirmDelete">
+            <div class="w-full flex justify-center items-center animate-pulse border-l-8 border-blue-700 bg-blue-400 bg-opacity-30 p-2 text-blue-400">
+                Checking The Task ...
+            </div>
+        </div>
+        <div class="m-1 flex w-full justify-center items-center" wire:loading wire:target="deleteTask">
+            <div class="w-full flex justify-center items-center animate-pulse border-l-8 border-blue-700 bg-blue-400 bg-opacity-30 p-2 text-blue-400">
+                Deleting ...
+            </div>
+        </div>
     </div>
     {{-- they need to be together `w-screen` `overflow-x-auto` --}}
-    <div class="overflow-x-auto relative w-full  inline-block shadow-md sm:rounded-lg box-border border-2 border-teal-800">
+    <div class="overflow-x-auto relative w-full inline-block shadow-md box-border border-4 border-teal-800">
         <table class="text-[14px]">
             <thead class="uppercase bg-gray-50 dark:bg-gray-700 text-white">
                 <tr class="">
@@ -98,14 +106,16 @@
                         {{-- {{ $task->ending_time }} --}}
                         {{-- </td> --}}
                         <td class="px-4 py-0">
-                            <form wire:submit.prevent="deleteTask({{ $task->id }})">
-                                <button type="submit" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Delete</button>
-                            </form>
+                            @if ($confirming === $task->id)
+                                <button wire:click="deleteTask({{ $task->id }})" type="submit" class="font-medium text-blue-600 dark:text-teal-500 hover:underline">Sure?</button>
+                            @else
+                                <button wire:click="confirmDelete({{ $task->id }})" type="submit" class="font-medium text-blue-600 dark:text-gray-500 hover:underline">Delete</button>
+                            @endif
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
-    {{ $allTasks->links() }}
+    {{ $allTasks->links('livewire.pagination-livewire-simple') }}
 </div>

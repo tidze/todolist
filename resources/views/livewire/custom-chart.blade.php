@@ -1,4 +1,4 @@
-<div class="relative border-2 border-yellow-900 box-border text-white text-[10px]">
+<div class="relative border-4 border-yellow-900 box-border text-white text-[10px]">
     {{-- Components Debugger Information --}}
     <div class="text-yellow-500 text-[11px] w-full">
         {{-- date_default_timezone_get=<span class="text-amber-100">{{ date_default_timezone_get() }}</span><br> --}}
@@ -17,11 +17,13 @@
     <div class="relative z-20 flex flex-col text-base">
         {{-- <span id="c_customDebug" class="inline-block border border-amber-600 p-0.5 rounded hover:bg-yellow-500 hover:text-black cursor-pointer" wire:click>c_customDebug</span> --}}
         {{-- <br> --}}
-        <div class="flex justify-center">
+        <div class="flex justify-center items-center">
+            <div class="border-2 flex items-center justify-center rounded-xl border-gray-500 mx-2 p-2 active:border-blue-500 active:border-2 cursor-default select-none" wire:click="prevPeriod">◄ ↺</div>
             <div id="c_targetDate_Container" class="flex items-center justify-center p-2">
                 <input class="inline-block border-2 rounded-xl border-gray-500 bg-gray-800" id="c_targetDate" type="date" value="">
                 <label class="px-1" for="c_targetDate">Date</label>
             </div>
+            <div class="border-2 flex items-center justify-center rounded-xl border-gray-500 mx-2 p-2 active:border-blue-500 active:border-2 cursor-default select-none" wire:click="nextPeriod">► ↻</div>
         </div>
 
         {{-- Component c_startingTimepoint --}}
@@ -89,8 +91,19 @@
                 getTimeAndDate
             </button>
         </div>
-        <div class="p-2" wire:loading>
-            <div class="text-blue-400 i nline-block  border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Loading Custom Graph ...</div>
+
+        {{-- Loading Animation For When Http Request is happening. --}}
+        <div class="p-1" wire:loading wire:target="getTask">
+            <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Loading Custom Graph ...</div>
+        </div>
+        <div class="p-1" wire:loading wire:target="flattenTasksGraph">
+            <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Flattening Tasks ...</div>
+        </div>
+        <div class="p-1" wire:loading wire:target="prevPeriod">
+            <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Going Previous Period ...</div>
+        </div>
+        <div class="p-1" wire:loading wire:target="nextPeriod">
+            <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Going Next Period ...</div>
         </div>
     </div>
     {{-- Dayily Graph Chart --}}
@@ -141,8 +154,8 @@
                                     </div>
 
                                     {{-- time indicator --}}
-                                    <div class="box-border border border-b-transparent border-r-transparent border-l-transparent border-t-yellow-400 pr-4 ">
-                                        <div class="flex justify-between bg-gray-500 bg-opacity-60 rounded-sm text-[14px]">
+                                    <div class="box-border border border-b-transparent border-r-transparent border-l-transparent border-t-yellow-400 pr-2">
+                                        <div class="flex justify-between bg-gray-500 bg-opacity-60 rounded-sm text-[12px]">
                                             <div class="mx-0.5">{{ date('H:i', $_task['starting_time'] + 12600) }}</div>
                                             &nbsp
                                             <div class="mr-1">{{ date('H:i', $_task['ending_time'] + 12600) }}</div>

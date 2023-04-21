@@ -190,30 +190,30 @@ class CustomChart extends Component
 
         // Setting variables into database is here //
         // if ($this->c_startingDate == $this->c_endingDate) {
-            // If the `is_date_different` is true, then change it to false. Otherwise do not call the database.
-            // if ($user_settings->is_date_different) {
-                // If the dates are equal, they are not different
-                // DB::table('user_settings')->update([
-                    // 'is_date_different' => false
-                // ]);
-            // }
+        // If the `is_date_different` is true, then change it to false. Otherwise do not call the database.
+        // if ($user_settings->is_date_different) {
+        // If the dates are equal, they are not different
+        // DB::table('user_settings')->update([
+        // 'is_date_different' => false
+        // ]);
+        // }
         // } else {
-            // If the `is_date_different` is false, then change it to true. Otherwise do not call the database.
-            // if (!($user_settings->is_date_different)) {
-                // If the dates are not equal, they are different
-                // DB::table('user_settings')->update([
-                    // 'is_date_different' => true
-                // ]);
-            // }
+        // If the `is_date_different` is false, then change it to true. Otherwise do not call the database.
+        // if (!($user_settings->is_date_different)) {
+        // If the dates are not equal, they are different
+        // DB::table('user_settings')->update([
+        // 'is_date_different' => true
+        // ]);
+        // }
         // }
 
         // dd($this->c_startingHourpoint, $starting_dateTime->format('H:i'));
         // if (!($this->c_startingHourpoint == $starting_dateTime->format('H:i'))) {
-            // dd(($this->c_startingHourpoint == $starting_dateTime->format('H:i')));
-            // DB::table('user_settings')->update([
-                // 'starting_hour' => substr($this->c_startingHourpoint, 0, 2),
-                // 'starting_minute' => substr($this->c_endingHourpoint, 3, 2),
-            // ]);
+        // dd(($this->c_startingHourpoint == $starting_dateTime->format('H:i')));
+        // DB::table('user_settings')->update([
+        // 'starting_hour' => substr($this->c_startingHourpoint, 0, 2),
+        // 'starting_minute' => substr($this->c_endingHourpoint, 3, 2),
+        // ]);
         // }
 
 
@@ -251,5 +251,39 @@ class CustomChart extends Component
     public function isDateDifferent_Changer()
     {
         // detects if the dates are not equal
+    }
+
+    public function prevPeriod()
+    {
+        $date = new DateTime();
+        $date->setTimezone(new DateTimeZone('asia/tehran'));
+        $date->setTimestamp($this->c_startingDatepoint_unix);
+        $date->sub(new DateInterval('P1D'));
+        $this->c_startingDatepoint_unix = $date->format('U');
+        $this->c_startingHourpoint = $date->format('H:i');
+        $this->c_startingDate = $date->format('Y-m-d');
+
+        $date->setTimestamp($this->c_endingDatepoint_unix);
+        $date->sub(new DateInterval('P1D'));
+        $this->c_endingDatepoint_unix = $date->format('U');
+        $this->c_endingHourpoint = $date->format('H:i');
+        $this->c_endingDate = $date->format('Y-m-d');
+    }
+
+    public function nextPeriod()
+    {
+        $date = new DateTime();
+        $date->setTimezone(new DateTimeZone('asia/tehran'));
+        $date->setTimestamp($this->c_startingDatepoint_unix);
+        $date->add(new DateInterval('P1D'));
+        $this->c_startingDatepoint_unix = $date->format('U');
+        $this->c_startingHourpoint = $date->format('H:i');
+        $this->c_startingDate = $date->format('Y-m-d');
+
+        $date->setTimestamp($this->c_endingDatepoint_unix);
+        $date->add(new DateInterval('P1D'));
+        $this->c_endingDatepoint_unix = $date->format('U');
+        $this->c_endingHourpoint = $date->format('H:i');
+        $this->c_endingDate = $date->format('Y-m-d');
     }
 }

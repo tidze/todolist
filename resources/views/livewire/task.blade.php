@@ -1,6 +1,6 @@
-<div class="border border-sky-300 flex flex-col text-white p-1">
+<div class="border-4 border-white-300 flex flex-col text-white p-1">
     {{-- Components Debugger Information --}}
-    <p class="text-amber-600 text-[8px]">
+    <p class="text-amber-600 text-[10px]">
         {{-- taskCategory= <span class='text-amber-100'>{{ ($taskCategory ?? 'Not Set') }}</span> <br> --}}
         {{-- taskDescription= <span class="text-amber-100">{{ $taskDescription ?? 'Not Set'}}</span><br> --}}
         {{-- desiredDuration= <span class="text-amber-100">{{ $desiredDuration ?? 'Not Set'}}</span><br> --}}
@@ -12,8 +12,6 @@
         {{-- endingDatepoint= <span class="text-amber-100">{{ $endingDatepoint ?? 'Not set'}}</span><br> --}}
         {{-- targetTaskIdEdit= <span class="text-amber-100">{{ $targetTaskIdEdit??'Not set' }}</span><br> --}}
         {{-- detector= <span class="text-amber-100">{{ $detector??'Not Set' }}</span><br> --}}
-        {{-- _88= <span class="text-amber-100">{{ ($_88??'Not Set') }}</span><br> --}}
-        {{-- _99= <span class="text-amber-100">{{ ($_99??'Not Set') }}</span><br> --}}
         {{-- date_default_timezone_get=<span class="text-amber-100">{{ date_default_timezone_get() }}</span><br> --}}
         {{-- timezone= <span class="text-amber-100">{{ ($timezone??'Not Set')}}</span><br> --}}
         {{-- @if ($errors->any()) --}}
@@ -44,8 +42,7 @@
             <label for="targetDate" class="px-1">Date</label>
         </div>
     </div>
-    <form wire:submit.prevent="storeOrUpdate({{ str_contains($detector, 9) ? $_99 : $_88 }})">
-        @csrf
+    <form wire:submit.prevent>
         <div class="flex flex-col flex-grow">
 
             {{-- Component startingTimepoint --}}
@@ -151,7 +148,7 @@
 
             </div>
             <div class="flex my-2">
-                <button wire:click="storeOrUpdate({{ $_99 }})"
+                <button wire:click="store"
                     class="flex-1 px-3 py-3 m-1 text-sm font-medium text-gray-900
                           focus:outline-none bg-white border border-gray-200 rounded-xl
                         hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4
@@ -159,7 +156,7 @@
                         dark:text-gray-400 dark:border-gray-600 dark:hover:text-white
                         dark:hover:bg-gray-700">Add
                     Task</button>
-                <button wire:click="storeOrUpdate({{ $_88 }})"
+                <button wire:click="update"
                     class="flex-1 px-3 py-3 m-1 text-sm font-medium text-gray-900
                           focus:outline-none bg-white border border-gray-200 rounded-xl
                         hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4
@@ -168,10 +165,23 @@
                         dark:hover:bg-gray-700">Update
                     Task</button>
             </div>
-            <div class="m-1" wire:loading wire:target="storeOrUpdate({{ $_99 }})">
-                <div class="text-blue-400 i nline-block border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Adding/Updating The Task ...</div>
+            <div class="p-0" wire:loading wire:target="update">
+                <div class="text-blue-400 i nline-block border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Updating The Task ...</div>
+            </div>
+            <div class="p-0" wire:loading wire:target="store">
+                <div class="text-blue-400 i nline-block border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Adding The Task ...</div>
             </div>
             <div>
+                @if (session()->has('store_validator_fail'))
+                    <div class="bg-yellow-500 bg-opacity-20 border-l-8 border-yellow-600 text-yellow-500 p-2">
+                        {{ session('store_validator_fail') }} <div class="text-yellow-500 inline-flex justify-center items-center border-2 border-yellow-500 rounded-full w-5 h-5 mx-1"><b>!</b></div>
+                    </div>
+                @endif
+                @if (session()->has('update_validator_fail'))
+                    <div class="bg-yellow-500 bg-opacity-20 border-l-8 border-yellow-600 text-yellow-500 p-2">
+                        {{ session('update_validator_fail') }} <div class="text-yellow-500 inline-flex justify-center items-center border-2 border-yellow-500 rounded-full w-5 h-5 mx-1"><b>!</b></div>
+                    </div>
+                @endif
                 @if (session()->has('successfull_message'))
                     <div class="bg-green-500 bg-opacity-20 border-l-8 border-green-600 text-green-500 p-2">
                         {{ session('successfull_message') }} <span class="text-green-500">&#10003</span>

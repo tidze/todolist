@@ -1,4 +1,4 @@
-<div class="relative border border-emerald-700">
+<div class="relative border-4 border-emerald-700">
     <div>
         {{-- Components Debugger Information --}}
         <p class="text-teal-600 text-[12px]">

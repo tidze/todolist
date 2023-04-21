@@ -13,6 +13,7 @@ class TasksTable extends Component
     use WithPagination;
     protected $listeners = ['$refresh', 'sendBackId'];
     public $sendBackId;
+    public $confirming;
     // public $allTasks;
     // protected $listeners = ['refreshComponent' => '$refresh'];
     protected $layout = null;
@@ -44,6 +45,10 @@ class TasksTable extends Component
         // ->items();
         // $this->allTasks= TaskModel::paginate(2);
         // dd($this->allTasks);
+    }
+
+    public function confirmDelete($id){
+        $this->confirming = $id;
     }
 
     public function deleteTask($id)

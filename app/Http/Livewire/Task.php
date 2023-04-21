@@ -9,6 +9,7 @@ use App\Models\Category as CategoryModel;
 use DateTimeZone;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class Task extends Component
 {
@@ -28,19 +29,10 @@ class Task extends Component
     public $targetTaskIdEdit;
     // detector for whether it should be update or store fucntion (any parameter that contains 9, store has been choosen)
     public $detector;
-    public $_88 = 88;
-    public $_99 = 99;
     public $timezone;
     // since we're calling editTask from tasks-table component's controller we need to register our function controller
     protected $listeners = ['editTask'];
-    protected $rules = [
-        'targetTaskIdEdit' => ['required'],
-        'startingTimepoint_unix' => ['required'],
-        'endingTimepoint_unix' => ['required'],
-        'desiredDuration' => ['required'],
-        'taskCategory' => ['required'],
-        'taskDescription' => ['required'],
-    ];
+
     public function mount()
     {
         $this->endingTimepoint_unix = time();
@@ -63,13 +55,6 @@ class Task extends Component
                 ->where('user_id', Auth::user()->id)->get()->toArray(),
             'category_Distinct' => DB::table('categories')->where('user_id', Auth::user()->id)->distinct()->select('category')->get(),
         ]);
-    }
-
-    public function storeOrUpdate($detector)
-    {
-        // if the coming parameter is update do update function else do store function
-        (str_contains($detector, 9)) ? $this->detector = $this->_99 : $this->detector = $this->_88;
-        (str_contains($detector, 9)) ? $this->store() : $this->update();
     }
 
     // incoming request from tasks-table anchor tag
@@ -97,15 +82,34 @@ class Task extends Component
 
     public function update()
     {
-        // $this->validate([
-        //     'targetTaskIdEdit' => ['required'],
-        //     'startingTimepoint_unix' => ['required'],
-        //     'endingTimepoint_unix' => ['required'],
-        //     'desiredDuration' => ['required'],
-        //     'taskCategory' => ['required'],
-        //     'taskDescription' => ['required'],
-        // ]);
-        $this->validate();
+        $validatedData = Validator::make(
+            [
+                'targetTaskIdEdit' => $this->targetTaskIdEdit,
+                'startingTimepoint_unix' => $this->startingTimepoint_unix,
+                'endingTimepoint_unix' => $this->endingTimepoint_unix,
+                'desiredDuration' => $this->desiredDuration,
+                'taskCategory' => $this->taskCategory,
+                'taskDescription' => $this->taskDescription,
+            ],
+            [
+                'targetTaskIdEdit' => ['required'],
+                'startingTimepoint_unix' => ['required'],
+                'endingTimepoint_unix' => ['required'],
+                'desiredDuration' => ['required'],
+                'taskCategory' => ['required'],
+                'taskDescription' => ['required'],
+            ]
+        );
+
+        // dd($validatedData);
+        if ($validatedData->fails()) {
+            session()->flash('update_validator_fail', 'Please provide requested inputs for update');
+        } else {
+            // session()->flash('store_validator_success', 'store_validator_success');
+        }
+        $validatedData->validate();
+
+
         $category = $this->checkForExistingCategory(Auth::user()->id, trim($this->taskCategory), trim($this->taskDescription));
         if (is_null($category)) {
             // if the category not exists, add the category to the categories table and then update the task
@@ -127,13 +131,30 @@ class Task extends Component
 
     public function store()
     {
-        $this->validate([
-            'startingTimepoint_unix' => ['required'],
-            'endingTimepoint_unix' => ['required'],
-            'desiredDuration' => ['required'],
-            'taskCategory' => ['required'],
-            'taskDescription' => ['required'],
-        ]);
+        $validatedData  = Validator::make(
+            [
+                'startingTimepoint_unix' => $this->startingTimepoint_unix,
+                'endingTimepoint_unix' => $this->endingTimepoint_unix,
+                'desiredDuration' => $this->desiredDuration,
+                'taskCategory' => $this->taskCategory,
+                'taskDescription' => $this->taskDescription,
+            ],
+            [
+                'startingTimepoint_unix' => ['required'],
+                'endingTimepoint_unix' => ['required'],
+                'desiredDuration' => ['required'],
+                'taskCategory' => ['required'],
+                'taskDescription' => ['required'],
+            ]
+        );
+
+        // dd($validatedData);
+        if ($validatedData->fails()) {
+            session()->flash('store_validator_fail', 'Please provide requested inputs for store');
+        } else {
+            // session()->flash('store_validator_success', 'store_validator_success');
+        }
+        $validatedData->validate();
 
         $category = $this->checkForExistingCategory(Auth::user()->id, trim($this->taskCategory), trim($this->taskDescription));
         if (is_null($category)) {
