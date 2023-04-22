@@ -18,21 +18,21 @@ class TasksTable extends Component
     // protected $listeners = ['refreshComponent' => '$refresh'];
     protected $layout = null;
 
+    public $c_targetTaskIdEdit;
+
     public function render()
     {
         // you have to send it through an array after the view
         return view('livewire.tasks-table', [
-            'sendBackId' => $this->sendBackId,
-            // 'allTasks' => TaskModel::select('tasks.*', 'categories.category', 'categories.description')
-            // ->join('categories', 'tasks.category_id', '=', 'categories.id')
-            // ->orderBy('starting_time', 'DESC')
-            // ->where('tasks.user_id',Auth::user()->id)
-            // ->paginate(5),
-            'allTasks' => DB::table('tasks')->select('tasks.*', 'categories.category', 'categories.description','categories.color')
+            // 'sendBackId' => $this->sendBackId,
+
+            'allTasks' => DB::table('tasks')->select('tasks.*', 'categories.category', 'categories.description', 'categories.color')
                 ->join('categories', 'tasks.category_id', '=', 'categories.id')
                 ->where('tasks.user_id', Auth::user()->id)
                 ->orderByDesc('starting_time')
-                ->paginate(5)
+                ->paginate(5),
+            'c_targetTaskIdEdit_' => $this->c_targetTaskIdEdit,
+
         ]);
     }
 
@@ -47,7 +47,8 @@ class TasksTable extends Component
         // dd($this->allTasks);
     }
 
-    public function confirmDelete($id){
+    public function confirmDelete($id)
+    {
         $this->confirming = $id;
     }
 
@@ -62,6 +63,7 @@ class TasksTable extends Component
     public function edit($id)
     {
         $this->emitTo('task', 'editTask', $id);
+        $this->c_targetTaskIdEdit = $id;
     }
 
     public function sendBackId($id)

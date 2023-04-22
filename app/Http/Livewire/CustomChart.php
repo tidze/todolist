@@ -26,13 +26,17 @@ class CustomChart extends Component
 
     public $is_date_different;
 
+    public $c_targetTaskIdForEdit;
+
+    protected $listeners = ['getTask'];
+
     public function mount()
     {
         $date = new DateTime();
         $date->setTimezone(new DateTimeZone('asia/tehran'));
         $date->setTime(9, 30, 0);
         $this->c_startingDatepoint_unix = $date->format('U');
-        $this->c_startingHourpoint = $date->format('H:i');
+        // $this->c_startingHourpoint = $date->format('H:i');
         $this->c_startingDate = $date->format('Y-m-d');
 
         $date->add(new DateInterval('P1D'));
@@ -46,8 +50,9 @@ class CustomChart extends Component
 
     public function render()
     {
-        // $this->getTimeAndDate();
-        return view('livewire.custom-chart');
+        return view('livewire.custom-chart',[
+            'c_targetTaskIdForEdit_'=>$this->c_targetTaskIdForEdit
+        ]);
     }
 
     public function flattenTasksGraph()
@@ -238,6 +243,8 @@ class CustomChart extends Component
             $task['position'] = 'absolute';
         }
         $this->calcTaskTopOffset();
+        $this->c_targetTaskIdForEdit = '';
+
     }
 
     public function getTimeAndDate()
@@ -268,6 +275,7 @@ class CustomChart extends Component
         $this->c_endingDatepoint_unix = $date->format('U');
         $this->c_endingHourpoint = $date->format('H:i');
         $this->c_endingDate = $date->format('Y-m-d');
+        $this->getTask();
     }
 
     public function nextPeriod()
@@ -285,5 +293,12 @@ class CustomChart extends Component
         $this->c_endingDatepoint_unix = $date->format('U');
         $this->c_endingHourpoint = $date->format('H:i');
         $this->c_endingDate = $date->format('Y-m-d');
+        $this->getTask();
+    }
+
+    public function edit($id)
+    {
+        $this->c_targetTaskIdForEdit = $id;
+        $this->emitTo('task', 'editTask', $id);
     }
 }

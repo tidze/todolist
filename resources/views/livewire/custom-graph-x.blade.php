@@ -58,7 +58,7 @@
         <div class="text-blue-400 i nline-block  border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Loading Custom Graph X ...</div>
     </div>
     {{-- Days Graph Chart --}}
-    <div class="flex flex-col items-center p-1">
+    <div class="flex flex-col items-center p-1 w-full overflow-x-auto">
         {{-- <div id="x_flattenTasksGraph" class="relative z-10 text-amber-600 text-[9px] w-60 text-center
             inline-block border border-amber-600 p-0.5 rounded
             hover:bg-yellow-500 hover:text-black cursor-pointer" wire:click="x_flattenTasksGraph">

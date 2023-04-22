@@ -77,7 +77,9 @@ class Task extends Component
         $this->startingDatepoint =  date("Y-m-d", $task->starting_time + 12600);
         $this->endingDatepoint = date("Y-m-d", $task->ending_time + 12600);
         // send back the targetTaskIdEdit to tasks-table
-        $this->emitTo('tasks-table', 'sendBackId', $this->targetTaskIdEdit);
+        // $this->emitTo('tasks-table', 'sendBackId', $this->targetTaskIdEdit);
+        $this->emitTo('custom-chart','$refresh');
+
     }
 
     public function update()
@@ -122,6 +124,8 @@ class Task extends Component
         $this->resetErrorBag();
 
         $this->resetValidation();
+
+        $this->emitTo('custom-chart','getTask');
     }
 
     public function deleteTask($id)
@@ -176,6 +180,8 @@ class Task extends Component
         $this->targetTaskIdEdit = '';
         $this->emitTo('tasks-table', 'sendBackId', $this->targetTaskIdEdit);
         $this->emitTo('category-color', '$refresh');
+        $this->emitTo('custom-chart','getTask');
+
         $this->resetErrorBag();
     }
 

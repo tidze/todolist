@@ -64,6 +64,9 @@
         @endif
     </div>
     <table class="overflow-x-auto relative w-full inline-block shadow-md sm:rounded-lg box-border border-2 border-sky-600">
+        <div class="p-0 w-full" wire:loading="nextPage ,prevPage">
+            <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Loading . . . </div>
+        </div>
         <thead class="text-[14px] uppercase bg-gray-50 dark:bg-gray-700 text-white">
             <tr>
                 {{-- <th class="px-1 py-0">c.Id</th> --}}

@@ -24,6 +24,7 @@ class CategoryColor extends Component
         return view('livewire.category-color', [
             'allCategories' => DB::table('categories')->select('categories.*')
                 ->where('categories.user_id', Auth::user()->id)
+                ->orderByDesc('categories.id')
                 ->paginate(5)
         ]);
     }

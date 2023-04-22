@@ -1,6 +1,9 @@
 <div>
+    <p class="text-[10px] text-white">
+        {{-- <span>$this->c_targetTaskIdEdit = {{isset($this->c_targetTaskIdEdit) ? $this->c_targetTaskIdEdit : 'Not Set' }}</span> --}}
+    </p>
     <div class="w-full flex">
-        <div class="m-1 flex w-full justify-center items-center" wire:loading wire:target="edit">
+        <div class="flex w-full justify-center items-center" wire:loading wire:target="edit">
             <div class="w-full flex justify-center items-center animate-pulse border-l-8 border-blue-700 bg-blue-400 bg-opacity-30 p-2 pt-4 text-blue-400">
                 <div class="inline-block h-8 w-8 animate-bounce rounded-full border border-blue-600 text-center leading-7">▲</div>
             </div>
@@ -40,10 +43,10 @@
                         ending_date
                     </th>
                     <th scope="col" class="px-1 py-0">
-                        C.category
+                        Category
                     </th>
                     <th scope="col" class="px-1 py-0">
-                        C.description
+                        Description
                     </th>
                     <th scope="col" class="px-1 py-0">
                         color
@@ -63,10 +66,11 @@
                 </tr>
             </thead>
             <tbody>
+
                 @foreach ($allTasks as $task)
-                    <tr @if ($task->id == $sendBackId) @class(['box-border','border','border-indigo-500','bg-gray-900','text-indigo-500']) @endif
+                    <tr @if ($task->id == $c_targetTaskIdEdit_) @class(['box-border','border','border-indigo-500','bg-gray-900','text-indigo-500','bg-indigo-900','bg-opacity-20']) @endif
                         class="box-border border-b bg-gray-900 border-gray-700 border text-teal-600">
-                        <td class="px-4 py-0">
+                        <td class="px-4 py-0" >
                             <form wire:submit.prevent="edit({{ $task->id }})">
                                 <button type="submit" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
                             </form>

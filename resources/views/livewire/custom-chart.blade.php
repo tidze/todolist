@@ -8,6 +8,7 @@
         {{-- $c_endingDate = <span class="text-yellow-100">{{ isset($c_endingDate) ? $c_endingDate : 'Not Set' }}</span><br> --}}
         {{-- $c_startingHourpoint = <span class="text-yellow-100">{{ isset($c_startingHourpoint) ? $c_startingHourpoint : 'Not Set' }}</span><br> --}}
         {{-- $c_endingHourpoint = <span class="text-yellow-100">{{ isset($c_endingHourpoint) ? $c_endingHourpoint : 'Not Set' }}</span><br> --}}
+        {{-- $c_targetTaskIdForEdit = <span class="text-yellow-100">{{ isset($c_targetTaskIdForEdit) ? $c_targetTaskIdForEdit : 'Not Set' }}</span><br> --}}
         {{-- $c_tasksGraphArray --> =<pre class="text-yellow-100">{{ isset($c_tasksGraphArray) ? print_r($c_tasksGraphArray) : 'Not Set' }}</pre><br> --}}
         {{-- $c_flattened --> =<span class="text-yellow-100">{{ isset($c_flattened) ? print_r($c_flattened) : 'Not Set' }}</span><br> --}}
         {{-- $flattened = <span class="text-yellow-100">{{ var_dump($flattened) }}</span><br> --}}
@@ -147,16 +148,20 @@
                                         border-color: {{ $_task['color'] }}"
                                 {{-- The Starting point is 100% off by Y Axis so i added translate transform --}}>
 
-                                <div class="absolute flex flex-row -translate-x-full ">
-
-                                    <div class="text-white-500 text-[14px] -translate-y-[40%] mx-1">
-                                        {{ $_task['description'] }}
+                                <div class="absolute flex flex-row -translate-x-full">
+                                    <div class=" -translate-y-[30%] mx-1 flex flex-col justify-center items-center">
+                                        <div @if($c_targetTaskIdForEdit_ == $_task['id']) @class(['text-teal-500','text-[14px]']) @endif class="text-white-500 text-[14px]" >
+                                            {{ $_task['description'] }}
+                                        </div>
+                                        <div @if ($c_targetTaskIdForEdit_ == $_task['id']) @class(['text-teal-500','text-[12px]', 'inline-flex' ,'font-medium', 'underline', 'cursor-pointer']) @endif
+                                            class="text-[12px] inline-flex font-medium text-blue-600 dark:text-gray-500 hover:underline cursor-pointer" wire:click="edit({{ $_task['id'] }})">Edit</div>
                                     </div>
 
                                     {{-- time indicator --}}
                                     <div class="box-border border border-b-transparent border-r-transparent border-l-transparent border-t-yellow-400 pr-2">
                                         <div class="flex justify-between bg-gray-500 bg-opacity-60 rounded-sm text-[12px]">
                                             <div class="mx-0.5">{{ date('H:i', $_task['starting_time'] + 12600) }}</div>
+                                            {{-- Add Additional Space ▼ --}}
                                             &nbsp
                                             <div class="mr-1">{{ date('H:i', $_task['ending_time'] + 12600) }}</div>
                                         </div>

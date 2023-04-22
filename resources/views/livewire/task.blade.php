@@ -171,6 +171,9 @@
             <div class="p-0" wire:loading wire:target="store">
                 <div class="text-blue-400 i nline-block border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Adding The Task ...</div>
             </div>
+            <div class="p-0" wire:loading>
+                <div class="text-blue-400 i nline-block border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Re-Rendering ...</div>
+            </div>
             <div>
                 @if (session()->has('store_validator_fail'))
                     <div class="bg-yellow-500 bg-opacity-20 border-l-8 border-yellow-600 text-yellow-500 p-2">
