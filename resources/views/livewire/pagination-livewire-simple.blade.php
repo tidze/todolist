@@ -34,7 +34,4 @@
             </span>
         </nav>
     @endif
-    <div class="p-0 w-full" wire:loading>
-        <div class="text-blue-400 i nline-block border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Loading . . . </div>
-    </div>
 </div>

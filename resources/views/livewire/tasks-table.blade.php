@@ -1,26 +1,35 @@
-<div>
+<div class=" shadow-md box-border border-4 border-t-0 border-teal-800">
     <p class="text-[10px] text-white">
-        {{-- <span>$this->c_targetTaskIdEdit = {{isset($this->c_targetTaskIdEdit) ? $this->c_targetTaskIdEdit : 'Not Set' }}</span> --}}
+        {{-- <span>$targetTaskIdEdit = {{isset($targetTaskIdEdit) ? $targetTaskIdEdit : 'Not Set' }}</span> --}}
     </p>
-    <div class="w-full flex">
-        <div class="flex w-full justify-center items-center" wire:loading wire:target="edit">
+
+    {{-- Loading State Animations --}}
+    <div class="w-full flex flex-col border-t-4 border-b-0 border-teal-800">
+        <div class="m-1 mb-0 flex w-full justify-center items-center" wire:loading wire:target="edit">
             <div class="w-full flex justify-center items-center animate-pulse border-l-8 border-blue-700 bg-blue-400 bg-opacity-30 p-2 pt-4 text-blue-400">
                 <div class="inline-block h-8 w-8 animate-bounce rounded-full border border-blue-600 text-center leading-7">▲</div>
             </div>
         </div>
-        <div class="m-1 flex w-full justify-center items-center" wire:loading wire:target="confirmDelete">
+        <div class="m-1 mb-0 flex w-full justify-center items-center" wire:loading wire:target="confirmDelete">
             <div class="w-full flex justify-center items-center animate-pulse border-l-8 border-blue-700 bg-blue-400 bg-opacity-30 p-2 text-blue-400">
                 Checking The Task ...
             </div>
         </div>
-        <div class="m-1 flex w-full justify-center items-center" wire:loading wire:target="deleteTask">
+        <div class="m-1 mb-0 flex w-full justify-center items-center" wire:loading wire:target="deleteTask">
             <div class="w-full flex justify-center items-center animate-pulse border-l-8 border-blue-700 bg-blue-400 bg-opacity-30 p-2 text-blue-400">
                 Deleting ...
             </div>
         </div>
+        <div class="m-1 flex w-full justify-center items-center" wire:loading>
+            <div class="w-full flex justify-center items-center animate-pulse border-l-8 border-blue-700 bg-blue-400 bg-opacity-30 p-2 text-blue-400">
+                Re-Rendering ...
+            </div>
+        </div>
     </div>
+
     {{-- they need to be together `w-screen` `overflow-x-auto` --}}
-    <div class="overflow-x-auto relative w-full inline-block shadow-md box-border border-4 border-teal-800">
+    <div class="overflow-x-auto relative w-full inline-block">
+        {{-- Table of Tasks --}}
         <table class="text-[14px]">
             <thead class="uppercase bg-gray-50 dark:bg-gray-700 text-white">
                 <tr class="">
@@ -68,9 +77,9 @@
             <tbody>
 
                 @foreach ($allTasks as $task)
-                    <tr @if ($task->id == $c_targetTaskIdEdit_) @class(['box-border','border','border-indigo-500','bg-gray-900','text-indigo-500','bg-indigo-900','bg-opacity-20']) @endif
+                    <tr @if ($task->id == $targetTaskIdEdit) @class(['box-border','border','border-indigo-500','bg-gray-900','text-indigo-500','bg-indigo-900','bg-opacity-20']) @endif
                         class="box-border border-b bg-gray-900 border-gray-700 border text-teal-600">
-                        <td class="px-4 py-0" >
+                        <td class="px-4 py-0">
                             <form wire:submit.prevent="edit({{ $task->id }})">
                                 <button type="submit" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
                             </form>

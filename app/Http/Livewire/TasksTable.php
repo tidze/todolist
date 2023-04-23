@@ -11,14 +11,16 @@ use Livewire\WithPagination;
 class TasksTable extends Component
 {
     use WithPagination;
-    protected $listeners = ['$refresh', 'sendBackId'];
+    protected $listeners = ['$refresh', 'sendBackId','targetTaskIdSetter'];
     public $sendBackId;
     public $confirming;
     // public $allTasks;
     // protected $listeners = ['refreshComponent' => '$refresh'];
     protected $layout = null;
 
-    public $c_targetTaskIdEdit;
+    public $targetTaskIdEdit;
+
+    // protected $listeners = ['targetTaskIdSetter'];
 
     public function render()
     {
@@ -31,7 +33,7 @@ class TasksTable extends Component
                 ->where('tasks.user_id', Auth::user()->id)
                 ->orderByDesc('starting_time')
                 ->paginate(5),
-            'c_targetTaskIdEdit_' => $this->c_targetTaskIdEdit,
+            'targetTaskIdEdit' => $this->targetTaskIdEdit,
 
         ]);
     }
@@ -60,10 +62,15 @@ class TasksTable extends Component
         // $this->emit('refreshComponent');
     }
 
+    public function targetTaskIdSetter($id){
+        $this->targetTaskIdEdit = $id;
+    }
+
     public function edit($id)
     {
         $this->emitTo('task', 'editTask', $id);
-        $this->c_targetTaskIdEdit = $id;
+        $this->emitTo('custom-chart', 'targetTaskIdSetter', $id);
+        $this->targetTaskIdSetter($id);
     }
 
     public function sendBackId($id)

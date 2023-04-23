@@ -94,6 +94,9 @@
         </div>
 
         {{-- Loading Animation For When Http Request is happening. --}}
+        <div class="p-1" wire:loading>
+            <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Re-Rendering ...</div>
+        </div>
         <div class="p-1" wire:loading wire:target="getTask">
             <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Loading Custom Graph ...</div>
         </div>
@@ -147,14 +150,17 @@
                                         background: repeating-linear-gradient(-45deg, {{ $_task['color'] }}, {{ $_task['color'] }} 2px, #ffffff00 0, #ffffff00 6px);
                                         border-color: {{ $_task['color'] }}"
                                 {{-- The Starting point is 100% off by Y Axis so i added translate transform --}}>
+                                {{-- I don't know why, but the @class needs to be before the class="". (because the if statement not going to work otherwise) --}}
+                                <div @if ($c_targetTaskIdForEdit_ == $_task['id']) @class(['bg-white','bg-opacity-50' ,'w-full', 'h-full','cursor-pointer']) @endif class="w-full h-full cursor-pointer"
+                                    wire:click="edit({{ $_task['id'] }})"></div>
 
                                 <div class="absolute flex flex-row -translate-x-full">
                                     <div class=" -translate-y-[30%] mx-1 flex flex-col justify-center items-center">
-                                        <div @if($c_targetTaskIdForEdit_ == $_task['id']) @class(['text-teal-500','text-[14px]']) @endif class="text-white-500 text-[14px]" >
+                                        <div @if ($c_targetTaskIdForEdit_ == $_task['id']) @class(['text-teal-500','text-[14px]']) @endif class="text-white-500 text-[14px]">
                                             {{ $_task['description'] }}
                                         </div>
-                                        <div @if ($c_targetTaskIdForEdit_ == $_task['id']) @class(['text-teal-500','text-[12px]', 'inline-flex' ,'font-medium', 'underline', 'cursor-pointer']) @endif
-                                            class="text-[12px] inline-flex font-medium text-blue-600 dark:text-gray-500 hover:underline cursor-pointer" wire:click="edit({{ $_task['id'] }})">Edit</div>
+                                        <div @if ($c_targetTaskIdForEdit_ == $_task['id']) @class(['bg-teal-500','bg-opacity-40','text-teal-500','text-[12px]', 'inline-flex' ,'font-medium', 'underline', 'cursor-pointer','relative' ,'z-10']) @endif
+                                            class="text-[12px] inline-flex font-medium text-blue-600 dark:text-gray-500 hover:underline cursor-pointer relative z-10" wire:click="edit({{ $_task['id'] }})">Edit</div>
                                     </div>
 
                                     {{-- time indicator --}}

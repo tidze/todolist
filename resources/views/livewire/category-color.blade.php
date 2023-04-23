@@ -1,4 +1,4 @@
-<div class="border-4 border-sky-400 ">
+<div class="border-4 border-sky-400">
     {{-- I added this class empty div because of livewire multiple root elements detected --}}
     <div>
         <p class="text-teal-600 text-[12px]">
@@ -45,11 +45,7 @@
       dark:text-gray-400 dark:border-gray-600 dark:hover:text-white
       dark:hover:bg-gray-700">Update
         Task</button>
-    <div class="w-full flex items-center justify-center">
-        <div class="w-full p-1" wire:loading wire:target="storeOrUpdate">
-            <div class="text-blue-400 block border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Updating The Task ...</div>
-        </div>
-    </div>
+
     {{-- Alert Message for Success or Unsuccuss of Category update record --}}
     <div class="m-1">
         @if (session()->has('successfull_message'))
@@ -63,10 +59,7 @@
             </div>
         @endif
     </div>
-    <table class="overflow-x-auto relative w-full inline-block shadow-md sm:rounded-lg box-border border-2 border-sky-600">
-        <div class="p-0 w-full" wire:loading="nextPage ,prevPage">
-            <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Loading . . . </div>
-        </div>
+    <table class="overflow-x-auto relative w-full inline-block shadow-md box-border border border-gray-500 border-opacity-25">
         <thead class="text-[14px] uppercase bg-gray-50 dark:bg-gray-700 text-white">
             <tr>
                 {{-- <th class="px-1 py-0">c.Id</th> --}}
@@ -80,7 +73,7 @@
         <tbody>
             @foreach ($allCategories as $category)
                 <tr class="text-center">
-                    <td class="box-border border-b bg-gray-900 border-gray-700 border text-teal-600 px-3 py-2   ">
+                    <td class="box-border border-b bg-gray-900 border-gray-700 border text-teal-600 px-3 py-2">
                         <form wire:submit.prevent="edit({{ $category->id }})">
                             <button type="submit" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button>
                         </form>
@@ -97,7 +90,15 @@
             @endforeach
         </tbody>
     </table>
-    {{ $allCategories->links('livewire.pagination-livewire-simple') }}
+    <div class="">
+        {{ $allCategories->links('livewire.pagination-livewire-simple') }}
+    </div>
+    <div class="p-1 pb-0 w-full" wire:loading wire:target="storeOrUpdate">
+        <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Updating The Task ...</div>
+    </div>
+    <div class="p-1 w-full" wire:loading>
+        <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Re-Rendering . . . </div>
+    </div>
 </div>
 
 @push('script')

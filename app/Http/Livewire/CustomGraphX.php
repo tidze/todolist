@@ -37,8 +37,8 @@ class CustomGraphX extends Component
         $this->x_endingHour = $date->format('H:i');
         $this->x_endingDate = $date->format('Y-m-d');
 
-        $date->sub(new DateInterval('P3D'));
-        $date->setTime(9, 30, 0);
+        $date->sub(new DateInterval('P7D'));
+        $date->setTime(7, 30, 0);
         $this->x_startingDatepoint_unix = $date->format('U');
         $this->x_startingHour = $date->format('H:i');
         $this->x_startingDate = $date->format('Y-m-d');

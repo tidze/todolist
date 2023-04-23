@@ -28,15 +28,15 @@ class CustomChart extends Component
 
     public $c_targetTaskIdForEdit;
 
-    protected $listeners = ['getTask'];
+    protected $listeners = ['getTask', 'targetTaskIdSetter'];
 
     public function mount()
     {
         $date = new DateTime();
         $date->setTimezone(new DateTimeZone('asia/tehran'));
-        $date->setTime(9, 30, 0);
+        $date->setTime(7, 30, 0);
         $this->c_startingDatepoint_unix = $date->format('U');
-        // $this->c_startingHourpoint = $date->format('H:i');
+        $this->c_startingHourpoint = $date->format('H:i');
         $this->c_startingDate = $date->format('Y-m-d');
 
         $date->add(new DateInterval('P1D'));
@@ -50,8 +50,8 @@ class CustomChart extends Component
 
     public function render()
     {
-        return view('livewire.custom-chart',[
-            'c_targetTaskIdForEdit_'=>$this->c_targetTaskIdForEdit
+        return view('livewire.custom-chart', [
+            'c_targetTaskIdForEdit_' => $this->c_targetTaskIdForEdit
         ]);
     }
 
@@ -244,7 +244,6 @@ class CustomChart extends Component
         }
         $this->calcTaskTopOffset();
         $this->c_targetTaskIdForEdit = '';
-
     }
 
     public function getTimeAndDate()
@@ -298,7 +297,13 @@ class CustomChart extends Component
 
     public function edit($id)
     {
-        $this->c_targetTaskIdForEdit = $id;
+        $this->targetTaskIdSetter($id);
         $this->emitTo('task', 'editTask', $id);
+        $this->emitTo('tasks-table', 'targetTaskIdSetter', $id);
+    }
+
+    public function targetTaskIdSetter($id)
+    {
+        $this->c_targetTaskIdForEdit = $id;
     }
 }

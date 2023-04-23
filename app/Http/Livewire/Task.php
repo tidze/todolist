@@ -52,7 +52,10 @@ class Task extends Component
         return view('livewire.task', [
             'allCategories' => DB::table('categories')
                 ->select('categories.category', 'categories.description', 'categories.color')
-                ->where('user_id', Auth::user()->id)->get()->toArray(),
+                ->where('user_id', Auth::user()->id)
+                ->orderByDesc('id')
+                ->get()
+                ->toArray(),
             'category_Distinct' => DB::table('categories')->where('user_id', Auth::user()->id)->distinct()->select('category')->get(),
         ]);
     }
