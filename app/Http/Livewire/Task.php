@@ -27,6 +27,7 @@ class Task extends Component
     public $startingDatepoint;
     public $endingDatepoint;
     public $targetTaskIdEdit;
+    public $taskDone;
     // detector for whether it should be update or store fucntion (any parameter that contains 9, store has been choosen)
     public $detector;
     public $timezone;

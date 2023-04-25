@@ -1,6 +1,6 @@
-<div class="border-4 border-white-300 flex flex-col text-white p-1">
+<div class="border-4 border-white-300 flex flex-col text-white p-1 pb-0">
     {{-- Components Debugger Information --}}
-    <p class="text-amber-600 text-[10px]">
+    <p class="text-amber-600 text-[12px]">
         {{-- taskCategory= <span class='text-amber-100'>{{ ($taskCategory ?? 'Not Set') }}</span> <br> --}}
         {{-- taskDescription= <span class="text-amber-100">{{ $taskDescription ?? 'Not Set'}}</span><br> --}}
         {{-- desiredDuration= <span class="text-amber-100">{{ $desiredDuration ?? 'Not Set'}}</span><br> --}}
@@ -11,6 +11,7 @@
         {{-- startingDatepoint= <span class="text-amber-100">{{ $startingDatepoint ?? 'Not set'}}</span><br> --}}
         {{-- endingDatepoint= <span class="text-amber-100">{{ $endingDatepoint ?? 'Not set'}}</span><br> --}}
         {{-- targetTaskIdEdit= <span class="text-amber-100">{{ $targetTaskIdEdit??'Not set' }}</span><br> --}}
+        taskDone= <span class="text-amber-100">{{ $taskDone ?? 'Not set' }}</span><br>
         {{-- detector= <span class="text-amber-100">{{ $detector??'Not Set' }}</span><br> --}}
         {{-- date_default_timezone_get=<span class="text-amber-100">{{ date_default_timezone_get() }}</span><br> --}}
         {{-- timezone= <span class="text-amber-100">{{ ($timezone??'Not Set')}}</span><br> --}}
@@ -37,12 +38,13 @@
     @endempty
     <br> --}}
     <div class="flex justify-center">
-        <div id="targetDateContainer" class="flex items-center justify-center p-2">
+        <div id="targetDateContainer" class="flex items-center justify-center p-1 pt-0">
             <input type="date" id="targetDate" class="inline-block border-2 rounded-xl border-gray-500 bg-gray-800" value="{{ $startingDatepoint }}">
             <label for="targetDate" class="px-1">Date</label>
         </div>
     </div>
-    <form wire:submit.prevent>
+    {{-- Old FOrm --}}
+    <div>
         <div class="flex flex-col flex-grow">
 
             {{-- Component startingTimepoint --}}
@@ -146,16 +148,86 @@
                     </div>
                 @enderror
 
+                {{-- Component `Select Done/UnDone` --}}
+                <div class="m-1
+                mb-1
+                border border-gray-500
+                {{-- px-2 --}}
+                {{-- py-2 --}}
+                flex
+                flex-row
+                justify-center
+                items-center
+                text-sm
+                font-medium
+                rounded-xl
+                text-gray-400
+                border-gray-600
+                bg-gray-800
+                hover:text-white
+                hover:bg-gray-700
+                cursor-pointer
+                {{-- ring-4 --}}
+                {{-- ring-red-500 --}}
+                {{-- focus:ring-4 --}}
+                {{-- focus:ring-opacity-100 --}}
+                {{-- focus:ring-gray-700 --}}
+                {{-- focus:z-10 --}}
+                ">
+                    <label for="taskDone" class="inline-flex cursor-pointer w-full justify-center items-center px-1 py-2 select-none ring-4 ring-transparent active:ring-gray-600 border-transparent rounded-xl">
+                        taskDone
+                    <input type="checkbox" name="taskDone" id="taskDone" wire:model.defer="taskDone"
+                    class="
+                        cursor-pointer
+                        inline-flex
+                        px-2
+                        py-2
+                        mx-2
+                        text-sm
+                        font-medium
+                        focus:outline-none
+                        border
+                        rounded-xl
+                        focus:z-10
+                        {{-- focus:ring-4 --}}
+                        {{-- focus:ring-gray-200 --}}
+                        focus:ring-gray-700
+                        bg-gray-800
+                        text-gray-400
+                        border-gray-600
+                        {{-- hover:text-white --}}
+                        hover:bg-gray-700
+                    "/>
+                </label>
+
+                </div>
+
             </div>
-            <div class="flex my-2">
+            <div class="flex">
                 <button wire:click="store"
-                    class="flex-1 px-3 py-3 m-1 text-sm font-medium text-gray-900
-                          focus:outline-none bg-white border border-gray-200 rounded-xl
-                        hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4
-                        focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800
-                        dark:text-gray-400 dark:border-gray-600 dark:hover:text-white
-                        dark:hover:bg-gray-700">Add
-                    Task</button>
+                    class="flex-1
+                        px-3
+                        py-3
+                        m-1
+                        text-sm
+                        font-medium
+                      text-gray-900
+                        focus:outline-none
+                        bg-white border
+                        border-gray-200
+                        rounded-xl
+                        hover:bg-gray-100
+                        hover:text-blue-700
+                        focus:z-10
+                        focus:ring-4
+                        focus:ring-gray-200
+                        dark:focus:ring-gray-700
+                        dark:bg-gray-800
+                        dark:text-gray-400
+                        dark:border-gray-600
+                        dark:hover:text-white
+                        dark:hover:bg-gray-700"
+                        >Add Task</button>
                 <button wire:click="update"
                     class="flex-1 px-3 py-3 m-1 text-sm font-medium text-gray-900
                           focus:outline-none bg-white border border-gray-200 rounded-xl
@@ -165,40 +237,43 @@
                         dark:hover:bg-gray-700">Update
                     Task</button>
             </div>
-            <div class="p-0" wire:loading wire:target="update">
+
+            {{-- Loading State Animations --}}
+            <div class="p-0 mb-1" wire:loading wire:target="update">
                 <div class="text-blue-400 i nline-block border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Updating The Task ...</div>
             </div>
-            <div class="p-0" wire:loading wire:target="store">
+            <div class="p-0 mb-1" wire:loading wire:target="store">
                 <div class="text-blue-400 i nline-block border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Adding The Task ...</div>
             </div>
-            <div class="p-0" wire:loading>
+            <div class="p-0 mb-1" wire:loading>
                 <div class="text-blue-400 i nline-block border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Re-Rendering ...</div>
             </div>
             <div>
                 @if (session()->has('store_validator_fail'))
-                    <div class="bg-yellow-500 bg-opacity-20 border-l-8 border-yellow-600 text-yellow-500 p-2">
+                    <div class="bg-yellow-500 bg-opacity-20 border-l-8 border-yellow-600 text-yellow-500 p-2 mb-1">
                         {{ session('store_validator_fail') }} <div class="text-yellow-500 inline-flex justify-center items-center border-2 border-yellow-500 rounded-full w-5 h-5 mx-1"><b>!</b></div>
                     </div>
                 @endif
                 @if (session()->has('update_validator_fail'))
-                    <div class="bg-yellow-500 bg-opacity-20 border-l-8 border-yellow-600 text-yellow-500 p-2">
+                    <div class="bg-yellow-500 bg-opacity-20 border-l-8 border-yellow-600 text-yellow-500 p-2 mb-1">
                         {{ session('update_validator_fail') }} <div class="text-yellow-500 inline-flex justify-center items-center border-2 border-yellow-500 rounded-full w-5 h-5 mx-1"><b>!</b></div>
                     </div>
                 @endif
                 @if (session()->has('successfull_message'))
-                    <div class="bg-green-500 bg-opacity-20 border-l-8 border-green-600 text-green-500 p-2">
+                    <div class="bg-green-500 bg-opacity-20 border-l-8 border-green-600 text-green-500 p-2 mb-1">
                         {{ session('successfull_message') }} <span class="text-green-500">&#10003</span>
                     </div>
                 @endif
                 @if (session()->has('unsuccessfull_message'))
-                    <div class="bg-red-500 bg-opacity-20 border-l-8 border-red-700 border-opacity-90 text-red-600 text-opacity-80 p-2">
+                    <div class="bg-red-500 bg-opacity-20 border-l-8 border-red-700 border-opacity-90 text-red-600 text-opacity-80 p-2 mb-1">
                         {{ session('unsuccessfull_message') }} <span class="text-red-600">&#10005</span>
                     </div>
                 @endif
             </div>
+            {{-- Loading State Animations END --}}
         </div>
 
-    </form>
+    </div>
 
 </div>
 

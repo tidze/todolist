@@ -16,7 +16,7 @@
     </div>
 
 
-    <div class="sm:w-[500px] sm:ml-auto sm:mr-auto sm:block py-4">
+    <div class="sm:w-[500px] sm:ml-auto sm:mr-auto sm:block pb-4">
 
         {{-- {{ public_path() }}<br> --}}
         {{-- {{ base_path() }}<br> --}}

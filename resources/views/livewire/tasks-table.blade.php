@@ -4,30 +4,30 @@
     </p>
 
     {{-- Loading State Animations --}}
-    <div class="w-full flex flex-col border-t-4 border-b-0 border-teal-800">
-        <div class="m-1 mb-0 flex w-full justify-center items-center" wire:loading wire:target="edit">
+    <div class="w-full flex flex-col border-t-4 border-b-0 border-teal-800" wire:loading.class="p-1">
+        <div class="mb-1 flex w-full justify-center items-center" wire:loading wire:target="edit">
             <div class="w-full flex justify-center items-center animate-pulse border-l-8 border-blue-700 bg-blue-400 bg-opacity-30 p-2 pt-4 text-blue-400">
                 <div class="inline-block h-8 w-8 animate-bounce rounded-full border border-blue-600 text-center leading-7">▲</div>
             </div>
         </div>
-        <div class="m-1 mb-0 flex w-full justify-center items-center" wire:loading wire:target="confirmDelete">
+        <div class="mb-1 flex w-full justify-center items-center" wire:loading wire:target="confirmDelete">
             <div class="w-full flex justify-center items-center animate-pulse border-l-8 border-blue-700 bg-blue-400 bg-opacity-30 p-2 text-blue-400">
                 Checking The Task ...
             </div>
         </div>
-        <div class="m-1 mb-0 flex w-full justify-center items-center" wire:loading wire:target="deleteTask">
+        <div class="mb-1 flex w-full justify-center items-center" wire:loading wire:target="deleteTask">
             <div class="w-full flex justify-center items-center animate-pulse border-l-8 border-blue-700 bg-blue-400 bg-opacity-30 p-2 text-blue-400">
                 Deleting ...
             </div>
         </div>
-        <div class="m-1 flex w-full justify-center items-center" wire:loading>
+        <div class="flex w-full justify-center items-center" wire:loading>
             <div class="w-full flex justify-center items-center animate-pulse border-l-8 border-blue-700 bg-blue-400 bg-opacity-30 p-2 text-blue-400">
                 Re-Rendering ...
             </div>
         </div>
     </div>
 
-    {{-- they need to be together `w-screen` `overflow-x-auto` --}}
+    {{-- They need to be together: `w-screen` & `overflow-x-auto` --}}
     <div class="overflow-x-auto relative w-full inline-block">
         {{-- Table of Tasks --}}
         <table class="text-[14px]">
