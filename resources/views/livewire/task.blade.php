@@ -11,7 +11,7 @@
         {{-- startingDatepoint= <span class="text-amber-100">{{ $startingDatepoint ?? 'Not set'}}</span><br> --}}
         {{-- endingDatepoint= <span class="text-amber-100">{{ $endingDatepoint ?? 'Not set'}}</span><br> --}}
         {{-- targetTaskIdEdit= <span class="text-amber-100">{{ $targetTaskIdEdit??'Not set' }}</span><br> --}}
-        taskDone= <span class="text-amber-100">{{ $taskDone ?? 'Not set' }}</span><br>
+        {{-- taskDone= <span class="text-amber-100">{{ $taskDone ?? 'Not set' }}</span><br> --}}
         {{-- detector= <span class="text-amber-100">{{ $detector??'Not Set' }}</span><br> --}}
         {{-- date_default_timezone_get=<span class="text-amber-100">{{ date_default_timezone_get() }}</span><br> --}}
         {{-- timezone= <span class="text-amber-100">{{ ($timezone??'Not Set')}}</span><br> --}}
@@ -37,10 +37,16 @@
         <p>targetTaskIdEdit <span class="underline">Not</span> empty</p>
     @endempty
     <br> --}}
-    <div class="flex justify-center">
-        <div id="targetDateContainer" class="flex items-center justify-center p-1 pt-0">
-            <input type="date" id="targetDate" class="inline-block border-2 rounded-xl border-gray-500 bg-gray-800" value="{{ $startingDatepoint }}">
+    <div class="flex items-center justify-center">
+        <div id="targetDateContainer" class="flex items-center justify-center p-1">
+            <input type="date" id="targetDate" class="inline-flex border-2 rounded-xl border-gray-500 bg-gray-800" value="{{ $startingDatepoint }}">
             <label for="targetDate" class="px-1">Date</label>
+        </div>
+        {{-- Now Button With Java Fking Script --}}
+        <div class="flex justify-center items-center">
+            <div id="setNowTime" class="text-[14px] text-gray-400 bg-gray-800 inline-flex justify-center items-center border-2 border-gray-500 rounded-xl px-2 py-2 hover:bg-gray-700 cursor-pointer active:border-gray-50 active:text-white select-none">
+                Now
+            </div>
         </div>
     </div>
     {{-- Old FOrm --}}
@@ -58,7 +64,7 @@
                 </div>
                 <label class="basis-1/5 self-center" for="startingTimepoint">Start</label>
 
-                <input class="bg-black text-center text-[8px]" id="startingTimepoint_unix" wire:model.defer="startingTimepoint_unix" name="startingTimepoint_unix" type="hidden" value="" />
+                <input class="bg-black text-center p-0 text-[15px]" id="startingTimepoint_unix" wire:model.defer="startingTimepoint_unix" name="startingTimepoint_unix" type="hidden" value="" />
                 {{-- <label for="startingTimepoint_unix">startingTimepoint_unix</label> --}}
                 {{-- @error('startingTimepoint_unix') --}}
                 {{-- <span class="text-red-500 text-[9px]">{{ $message }}</span> --}}
@@ -76,7 +82,7 @@
                 </div>
                 <label class="basis-1/5 self-center" for="endingTimepoint">End</label>
 
-                <input name="endingTimepoint_unix" wire:model.defer="endingTimepoint_unix" id="endingTimepoint_unix" class="bg-black text-center w-52 p-0 text-[10px]" type="hidden" value="0" />
+                <input name="endingTimepoint_unix" wire:model.defer="endingTimepoint_unix" id="endingTimepoint_unix" class="bg-black text-center p-0 text-[15px]" type="hidden" value="0" />
                 {{-- <label for="startingTimepoint_unix">startingTimepoint_unix</label> --}}
                 {{-- @error('endingTimepoint_unix') --}}
                 {{-- <span class="text-red-500 text-[9px]">{{ $message }}</span> --}}
@@ -149,7 +155,8 @@
                 @enderror
 
                 {{-- Component `Select Done/UnDone` --}}
-                <div class="m-1
+                <div
+                    class="m-1
                 mb-1
                 border border-gray-500
                 {{-- px-2 --}}
@@ -176,8 +183,8 @@
                 ">
                     <label for="taskDone" class="inline-flex cursor-pointer w-full justify-center items-center px-1 py-2 select-none ring-4 ring-transparent active:ring-gray-600 border-transparent rounded-xl">
                         taskDone
-                    <input type="checkbox" name="taskDone" id="taskDone" wire:model.defer="taskDone"
-                    class="
+                        <input type="checkbox" name="taskDone" id="taskDone" wire:model.defer="taskDone"
+                            class="
                         cursor-pointer
                         inline-flex
                         px-2
@@ -197,8 +204,8 @@
                         border-gray-600
                         {{-- hover:text-white --}}
                         hover:bg-gray-700
-                    "/>
-                </label>
+                    " />
+                    </label>
 
                 </div>
 
@@ -226,8 +233,8 @@
                         dark:text-gray-400
                         dark:border-gray-600
                         dark:hover:text-white
-                        dark:hover:bg-gray-700"
-                        >Add Task</button>
+                        dark:hover:bg-gray-700">Add
+                    Task</button>
                 <button wire:click="update"
                     class="flex-1 px-3 py-3 m-1 text-sm font-medium text-gray-900
                           focus:outline-none bg-white border border-gray-200 rounded-xl
@@ -457,6 +464,15 @@
             console.log();
             $('#taskDescription').val($(this).text().trim());
             document.getElementById("taskDescription").dispatchEvent(new Event('input'));
+        });
+
+        $('#setNowTime').on('click',function(){
+            let newDate = new Date();
+            $('#startingTimepoint').val(newDate.getHours()+ ":" +newDate.getMinutes());
+            $('#endingTimepoint').val(newDate.getHours()+ ":" +newDate.getMinutes());
+            $('#startingTimepoint_unix').val((newDate.getTime()).toString().substring(0,10));
+            $('#endingTimepoint_unix').val((newDate.getTime()).toString().substring(0,10));
+            setFullDuration();
         });
     </script>
 @endpush

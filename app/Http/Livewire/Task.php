@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Task as TaskModel;
 use App\Models\Category as CategoryModel;
 use DateTimeZone;
+use DateTime;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -36,14 +37,18 @@ class Task extends Component
 
     public function mount()
     {
-        $this->endingTimepoint_unix = time();
-        $this->startingTimepoint_unix = time();
+        $dateTime = new DateTime();
+        $dateTime->setTimezone(new DateTimeZone('asia/tehran'));
+
+        $this->endingTimepoint_unix = $dateTime->format('U');
+        $this->startingTimepoint_unix = $dateTime->format('U');
         // the starting time for "clock time picker" ought to be current time. for now we leave it at 00:00
-        $this->startingTimepoint = '00:00';
-        $this->endingTimepoint = '00:00';
+        $this->startingTimepoint = $dateTime->format('H:i');;
+        $this->endingTimepoint = $dateTime->format('H:i');;
         $this->desiredDuration = '';
         $this->taskCategory = '';
         $this->taskDescription = '';
+        $this->taskDone = false;
         // $this->timezone =  new DateTimeZone();
         // session_start(); $timezone = $_SESSION['time'];
     }
@@ -73,6 +78,7 @@ class Task extends Component
         $this->taskCategory = $task->category;
         $this->taskDescription = $task->description;
         $this->desiredDuration = $task->desired_duration;
+        $this->taskDone = $task->done;
         // turn it into each time zone , this fix is temporary
         $this->startingTimepoint_unix = $task->starting_time * 1000;
         $this->endingTimepoint_unix = $task->ending_time * 1000;
@@ -125,11 +131,20 @@ class Task extends Component
             // if the category exists, just retrive the id from categories table and update it with category_id
             $this->updateIntoTasks(trim($this->targetTaskIdEdit), trim($this->taskCategory), trim($this->taskDescription));
         }
+        $this->emitTo('custom-chart','getTask');
         $this->resetErrorBag();
-
         $this->resetValidation();
 
-        $this->emitTo('custom-chart','getTask');
+        $this->taskCategory = '';
+        $this->taskDescription = '';
+        $this->desiredDuration = '';
+        $this->startingTimepoint_unix = '';
+        $this->endingTimepoint_unix = '';
+        $this->startingTimepoint = '00:00';
+        $this->endingTimepoint = '00:00';
+        $this->targetTaskIdEdit = '';
+        $this->taskDone = '';
+
     }
 
     public function deleteTask($id)
@@ -174,6 +189,12 @@ class Task extends Component
             $this->insertIntoTasks(Auth::user()->id, trim($this->taskCategory), trim($this->taskDescription));
         }
         $this->emitTo('tasks-table', '$refresh');
+        $this->emitTo('tasks-table', 'sendBackId', $this->targetTaskIdEdit);
+        $this->emitTo('category-color', '$refresh');
+        $this->emitTo('custom-chart','getTask');
+
+        $this->resetErrorBag();
+
         $this->taskCategory = '';
         $this->taskDescription = '';
         $this->desiredDuration = '';
@@ -182,11 +203,7 @@ class Task extends Component
         $this->startingTimepoint = '00:00';
         $this->endingTimepoint = '00:00';
         $this->targetTaskIdEdit = '';
-        $this->emitTo('tasks-table', 'sendBackId', $this->targetTaskIdEdit);
-        $this->emitTo('category-color', '$refresh');
-        $this->emitTo('custom-chart','getTask');
-
-        $this->resetErrorBag();
+        $this->taskDone = '';
     }
 
     public function checkForExistingCategory($user_id, $category, $description)
@@ -210,6 +227,7 @@ class Task extends Component
         $taskModel->user_id = $user_id;
         $taskModel->category_id = $retrievedCategory->id;
         $taskModel->desired_duration = $this->desiredDuration;
+        $taskModel->done = $this->taskDone;
         // The UnixEpoch in js is in miliseconds, while php is in seconds.
         $taskModel->starting_time = substr($this->startingTimepoint_unix, 0, 10);
         $taskModel->ending_time = substr($this->endingTimepoint_unix, 0, 10);
@@ -226,6 +244,7 @@ class Task extends Component
         $retrievedCategory = $this->checkForExistingCategory(Auth::user()->id, $category, $description);
         $update = DB::table('tasks')->where('id', $taskId)
             ->update([
+                'done' => $this->taskDone,
                 'category_id' => $retrievedCategory->id,
                 'desired_duration' => $this->desiredDuration,
                 'starting_time' => substr($this->startingTimepoint_unix, 0, 10),
@@ -237,13 +256,5 @@ class Task extends Component
             session()->flash('unsuccessfull_message', 'Updating Task Was Unsuccessfull');
         }
         $this->emitTo('tasks-table', '$refresh');
-        $this->taskCategory = '';
-        $this->taskDescription = '';
-        $this->desiredDuration = '';
-        $this->startingTimepoint_unix = '';
-        $this->endingTimepoint_unix = '';
-        $this->startingTimepoint = '00:00';
-        $this->endingTimepoint = '00:00';
-        $this->targetTaskIdEdit = '';
     }
 }

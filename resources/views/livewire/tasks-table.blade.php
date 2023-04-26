@@ -46,6 +46,9 @@
                     {{-- C.id --}}
                     {{-- </th> --}}
                     <th scope="col" class="px-1 py-0">
+                    done
+                    </th>
+                    <th scope="col" class="px-1 py-0">
                         starting_date
                     </th>
                     <th scope="col" class="px-1 py-0">
@@ -93,6 +96,9 @@
                         {{-- <td class="px-2 py-0"> --}}
                         {{-- {{ $task->category_id }} --}}
                         {{-- </td> --}}
+                        <td class="px-2 py-0">
+                        {{ $task->done }}
+                        </td>
                         <td class="px-2 py-0 whitespace-nowrap">
                             {{ date('Y-M(m)-d H:i', $task->starting_time + 12600) }}
                         </td>

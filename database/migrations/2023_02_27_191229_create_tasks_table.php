@@ -18,6 +18,7 @@ return new class extends Migration
             // $table->foreignId('user_id')->references('id')->on('users');
             $table->foreignId('category_id')->references('id')->on('categories');
             $table->integer('desired_duration')->comment("Minutes");
+            $table->boolean('done')->comment("Is the task Done?")->default(false);
             $table->integer('starting_time')->comment('Unix Epoch Time');
             $table->integer('ending_time')->comment('Unix Epoch Time');
             // $table->timestamps();

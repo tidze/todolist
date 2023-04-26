@@ -49,7 +49,8 @@
             <div class="flex flex-row justify-around mt-1 w-full flex-wrap">
                 <div class="p-2 text-[14px] inline-block border border-emerald-600 text-emerald-500 rounded hover:bg-emerald-600 hover:text-black cursor-pointer" wire:click="getTask()">Custom Days Report</div>
                 <div class="p-2 text-[14px] inline-block border border-emerald-600 text-emerald-500 rounded hover:bg-emerald-600 hover:text-black cursor-pointer" wire:click="getTaskForPastSevenDays()">7 Days Report</div>
-                <div class="p-2 text-[14px] inline-block border border-emerald-600 text-emerald-500 rounded hover:bg-emerald-600 hover:text-black cursor-pointer" wire:click="getTaskForPastThirtyDays()">30 Days Report</div>
+                <div class="p-2 text-[14px] inline-block border border-emerald-600 text-emerald-500 rounded hover:bg-emerald-600 hover:text-black cursor-pointer" wire:click="getTaskForPastThirtyDays()">30 Days Report
+                </div>
             </div>
         </div>
         {{-- <span id="x_customDebug" class="inline-block border border-amber-600 p-0.5 rounded hover:bg-yellow-500 hover:text-black cursor-pointer" wire:click>x_customDebug</span> --}}
@@ -76,9 +77,37 @@
                         <div class="text-[10px] text-teal-400" style>{{ date('H:i', substr($x_endingDatepoint_unix, 0, 10) + 12600 + 86400 * -$index) }}</div>
                     </div>
                     @foreach ($tasksOfDay as $index => $_task)
-                        <div class="border w-1/2 h-full flex flex-row absolute box-border diagonal-stripes-x"
-                            style="{{ $_task['width'] }};{{ $_task['left'] }};border-color: {{ $_task['color'] }};background: repeating-linear-gradient(-45deg, {{ $_task['color'] }}, {{ $_task['color'] }} 2px, #ffffff00 0, #ffffff00 9px);">
-                        </div>
+                        @if ($_task['done'])
+                            <div class="
+                        border
+                        w-1/2
+                        h-full
+                        flex
+                        flex-row
+                        absolute
+                        box-border"
+                                style="
+                        {{ $_task['width'] }};
+                        {{ $_task['left'] }};
+                        border-color: {{ $_task['color'] }};
+                        background: repeating-linear-gradient(-45deg, {{ $_task['color'] }}, {{ $_task['color'] }} 2px, #ffffff00 0, #ffffff00 6px);">
+                            </div>
+                        @else
+                            <div class="
+                        border
+                        w-1/2
+                        h-full
+                        flex
+                        flex-row
+                        absolute
+                        box-border"
+                                style="
+                                {{ $_task['width'] }};
+                                {{ $_task['left'] }};
+                                border-color: {{ $_task['color'] }};
+                                background: repeating-linear-gradient(-90deg, {{ $_task['color'] }}, {{ $_task['color'] }} 2px, #ffffff00 0, #ffffff00 6px);">
+                            </div>
+                        @endif
                     @endforeach
                 </div>
             @endforeach

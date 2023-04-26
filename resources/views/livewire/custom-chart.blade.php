@@ -9,6 +9,7 @@
         {{-- $c_startingHourpoint = <span class="text-yellow-100">{{ isset($c_startingHourpoint) ? $c_startingHourpoint : 'Not Set' }}</span><br> --}}
         {{-- $c_endingHourpoint = <span class="text-yellow-100">{{ isset($c_endingHourpoint) ? $c_endingHourpoint : 'Not Set' }}</span><br> --}}
         {{-- $c_targetTaskIdForEdit = <span class="text-yellow-100">{{ isset($c_targetTaskIdForEdit) ? $c_targetTaskIdForEdit : 'Not Set' }}</span><br> --}}
+        {{-- $now = <span class="text-yellow-100">{{ var_dump($now) }}</span><br> --}}
         {{-- $c_tasksGraphArray --> =<pre class="text-yellow-100">{{ isset($c_tasksGraphArray) ? print_r($c_tasksGraphArray) : 'Not Set' }}</pre><br> --}}
         {{-- $c_flattened --> =<span class="text-yellow-100">{{ isset($c_flattened) ? print_r($c_flattened) : 'Not Set' }}</span><br> --}}
         {{-- $flattened = <span class="text-yellow-100">{{ var_dump($flattened) }}</span><br> --}}
@@ -113,8 +114,8 @@
     {{-- Dayily Graph Chart --}}
     <div class="flex flex-col">
         <div class="flex justify-end">
-            <div class="relative pt-11 pb-2 px-9 border-2 border-red-400 border-opacity-0">
-                <div class="border-2 border-orange-800 border-opacity-50 w-52 h-[78vh] relative right-0 box-border">
+            <div class="flex justify-end relative pt-11 pb-2 px-9 border-2 border-red-400 border-opacity-0 w-full">
+                <div class="border-2 border-orange-800 border-opacity-50 w-[55%] h-[78vh] relative right-0 box-border">
                     {{-- startTimepointHandle --}}
                     <div class="w-[10%] h-[2px] bg-amber-700 border-t-2 border-t-amber-700 absolute right-full bottom-full">
                         <div class="relative flex flex-row justify-center items-center w-[45px] -translate-x-2/4 -translate-y-2/4 -rotate-90 h-10">
@@ -142,45 +143,95 @@
                             </div>
                         </div>
                     </div>
-                    @isset($c_tasksGraphArray)
-                        @foreach ($c_tasksGraphArray as $_task)
-                            <div class="flex taskGraphItem box-border {{ $_task['translate'] ?? '' }} {{ $_task['position'] ?? '' }} w-full text-[9px] border-2 border-opacity-70"
-                                style=" {{ $_task['top'] ?? '' }} ;
-                                        {{ $_task['height'] ?? '' }};
-                                        background: repeating-linear-gradient(-45deg, {{ $_task['color'] }}, {{ $_task['color'] }} 2px, #ffffff00 0, #ffffff00 6px);
-                                        border-color: {{ $_task['color'] }}"
-                                {{-- The Starting point is 100% off by Y Axis so i added translate transform --}}>
-                                {{-- I don't know why, but the @class needs to be before the class="". (because the if statement not going to work otherwise) --}}
-                                <div @if ($c_targetTaskIdForEdit_ == $_task['id']) @class(['bg-white','bg-opacity-50' ,'w-full', 'h-full','cursor-pointer']) @endif class="w-full h-full cursor-pointer"
-                                    wire:click="edit({{ $_task['id'] }})"></div>
 
-                                <div class="absolute flex flex-row -translate-x-full">
-                                    <div class=" -translate-y-[30%] mx-1 flex flex-col justify-center items-center">
-                                        <div @if ($c_targetTaskIdForEdit_ == $_task['id']) @class(['text-teal-500','text-[14px]']) @endif class="text-white-500 text-[14px]">
-                                            {{ $_task['description'] }}
-                                        </div>
-                                        <div @if ($c_targetTaskIdForEdit_ == $_task['id']) @class(['bg-teal-500','bg-opacity-40','text-teal-500','text-[12px]', 'inline-flex' ,'font-medium', 'underline', 'cursor-pointer','relative' ,'z-10']) @endif
-                                            class="text-[12px] inline-flex font-medium text-blue-600 dark:text-gray-500 hover:underline cursor-pointer relative z-10" wire:click="edit({{ $_task['id'] }})">Edit</div>
-                                    </div>
 
-                                    {{-- time indicator --}}
-                                    <div class="box-border border border-b-transparent border-r-transparent border-l-transparent border-t-yellow-400 pr-2">
-                                        <div class="flex justify-between bg-gray-500 bg-opacity-60 rounded-sm text-[12px]">
-                                            <div class="mx-0.5">{{ date('H:i', $_task['starting_time'] + 12600) }}</div>
-                                            {{-- Add Additional Space ▼ --}}
-                                            &nbsp
-                                            <div class="mr-1">{{ date('H:i', $_task['ending_time'] + 12600) }}</div>
-                                        </div>
-                                    </div>
+                    {{-- Now Indicator --}}
+                    <div class="box-border absolute flex border-t border-t-yellow-400 w-[125%] -translate-x-[20%] " style="{{ $now['top'] }};visibility:{{$now['visible']}}">
+                        <div class="box-border flex justify-between bg-gray-500 bg-opacity-60 rounded-sm text-[12px]">
+                            <div class="px-2">{{ date('H:i', $now['unix'] + 12600) }}</div>
+                        </div>
+
+                        <div class="box-border absolute flex flex-row -translate-x-full" style="{{ $now['top'] }};">
+                            <div class="box-border -translate-y-[65%] mx-1 flex flex-col justify-center items-center">
+                                <div class="text-white-500 text-[14px]">
+                                    Now
                                 </div>
+                                {{-- Hour:Minute indicator --}}
+
 
                             </div>
-                        @endforeach
-                    @endisset
-                </div>
+                        </div>
+                    </div>
+
+
+                    @isset($c_tasksGraphArray)
+
+                        @foreach ($c_tasksGraphArray as $_task)
+                            @if ($_task['done'])
+                                <div class="
+                                    flex
+                                    taskGraphItem
+                                    box-border
+                                    {{ $_task['translate'] ?? '' }}
+                                    {{ $_task['position'] ?? '' }}
+                                    w-full
+                                    text-[9px]
+                                    border-2
+                                    border-opacity-70"
+                                    style="
+                                    {{ $_task['top'] ?? '' }} ;
+                                    {{ $_task['height'] ?? '' }};
+                                    background: repeating-linear-gradient(-45deg, {{ $_task['color'] }}, {{ $_task['color'] }} 2px, #ffffff00 0, #ffffff00 6px);
+                                    border-color: {{ $_task['color'] }}">
+                                @else
+                                    <div class="flex
+                                    taskGraphItem
+                                    box-border
+                                    {{ $_task['translate'] ?? '' }}
+                                    {{ $_task['position'] ?? '' }}
+                                    w-full
+                                    text-[9px]
+                                    border-2
+                                    border-opacity-70"
+                                        style="
+                                    {{ $_task['top'] ?? '' }} ;
+                                    {{ $_task['height'] ?? '' }};
+                                    background: repeating-linear-gradient(-90deg, rgb(126, 126, 126), rgb(126, 126, 126) 3px, #ffffff00 0, #ffffff00 9px);
+                                    border-color: rgb(126, 126, 126)">
+                            @endif
+
+                            {{-- The Starting point is 100% off by Y Axis so i added translate transform --}}
+                            {{-- I don't know why, but the @class needs to be before the class="". (because the if statement not going to work otherwise) --}}
+                            <div @if ($c_targetTaskIdForEdit_ == $_task['id']) @class(['bg-white','bg-opacity-50' ,'w-full', 'h-full','cursor-pointer']) @endif class="w-full h-full cursor-pointer"
+                                wire:click="edit({{ $_task['id'] }})"></div>
+
+                            <div class="absolute flex flex-row -translate-x-full">
+                                <div class=" -translate-y-[30%] mx-1 flex flex-col justify-center items-center">
+                                    <div @if ($c_targetTaskIdForEdit_ == $_task['id']) @class(['text-teal-500','text-[14px]']) @endif class="text-white-500 text-[14px]">
+                                        {{ $_task['description'] }}
+                                    </div>
+                                    <div @if ($c_targetTaskIdForEdit_ == $_task['id']) @class(['bg-teal-500','bg-opacity-40','text-teal-500','text-[12px]', 'inline-flex' ,'font-medium', 'underline', 'cursor-pointer','relative' ,'z-10']) @endif
+                                        class="text-[12px] inline-flex font-medium text-blue-600 dark:text-gray-500 hover:underline cursor-pointer relative z-10" wire:click="edit({{ $_task['id'] }})">Edit</div>
+                                </div>
+
+                                {{-- time indicator --}}
+                                <div class="box-border border border-b-transparent border-r-transparent border-l-transparent border-t-yellow-400 pr-2">
+                                    <div class="flex justify-between bg-gray-500 bg-opacity-60 rounded-sm text-[12px]">
+                                        <div class="mx-0.5">{{ date('H:i', $_task['starting_time'] + 12600) }}</div>
+                                        {{-- Add Additional Space ▼ --}}
+                                        &nbsp
+                                        <div class="mr-1">{{ date('H:i', $_task['ending_time'] + 12600) }}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                    </div>
+                    @endforeach
+                @endisset
             </div>
         </div>
     </div>
+</div>
 </div>
 
 @push('script')
