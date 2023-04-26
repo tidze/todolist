@@ -49,8 +49,8 @@ class CustomChart extends Component
 
         $this->c_flattened = false;
 
-        $date->setTimestamp(time());
-        $this->now['unix'] = $date->format('U');
+        // $date->setTimestamp(time());
+        // $this->now['unix'] = $date->format('U');
         $this->calcNow();
         // dd($this->now['unix']);
     }
@@ -319,36 +319,41 @@ class CustomChart extends Component
 
     public function calcNow()
     {
+        $date = new DateTime();
+        $date->setTimezone(new DateTimeZone('asia/tehran'));
+        $date->setTimestamp(time());
+        $this->now['unix'] = $date->format('U');
+
+        $deltaForNumerator = abs(
+            substr($this->c_startingDatepoint_unix, 0, 10)
+                -
+                substr($this->now['unix'], 0, 10)
+        );
+        $deltaForDenumerator = abs(
+            substr($this->c_startingDatepoint_unix, 0, 10)
+                -
+                substr($this->c_endingDatepoint_unix, 0, 10)
+        );
+        $this->now['top'] = "top:" .
+            substr(
+                (100 * (
+                    ($deltaForNumerator)
+                    /
+                    ($deltaForDenumerator)
+                )
+                ),
+                0,
+                5
+            )
+            . "%";
+
         if (
             ($this->now['unix'] >= $this->c_startingDatepoint_unix)
             &&
             ($this->now['unix'] <= $this->c_endingDatepoint_unix)
-           ) {
+        ) {
             $this->now['visible'] = 'visible';
-            $deltaForNumerator = abs(
-                substr($this->c_startingDatepoint_unix, 0, 10)
-                    -
-                    substr($this->now['unix'], 0, 10)
-            );
-            $deltaForDenumerator = abs(
-                substr($this->c_startingDatepoint_unix, 0, 10)
-                    -
-                    substr($this->c_endingDatepoint_unix, 0, 10)
-            );
-            $this->now['top'] = "top:" .
-                substr(
-                    (100 * (
-                        ($deltaForNumerator)
-                        /
-                        ($deltaForDenumerator)
-                    )
-                    ),
-                    0,
-                    5
-                )
-                . "%";
-        }
-        else{
+        } else {
             $this->now['visible'] = 'hidden';
         }
         // dd($this->now, $this->c_startingDatepoint_unix, $this->c_endingDatepoint_unix);

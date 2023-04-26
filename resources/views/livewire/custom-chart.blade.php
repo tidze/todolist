@@ -115,7 +115,7 @@
     <div class="flex flex-col">
         <div class="flex justify-end">
             <div class="flex justify-end relative pt-11 pb-2 px-9 border-2 border-red-400 border-opacity-0 w-full">
-                <div class="border-2 border-orange-800 border-opacity-50 w-[55%] h-[78vh] relative right-0 box-border">
+                <div class="border-2 border-orange-800 border-opacity-50 w-[65%] h-[78vh] relative right-0 box-border">
                     {{-- startTimepointHandle --}}
                     <div class="w-[10%] h-[2px] bg-amber-700 border-t-2 border-t-amber-700 absolute right-full bottom-full">
                         <div class="relative flex flex-row justify-center items-center w-[45px] -translate-x-2/4 -translate-y-2/4 -rotate-90 h-10">
@@ -196,7 +196,6 @@
                                         style="
                                     {{ $_task['top'] ?? '' }} ;
                                     {{ $_task['height'] ?? '' }};
-                                    background: repeating-linear-gradient(-90deg, rgb(126, 126, 126), rgb(126, 126, 126) 3px, #ffffff00 0, #ffffff00 9px);
                                     border-color: rgb(126, 126, 126)">
                             @endif
 

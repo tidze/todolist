@@ -44,7 +44,8 @@
         </div>
         {{-- Now Button With Java Fking Script --}}
         <div class="flex justify-center items-center">
-            <div id="setNowTime" class="text-[14px] text-gray-400 bg-gray-800 inline-flex justify-center items-center border-2 border-gray-500 rounded-xl px-2 py-2 hover:bg-gray-700 cursor-pointer active:border-gray-50 active:text-white select-none">
+            <div id="setNowTime"
+                class="text-[14px] text-gray-400 bg-gray-800 inline-flex justify-center items-center border-2 border-gray-500 rounded-xl px-2 py-2 hover:bg-gray-700 cursor-pointer active:border-gray-50 active:text-white select-none">
                 Now
             </div>
         </div>
@@ -157,7 +158,7 @@
                 {{-- Component `Select Done/UnDone` --}}
                 <div
                     class="m-1
-                mb-1
+                mb-2
                 border border-gray-500
                 {{-- px-2 --}}
                 {{-- py-2 --}}
@@ -246,36 +247,38 @@
             </div>
 
             {{-- Loading State Animations --}}
-            <div class="p-0 mb-1" wire:loading wire:target="update">
-                <div class="text-blue-400 i nline-block border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Updating The Task ...</div>
-            </div>
-            <div class="p-0 mb-1" wire:loading wire:target="store">
-                <div class="text-blue-400 i nline-block border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Adding The Task ...</div>
-            </div>
-            <div class="p-0 mb-1" wire:loading>
-                <div class="text-blue-400 i nline-block border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Re-Rendering ...</div>
-            </div>
-            <div>
-                @if (session()->has('store_validator_fail'))
-                    <div class="bg-yellow-500 bg-opacity-20 border-l-8 border-yellow-600 text-yellow-500 p-2 mb-1">
-                        {{ session('store_validator_fail') }} <div class="text-yellow-500 inline-flex justify-center items-center border-2 border-yellow-500 rounded-full w-5 h-5 mx-1"><b>!</b></div>
-                    </div>
-                @endif
-                @if (session()->has('update_validator_fail'))
-                    <div class="bg-yellow-500 bg-opacity-20 border-l-8 border-yellow-600 text-yellow-500 p-2 mb-1">
-                        {{ session('update_validator_fail') }} <div class="text-yellow-500 inline-flex justify-center items-center border-2 border-yellow-500 rounded-full w-5 h-5 mx-1"><b>!</b></div>
-                    </div>
-                @endif
-                @if (session()->has('successfull_message'))
-                    <div class="bg-green-500 bg-opacity-20 border-l-8 border-green-600 text-green-500 p-2 mb-1">
-                        {{ session('successfull_message') }} <span class="text-green-500">&#10003</span>
-                    </div>
-                @endif
-                @if (session()->has('unsuccessfull_message'))
-                    <div class="bg-red-500 bg-opacity-20 border-l-8 border-red-700 border-opacity-90 text-red-600 text-opacity-80 p-2 mb-1">
-                        {{ session('unsuccessfull_message') }} <span class="text-red-600">&#10005</span>
-                    </div>
-                @endif
+            <div class="flex flex-col pt-1">
+                <div class="p-0 mb-1" wire:loading wire:target="update">
+                    <div class="text-blue-400 i nline-block border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Updating The Task ...</div>
+                </div>
+                <div class="p-0 mb-1" wire:loading wire:target="store">
+                    <div class="text-blue-400 i nline-block border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Adding The Task ...</div>
+                </div>
+                <div class="p-0 mb-1" wire:loading>
+                    <div class="text-blue-400 i nline-block border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Re-Rendering ...</div>
+                </div>
+                <div>
+                    @if (session()->has('store_validator_fail'))
+                        <div class="bg-yellow-500 bg-opacity-20 border-l-8 border-yellow-600 text-yellow-500 p-2 mb-1">
+                            {{ session('store_validator_fail') }} <div class="text-yellow-500 inline-flex justify-center items-center border-2 border-yellow-500 rounded-full w-5 h-5 mx-1"><b>!</b></div>
+                        </div>
+                    @endif
+                    @if (session()->has('update_validator_fail'))
+                        <div class="bg-yellow-500 bg-opacity-20 border-l-8 border-yellow-600 text-yellow-500 p-2 mb-1">
+                            {{ session('update_validator_fail') }} <div class="text-yellow-500 inline-flex justify-center items-center border-2 border-yellow-500 rounded-full w-5 h-5 mx-1"><b>!</b></div>
+                        </div>
+                    @endif
+                    @if (session()->has('successfull_message'))
+                        <div class="bg-green-500 bg-opacity-20 border-l-8 border-green-600 text-green-500 p-2 mb-1">
+                            {{ session('successfull_message') }} <span class="text-green-500">&#10003</span>
+                        </div>
+                    @endif
+                    @if (session()->has('unsuccessfull_message'))
+                        <div class="bg-red-500 bg-opacity-20 border-l-8 border-red-700 border-opacity-90 text-red-600 text-opacity-80 p-2 mb-1">
+                            {{ session('unsuccessfull_message') }} <span class="text-red-600">&#10005</span>
+                        </div>
+                    @endif
+                </div>
             </div>
             {{-- Loading State Animations END --}}
         </div>
@@ -466,12 +469,13 @@
             document.getElementById("taskDescription").dispatchEvent(new Event('input'));
         });
 
-        $('#setNowTime').on('click',function(){
+        $('#setNowTime').on('click', function() {
             let newDate = new Date();
-            $('#startingTimepoint').val(newDate.getHours()+ ":" +newDate.getMinutes());
-            $('#endingTimepoint').val(newDate.getHours()+ ":" +newDate.getMinutes());
-            $('#startingTimepoint_unix').val((newDate.getTime()).toString().substring(0,10));
-            $('#endingTimepoint_unix').val((newDate.getTime()).toString().substring(0,10));
+            ("0" + currentHours).slice(-2)
+            $('#startingTimepoint').val(("0" + newDate.getHours()).slice(-2) + ":" + ("0" + newDate.getMinutes()).slice(-2));
+            $('#endingTimepoint').val(("0" + newDate.getHours()).slice(-2) + ":" + ("0" + newDate.getMinutes()).slice(-2));
+            $('#startingTimepoint_unix').val((newDate.getTime()).toString().substring(0, 10));
+            $('#endingTimepoint_unix').val((newDate.getTime()).toString().substring(0, 10));
             setFullDuration();
         });
     </script>
