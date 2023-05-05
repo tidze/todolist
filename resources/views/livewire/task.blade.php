@@ -11,6 +11,8 @@
         {{-- startingDatepoint= <span class="text-amber-100">{{ $startingDatepoint ?? 'Not set'}}</span><br> --}}
         {{-- endingDatepoint= <span class="text-amber-100">{{ $endingDatepoint ?? 'Not set'}}</span><br> --}}
         {{-- targetTaskIdEdit= <span class="text-amber-100">{{ $targetTaskIdEdit??'Not set' }}</span><br> --}}
+        {{-- category_distinct_desc= <span class="text-amber-100">{{ print_r($category_distinct_desc)??'Not set' }}</span><br> --}}
+        {{-- category_description_distinct_desc= <span class="text-amber-100">{{ print_r($category_description_distinct_desc)??'Not set' }}</span><br> --}}
         {{-- taskDone= <span class="text-amber-100">{{ $taskDone ?? 'Not set' }}</span><br> --}}
         {{-- detector= <span class="text-amber-100">{{ $detector??'Not Set' }}</span><br> --}}
         {{-- date_default_timezone_get=<span class="text-amber-100">{{ date_default_timezone_get() }}</span><br> --}}
@@ -124,7 +126,7 @@
 
                 {{-- Component `Select Category` --}}
                 <div class="flex w-full overflow-auto pb-2">
-                    @foreach ($category_Distinct as $category)
+                    @foreach ($category_distinct_desc as $category)
                         <div class="py-1 px-2 border border-l-4 border-white text-white cursor-pointer rounded-lg mr-1 select-none whitespace-nowrap categoryAutoSetter" style="">{{ $category->category }}
                         </div>
                     @endforeach
@@ -143,7 +145,7 @@
 
                 {{-- Component `Select Description` --}}
                 <div class="flex w-full overflow-auto pb-2">
-                    @foreach ($allCategories as $category)
+                    @foreach ($category_description_distinct_desc as $category)
                         <div class="py-1 px-2 border border-l-4 border-l-transparent cursor-pointer rounded-lg mr-1 select-none whitespace-nowrap descriptionAutoSetter"
                             style="border-color:{{ $category->color }};color:{{ $category->color }}">
                             {{ $category->description }}</div>
@@ -289,7 +291,7 @@
 
 @push('script')
     <script>
-        console.log('Task Script Loaded.')
+        // console.log('Task Script Loaded.')
         const date1 = new Date();
 
         Livewire.hook('component.initialized', (component) => {
@@ -471,7 +473,6 @@
 
         $('#setNowTime').on('click', function() {
             let newDate = new Date();
-            ("0" + currentHours).slice(-2)
             $('#startingTimepoint').val(("0" + newDate.getHours()).slice(-2) + ":" + ("0" + newDate.getMinutes()).slice(-2));
             $('#endingTimepoint').val(("0" + newDate.getHours()).slice(-2) + ":" + ("0" + newDate.getMinutes()).slice(-2));
             $('#startingTimepoint_unix').val((newDate.getTime()).toString().substring(0, 10));

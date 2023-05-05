@@ -41,3 +41,22 @@
     "css.validate": false,
     "editor.inlineSuggest.enabled": true,
     "tailwindCSS.emmetCompletions": true,
+
+
+
+Here are some name suggestions for your task and time-tracking web application:
+
+TaskTrack
+TimeStack
+DayPlanr
+WorkWatch
+TimeWise
+TaskTempo
+DaySprint
+TimePilot
+TaskChrono
+PlanPacer
+
+SELECT category_id, COUNT(`category_id`) FROM `tasks` WHERE `user_id` = 2 GROUP BY category_id;
+SELECT category_id, COUNT(`category_id`) FROM `tasks` WHERE `user_id` = 2 GROUP BY category_id
+ORDER BY `COUNT(``category_id``)` DESC

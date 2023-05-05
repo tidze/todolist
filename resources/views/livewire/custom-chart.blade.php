@@ -235,7 +235,7 @@
 
 @push('script')
     <script>
-        console.log('CustomChart Script Loaded.')
+        // console.log('CustomChart Script Loaded.')
         Livewire.hook('component.initialized', (component) => {
             $('#c_startingHourpoint').clockTimePicker({
                 autosize: true,

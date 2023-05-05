@@ -55,14 +55,28 @@ class Task extends Component
 
     public function render()
     {
+        // dd(DB::table('tasks')
+        // ->join('categories', 'tasks.category_id', '=', 'categories.id')
+        // ->select('categories.description', 'categories.color', DB::raw('COUNT(*) as count'))
+        // ->where('tasks.user_id', 2)
+        // ->groupBy('categories.color', 'categories.description')
+        // ->orderByDesc('count')
+        // ->get()->toArray());
         return view('livewire.task', [
-            'allCategories' => DB::table('categories')
-                ->select('categories.category', 'categories.description', 'categories.color')
-                ->where('user_id', Auth::user()->id)
-                ->orderByDesc('id')
-                ->get()
-                ->toArray(),
-            'category_Distinct' => DB::table('categories')->where('user_id', Auth::user()->id)->distinct()->select('category')->get(),
+            'category_distinct_desc' => DB::table('tasks')
+            ->join('categories', 'tasks.category_id', '=', 'categories.id')
+            ->select('categories.category', DB::raw('COUNT(*) as count'))
+            ->where('tasks.user_id', Auth::user()->id)
+            ->groupBy('categories.category')
+            ->orderByDesc('count')
+            ->get()->toArray(),
+            'category_description_distinct_desc' => DB::table('tasks')
+                        ->join('categories', 'tasks.category_id', '=', 'categories.id')
+                        ->select('categories.description', 'categories.color', DB::raw('COUNT(*) as count'))
+                        ->where('tasks.user_id', Auth::user()->id)
+                        ->groupBy('categories.color', 'categories.description')
+                        ->orderByDesc('count')
+                        ->get()->toArray()
         ]);
     }
 
