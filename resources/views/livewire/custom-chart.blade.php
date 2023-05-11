@@ -10,7 +10,7 @@
         {{-- $c_endingHourpoint = <span class="text-yellow-100">{{ isset($c_endingHourpoint) ? $c_endingHourpoint : 'Not Set' }}</span><br> --}}
         {{-- $c_targetTaskIdForEdit = <span class="text-yellow-100">{{ isset($c_targetTaskIdForEdit) ? $c_targetTaskIdForEdit : 'Not Set' }}</span><br> --}}
         {{-- $now = <span class="text-yellow-100">{{ var_dump($now) }}</span><br> --}}
-        {{-- $c_tasksGraphArray --> =<pre class="text-yellow-100">{{ isset($c_tasksGraphArray) ? print_r($c_tasksGraphArray) : 'Not Set' }}</pre><br> --}}
+        $c_tasksGraphArray --> =<pre class="text-yellow-100">{{ isset($c_tasksGraphArray) ? print_r($c_tasksGraphArray) : 'Not Set' }}</pre><br>
         {{-- $c_flattened --> =<span class="text-yellow-100">{{ isset($c_flattened) ? print_r($c_flattened) : 'Not Set' }}</span><br> --}}
         {{-- $flattened = <span class="text-yellow-100">{{ var_dump($flattened) }}</span><br> --}}
         {{-- timezone= <span class="text-yellow-100">{{ $timezone ?? 'Not Set' }}</span><br> --}}
