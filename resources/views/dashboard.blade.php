@@ -16,26 +16,26 @@
     </div>
 
 
-    <div class="sm:w-[500px] sm:ml-auto sm:mr-auto sm:block pb-4">
+    <div class="sm:w-[500px] sm:ml-auto sm:mr-auto sm:block pb-4 ">
 
         {{-- {{ public_path() }}<br> --}}
         {{-- {{ base_path() }}<br> --}}
         {{-- {{ storage_path() }}<br> --}}
         {{-- {{ app_path() }}<br> --}}
+        <div>
+            @livewire('task')
+            @livewire('tasks-table')
+        </div>
 
-        @livewire('task')
+        <div>
+            @livewire('category-color')
+            @livewire('custom-chart')
+        </div>
 
-        @livewire('tasks-table')
-
-        @livewire('category-color')
-
-        @livewire('custom-chart')
-
-        @livewire('custom-graph-x')
-
-        {{-- @yield('content') --}}
-
-        @include('layouts.footer')
+        <div>
+            @livewire('custom-graph-x')
+        </div>
 
     </div>
+    @include('layouts.footer')
 </x-app-layout>

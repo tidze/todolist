@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Category;
 use DateInterval;
 use DateTime;
 use DateTimeZone;
@@ -21,7 +22,7 @@ class CustomChart extends Component
     public $c_startingHourpoint;
     public $c_endingHourpoint;
 
-    public $c_tasksGraphArray;
+    public $dailyTasks;
     public $c_flattened;
 
     public $is_date_different;
@@ -31,6 +32,8 @@ class CustomChart extends Component
     public $now = [];
 
     protected $listeners = ['getTask', 'targetTaskIdSetter'];
+
+    public $taskSumOfDurations;
 
     public function mount()
     {
@@ -64,7 +67,7 @@ class CustomChart extends Component
 
     public function flattenTasksGraph()
     {
-        if (isset($this->c_tasksGraphArray)) {
+        if (isset($this->dailyTasks)) {
             if ($this->c_flattened) {
                 $this->calcTaskTopOffset();
 
@@ -78,7 +81,7 @@ class CustomChart extends Component
             }
             $this->toggleFlattened();
         } else {
-            dd('c_tasksGraphArray is not set!');
+            dd('dailyTasks is not set!');
         }
     }
 
@@ -89,25 +92,25 @@ class CustomChart extends Component
 
     public function setTopOffsetToZero()
     {
-        foreach ($this->c_tasksGraphArray as &$task) {
+        foreach ($this->dailyTasks as &$task) {
             $task['top'] = 'top:0';
         }
     }
     public function setTaskPositionType()
     {
-        foreach ($this->c_tasksGraphArray as &$task) {
+        foreach ($this->dailyTasks as &$task) {
             $task['position'] = ($this->c_flattened ? 'absolute' : 'relative');
         }
     }
     public function setTaskTranslateType()
     {
-        foreach ($this->c_tasksGraphArray as &$task) {
+        foreach ($this->dailyTasks as &$task) {
             $task['translate'] = ($this->c_flattened ? '' : 'translate-y-full');
         }
     }
     public function calcTaskHeight()
     {
-        foreach ($this->c_tasksGraphArray as &$task) {
+        foreach ($this->dailyTasks as &$task) {
             $task = json_decode(json_encode($task), true);
             $deltaForNumerator = abs(
                 substr($task['ending_time'], 0, 10)
@@ -138,7 +141,7 @@ class CustomChart extends Component
     }
     public function calcTaskTopOffset()
     {
-        foreach ($this->c_tasksGraphArray as &$task) {
+        foreach ($this->dailyTasks as &$task) {
             $task = json_decode(json_encode($task), true);
             $deltaForNumerator = abs(
                 substr($this->c_startingDatepoint_unix, 0, 10)
@@ -170,7 +173,7 @@ class CustomChart extends Component
 
         (is_null($this->c_startingDatepoint_unix) || is_null($this->c_endingDatepoint_unix)) ?
             dd('Parameter has not been found!') :
-            $this->c_tasksGraphArray = DB::table('tasks')
+            $this->dailyTasks = DB::table('tasks')
             ->select('tasks.*', 'categories.category', 'categories.description', 'categories.color')
             ->join('categories', 'tasks.category_id', '=', 'categories.id')
             ->where('tasks.user_id', Auth::user()->id)
@@ -178,10 +181,38 @@ class CustomChart extends Component
             ->where('starting_time', '<', substr($this->c_endingDatepoint_unix, 0, 10))
             ->orderBy('starting_time')
             ->get()->toArray();
+
+        // Sort dailyTasks By their Category
+        $uniqueCategories = array_unique(array_column($this->dailyTasks, 'category'), SORT_REGULAR);
+        $tasksSortedByCategory = [];
+        foreach ($uniqueCategories as $uniqueCategory) {
+            foreach ($this->dailyTasks as $key => $task) {
+                if ($task->category == $uniqueCategory) {
+                    $tasksSortedByCategory[$uniqueCategory][$key] = $task;
+                }
+            }
+        }
+
+        // Calculate duration for each task
+        $tasksDuration = [];
+        foreach ($tasksSortedByCategory as $categoryIndex => $array) {
+            foreach ($array as $taskIndex => $task) {
+                $tasksDuration[$categoryIndex][$taskIndex] = abs($task->ending_time - $task->starting_time);
+            }
+        }
+
+        $taskSumOfDurations = [];
+        foreach ($tasksDuration as $categoryIndex => $array) {
+            $taskSumOfDurations[$categoryIndex] = array_sum($array);
+        }
+
+        arsort($taskSumOfDurations);
+        $this->taskSumOfDurations = $taskSumOfDurations;
+
         $this->calcTaskHeight();
         // You may wonder: Why did I add this custom made foreach loop, while I could have used the `setTaskPositionType()`?
         // Because of the initial state and timeline. The timeline does not match the correct corresponding according to the `c_flattened :bool`
-        foreach ($this->c_tasksGraphArray as &$task) {
+        foreach ($this->dailyTasks as &$task) {
             $task['position'] = 'absolute';
         }
         $this->calcTaskTopOffset();

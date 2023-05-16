@@ -1,4 +1,5 @@
 <div class="relative border-4 border-yellow-900 box-border text-white text-[10px]">
+      <div wire:loading class="bg-blue-400 bg-opacity-30 animate-pulse absolute w-full h-full"></div>
     {{-- Components Debugger Information --}}
     <div class="text-yellow-500 text-[11px] w-full">
         {{-- date_default_timezone_get=<span class="text-amber-100">{{ date_default_timezone_get() }}</span><br> --}}
@@ -10,7 +11,8 @@
         {{-- $c_endingHourpoint = <span class="text-yellow-100">{{ isset($c_endingHourpoint) ? $c_endingHourpoint : 'Not Set' }}</span><br> --}}
         {{-- $c_targetTaskIdForEdit = <span class="text-yellow-100">{{ isset($c_targetTaskIdForEdit) ? $c_targetTaskIdForEdit : 'Not Set' }}</span><br> --}}
         {{-- $now = <span class="text-yellow-100">{{ var_dump($now) }}</span><br> --}}
-        $c_tasksGraphArray --> =<pre class="text-yellow-100">{{ isset($c_tasksGraphArray) ? print_r($c_tasksGraphArray) : 'Not Set' }}</pre><br>
+        {{-- $dailyTasks --> =<pre class="text-yellow-100">{{ isset($dailyTasks) ? print_r($dailyTasks) : 'Not Set' }}</pre><br> --}}
+        {{-- $taskSumOfDurations = <span class="text-yellow-100">{{ print_r($taskSumOfDurations) }}</span><br> --}}
         {{-- $c_flattened --> =<span class="text-yellow-100">{{ isset($c_flattened) ? print_r($c_flattened) : 'Not Set' }}</span><br> --}}
         {{-- $flattened = <span class="text-yellow-100">{{ var_dump($flattened) }}</span><br> --}}
         {{-- timezone= <span class="text-yellow-100">{{ $timezone ?? 'Not Set' }}</span><br> --}}
@@ -73,43 +75,41 @@
                 wire:click="getTask">
                 Daily Report</button>
             <button id="c_flattenTasksGraph"
-                class="flex-1 px-3 py-3 m-1 text-center text-sm font-medium text-gray-900
-                focus:outline-none bg-white border border-gray-200 rounded-xl
-              hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4
-              focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800
-              dark:text-gray-400 dark:border-gray-600 dark:hover:text-white
-              dark:hover:bg-gray-700"
-                wire:click="flattenTasksGraph">
+                class="flex-1 px-3 py-3 m-1 text-center text-sm font-medium text-gray-500
+                bg-white border border-gray-200 rounded-xl
+
+              dark:text-gray-400 dark:border-gray-600" wire:click=""
+                disabled>
                 Flat
             </button>
             <button id=""
-                class="flex-1 px-3 py-3 m-1 text-center text-sm font-medium text-gray-900
-                focus:outline-none bg-white border border-gray-200 rounded-xl
-              hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4
-              focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800
-              dark:text-gray-400 dark:border-gray-600 dark:hover:text-white
-              dark:hover:bg-gray-700"
-                wire:click="getTimeAndDate">
+                class="flex-1 px-3 py-3 m-1 text-center text-sm font-medium text-gray-500
+                bg-white border border-gray-200 rounded-xl
+
+              dark:text-gray-400 dark:border-gray-600" wire:click=""
+                disabled>
                 getTimeAndDate
             </button>
         </div>
 
+
+
         {{-- Loading Animation For When Http Request is happening. --}}
-        <div class="p-1" wire:loading>
-            <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Re-Rendering ...</div>
-        </div>
-        <div class="p-1" wire:loading wire:target="getTask">
-            <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Loading Custom Graph ...</div>
-        </div>
-        <div class="p-1" wire:loading wire:target="flattenTasksGraph">
-            <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Flattening Tasks ...</div>
-        </div>
-        <div class="p-1" wire:loading wire:target="prevPeriod">
-            <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Going Previous Period ...</div>
-        </div>
-        <div class="p-1" wire:loading wire:target="nextPeriod">
-            <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Going Next Period ...</div>
-        </div>
+        {{-- <div class="p-1" wire:loading> --}}
+            {{-- <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Re-Rendering ...</div> --}}
+        {{-- </div> --}}
+        {{-- <div class="p-1" wire:loading wire:target="getTask"> --}}
+            {{-- <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Loading Custom Graph ...</div> --}}
+        {{-- </div> --}}
+        {{-- <div class="p-1" wire:loading wire:target="flattenTasksGraph"> --}}
+            {{-- <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Flattening Tasks ...</div> --}}
+        {{-- </div> --}}
+        {{-- <div class="p-1" wire:loading wire:target="prevPeriod"> --}}
+            {{-- <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Going Previous Period ...</div> --}}
+        {{-- </div> --}}
+        {{-- <div class="p-1" wire:loading wire:target="nextPeriod"> --}}
+            {{-- <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Going Next Period ...</div> --}}
+        {{-- </div> --}}
     </div>
     {{-- Dayily Graph Chart --}}
     <div class="flex flex-col">
@@ -146,7 +146,7 @@
 
 
                     {{-- Now Indicator --}}
-                    <div class="box-border absolute flex border-t border-t-yellow-400 w-[125%] -translate-x-[20%] " style="{{ $now['top'] }};visibility:{{$now['visible']}}">
+                    <div class="box-border absolute flex border-t border-t-yellow-400 w-[125%] -translate-x-[20%] " style="{{ $now['top'] }};visibility:{{ $now['visible'] }}">
                         <div class="box-border flex justify-between bg-gray-500 bg-opacity-60 rounded-sm text-[12px]">
                             <div class="px-2">{{ date('H:i', $now['unix'] + 12600) }}</div>
                         </div>
@@ -164,9 +164,9 @@
                     </div>
 
 
-                    @isset($c_tasksGraphArray)
+                    @isset($dailyTasks)
 
-                        @foreach ($c_tasksGraphArray as $_task)
+                        @foreach ($dailyTasks as $_task)
                             @if ($_task['done'])
                                 <div class="
                                     flex
@@ -200,7 +200,7 @@
                             @endif
 
                             {{-- The Starting point is 100% off by Y Axis so i added translate transform --}}
-                            {{-- I don't know why, but the @class needs to be before the class="". (because the if statement not going to work otherwise) --}}
+                            {{-- I don't know why, but the @class needs to be before the class="". (because the `if statement` not going to work otherwise) --}}
                             <div @if ($c_targetTaskIdForEdit_ == $_task['id']) @class(['bg-white','bg-opacity-50' ,'w-full', 'h-full','cursor-pointer']) @endif class="w-full h-full cursor-pointer"
                                 wire:click="edit({{ $_task['id'] }})"></div>
 
@@ -227,9 +227,17 @@
                     </div>
                     @endforeach
                 @endisset
+
             </div>
         </div>
     </div>
+
+    {{-- TasksCategory Duration --}}
+    @isset($taskSumOfDurations)
+        @foreach ($taskSumOfDurations as $category => $duration)
+            <div class="text-sm">{{ $category }} <span class="text-amber-400">{{ substr($duration / 3600, 0, 3) }}</span> h </div>
+        @endforeach
+    @endisset
 </div>
 </div>
 
