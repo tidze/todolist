@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="robots" content="noindex">
 
-    <title>{{env('APP_NAME')}}</title>
+    <title>{{ env('APP_NAME') }}</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
@@ -59,13 +59,16 @@
         @include('layouts.navigation')
 
         <!-- Page Heading -->
-        @if (isset($header))
-            <header class="bg-white dark:bg-gray-800 shadow">
-                <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
-                    {{ $header }}
-                </div>
-            </header>
-        @endif
+        {{-- @if (isset($header)) --}}
+        {{-- <header class="bg-white dark:bg-gray-800 shadow"> --}}
+        {{-- <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8"> --}}
+        {{-- {{ $header }} --}}
+        {{-- </div> --}}
+        {{-- </header> --}}
+        {{-- @endif --}}
+        <div class="bg-gray-800 text-white max-w-6xl mx-auto lg:px-0 mb-1">
+            <div class="text-yellow-400 border-yellow-700 border-l-8 p-2 bg-yellow-400 bg-opacity-30">Welcome <span class="text-white">{{ Auth::user()->name }}</span> !</div>
+        </div>
 
         <!-- Page Content -->
         <main>

@@ -9,6 +9,8 @@ use DateTimeZone;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Illuminate\Support\Facades\DB;
+use App\Models\Task as TaskModel;
+
 
 class CustomChart extends Component
 {
@@ -34,6 +36,8 @@ class CustomChart extends Component
     protected $listeners = ['getTask', 'targetTaskIdSetter'];
 
     public $taskSumOfDurations;
+
+    public $confirming;
 
     public function mount()
     {
@@ -274,7 +278,7 @@ class CustomChart extends Component
     {
         $this->targetTaskIdSetter($id);
         $this->emitTo('task', 'editTask', $id);
-        $this->emitTo('tasks-table', 'targetTaskIdSetter', $id);
+        // $this->emitTo('tasks-table', 'targetTaskIdSetter', $id);
     }
 
     public function targetTaskIdSetter($id)
@@ -322,5 +326,20 @@ class CustomChart extends Component
             $this->now['visible'] = 'hidden';
         }
         // dd($this->now, $this->c_startingDatepoint_unix, $this->c_endingDatepoint_unix);
+    }
+
+    public function confirmDelete($id)
+    {
+        $this->confirming = $id;
+    }
+
+    public function deleteTask($id)
+    {
+        // Alternatively, you can use the get() method to retrieve all matching rows and then use the ->first() method on the resulting collection to get the first item
+        // DB::table('tasks')->where('id', $id)->delete();
+        TaskModel::findOrFail($id)->delete();
+        // Later. This is not optimiezed. The funcions are not minimized enough. Just a whole chunk of funtions running again that even may not need to run twice.
+        $this->getTask();
+
     }
 }

@@ -6,7 +6,7 @@
     </span>
     <br>
     <span>
-        jquery-clock-timepicker
+        Used libraries : jquery-clock-timepicker
     </span>
     <a class="text-blue-600 hover:underline" href="https://github.com/loebi-ch/jquery-clock-timepicker">github</a>
     <br>

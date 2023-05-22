@@ -1,5 +1,5 @@
-<div class="relative border-4 border-yellow-900 box-border text-white text-[10px]">
-      <div wire:loading class="bg-blue-400 bg-opacity-30 animate-pulse absolute w-full h-full"></div>
+<div class="relative border-4 border-yellow-700 box-border text-white text-[10px]">
+    <div wire:loading class="bg-blue-400 bg-opacity-30 animate-pulse absolute w-full h-full"></div>
     {{-- Components Debugger Information --}}
     <div class="text-yellow-500 text-[11px] w-full">
         {{-- date_default_timezone_get=<span class="text-amber-100">{{ date_default_timezone_get() }}</span><br> --}}
@@ -66,7 +66,7 @@
 
         <div class="flex flex-row">
             <button
-                class="flex-1 px-3 py-3 m-1 text-center text-sm font-medium text-gray-900
+                class="flex-1 px-3 py-2 m-1 text-center text-sm font-medium text-gray-900
             focus:outline-none bg-white border border-gray-200 rounded-xl
           hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4
           focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800
@@ -74,41 +74,38 @@
           dark:hover:bg-gray-700"
                 wire:click="getTask">
                 Daily Report</button>
-            <button id="c_flattenTasksGraph"
+            {{-- <button id="c_flattenTasksGraph"
                 class="flex-1 px-3 py-3 m-1 text-center text-sm font-medium text-gray-500
                 bg-white border border-gray-200 rounded-xl
-
-              dark:text-gray-400 dark:border-gray-600" wire:click=""
-                disabled>
+                dark:text-gray-400 dark:border-gray-600"
+                wire:click="flattenTasksGraph">
                 Flat
-            </button>
-            <button id=""
+            </button> --}}
+            {{-- <button id=""
                 class="flex-1 px-3 py-3 m-1 text-center text-sm font-medium text-gray-500
                 bg-white border border-gray-200 rounded-xl
 
               dark:text-gray-400 dark:border-gray-600" wire:click=""
                 disabled>
                 getTimeAndDate
-            </button>
+            </button> --}}
         </div>
-
-
 
         {{-- Loading Animation For When Http Request is happening. --}}
         {{-- <div class="p-1" wire:loading> --}}
-            {{-- <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Re-Rendering ...</div> --}}
+        {{-- <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Re-Rendering ...</div> --}}
         {{-- </div> --}}
         {{-- <div class="p-1" wire:loading wire:target="getTask"> --}}
-            {{-- <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Loading Custom Graph ...</div> --}}
+        {{-- <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Loading Custom Graph ...</div> --}}
         {{-- </div> --}}
         {{-- <div class="p-1" wire:loading wire:target="flattenTasksGraph"> --}}
-            {{-- <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Flattening Tasks ...</div> --}}
+        {{-- <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Flattening Tasks ...</div> --}}
         {{-- </div> --}}
         {{-- <div class="p-1" wire:loading wire:target="prevPeriod"> --}}
-            {{-- <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Going Previous Period ...</div> --}}
+        {{-- <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Going Previous Period ...</div> --}}
         {{-- </div> --}}
         {{-- <div class="p-1" wire:loading wire:target="nextPeriod"> --}}
-            {{-- <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Going Next Period ...</div> --}}
+        {{-- <div class="text-blue-400 border-blue-700 border-l-8 p-2 bg-blue-400 bg-opacity-30 animate-pulse">Going Next Period ...</div> --}}
         {{-- </div> --}}
     </div>
     {{-- Dayily Graph Chart --}}
@@ -198,7 +195,21 @@
                                     {{ $_task['height'] ?? '' }};
                                     border-color: rgb(126, 126, 126)">
                             @endif
-
+                            <div class="absolute right-0 translate-x-full border-t border-yellow-500">
+                                @if ($confirming === $_task['id'])
+                                <div class="w-5 h-5 ml-1 translate-x-1/2 border border-teal-600 bg-teal-500 bg-opacity-20 text-teal-500
+                                rounded-full cursor-pointer inline-flex justify-center items-center hover:bg-opacity-40 hover:font-bold"
+                                wire:click="deleteTask({{$_task['id']}})">
+                                    &#10003 ?
+                                </div>
+                                @else
+                                <div class="w-5 h-5 ml-1 translate-x-1/2 border border-yellow-600 bg-yellow-500 bg-opacity-20 text-yellow-500
+                                rounded-full cursor-pointer inline-flex justify-center items-center hover:bg-opacity-40 hover:font-bold"
+                                wire:click="confirmDelete({{$_task['id']}})">
+                                    &#10005
+                                </div>
+                                @endif
+                            </div>
                             {{-- The Starting point is 100% off by Y Axis so i added translate transform --}}
                             {{-- I don't know why, but the @class needs to be before the class="". (because the `if statement` not going to work otherwise) --}}
                             <div @if ($c_targetTaskIdForEdit_ == $_task['id']) @class(['bg-white','bg-opacity-50' ,'w-full', 'h-full','cursor-pointer']) @endif class="w-full h-full cursor-pointer"

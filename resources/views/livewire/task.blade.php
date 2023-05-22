@@ -1,4 +1,4 @@
-<div class="relative border-4 border-white-300 flex flex-col text-white p-1 pb-0">
+<div class="relative border-4 border-white flex flex-col text-white p-1 pb-0">
     <div wire:loading class="bg-blue-400 bg-opacity-30 animate-pulse absolute w-full h-full z-0 -m-1"></div>
 
     <div class="relative z-50">

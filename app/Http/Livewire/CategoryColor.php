@@ -54,7 +54,7 @@ class CategoryColor extends Component
             ]);
 
         // Refresh the `tasks-table.blade.php`
-        $this->emitTo('tasks-table','$refresh');
+        // $this->emitTo('tasks-table','$refresh');
         if($update){
             session()->flash('successfull_message', 'Category Updated Successfully');
         }else{
