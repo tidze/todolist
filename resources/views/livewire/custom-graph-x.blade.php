@@ -12,7 +12,8 @@
                 {{-- $x_startingHour = <span class="text-teal-100">{{ isset($x_startingHour) ? $x_startingHour : 'Not Set' }}</span><br> --}}
                 {{-- $x_endingHour = <span class="text-teal-100">{{ isset($x_endingHour) ? $x_endingHour : 'Not Set' }}</span><br> --}}
                 {{-- $x_tasksGraphArray --> = <pre class="text-teal-100 text-[10px]">{{ isset($x_tasksGraphArray) ? print_r($x_tasksGraphArray) : 'Not Set' }}</pre><br> --}}
-                {{-- $x_seperatedTasks --> =''  <pre class="text-teal-100 text-[10px]">{{ isset($x_seperatedTasks) ? print_r($x_seperatedTasks) : 'Not Set' }}</pre><br> --}}
+                {{-- $seperatedTasksByDay --> =''  <pre class="text-teal-100 text-[10px]">{{ isset($seperatedTasksByDay) ? print_r($seperatedTasksByDay) : 'Not Set' }}</pre><br> --}}
+                {{-- $seperatedCategoriesByDay_Sum --> =''  <pre class="text-teal-100 text-[10px]">{{ isset($seperatedCategoriesByDay_Sum) ? print_r($seperatedCategoriesByDay_Sum) : 'Not Set' }}</pre><br> --}}
                 {{-- $x_flattened = <span class="text-teal-100">{{ var_dump($x_flattened) }}</span><br> --}}
             </p>
             <div class="relative z-20 flex flex-col items-center text-white">
@@ -71,18 +72,19 @@
             hover:bg-yellow-500 hover:text-black cursor-pointer" wire:click="x_flattenTasksGraph">
             Flat
         </div> --}}
-            @isset($x_seperatedTasks)
-                @foreach ($x_seperatedTasks as $index => $tasksOfDay)
+            @isset($seperatedTasksByDay)
+                @foreach ($seperatedTasksByDay as $day => $tasksOfDay)
                     <div class="border-2 border-cyan-900 h-[6vh] flex flex-row relative right-0 box-border border-opacity-100 w-full">
                         <div class="flex flex-row w-full">
-                            <div class="text-[10px] text-green-400">{{ date('Y-m-d', substr($x_startingDatepoint_unix, 0, 10) + 12600 + 86400 * (count($x_seperatedTasks) - ($index + 1))) }}</div>
+                            <div class="text-[10px] text-green-400">{{ date('Y-m-d', substr($x_startingDatepoint_unix, 0, 10) + 12600 + 86400 * (count($seperatedTasksByDay) - ($day + 1))) }}</div>
                             <pre> </pre>
-                            <div class="text-[10px] text-teal-400">{{ date('H:i', substr($x_startingDatepoint_unix, 0, 10) + 12600 + 86400 * ($index + 1)) }}</div>
-                            <div class="ml-auto text-[10px] text-green-400">{{ date('Y-m-d', substr($x_endingDatepoint_unix, 0, 10) + 12600 + 86400 * -$index) }}</div>
+                            <div class="text-[10px] text-teal-400">{{ date('H:i', substr($x_startingDatepoint_unix, 0, 10) + 12600 + 86400 * ($day + 1)) }}</div>
+                            <div class="ml-auto text-[10px] text-green-400">{{ date('Y-m-d', substr($x_endingDatepoint_unix, 0, 10) + 12600 + 86400 * -$day) }}</div>
                             <pre> </pre>
-                            <div class="text-[10px] text-teal-400" style>{{ date('H:i', substr($x_endingDatepoint_unix, 0, 10) + 12600 + 86400 * -$index) }}</div>
+                            <div class="text-[10px] text-teal-400" style>{{ date('H:i', substr($x_endingDatepoint_unix, 0, 10) + 12600 + 86400 * -$day) }}</div>
                         </div>
-                        @foreach ($tasksOfDay as $index => $_task)
+                        {{-- If the task['done'] is true, then enable grid background. --}}
+                        @foreach ($tasksOfDay as $_task)
                             @if ($_task['done'])
                                 <div class="
                         border
@@ -116,6 +118,19 @@
                             @endif
                         @endforeach
                     </div>
+
+                    <div class="text-white text-[10px] flex justify-start w-full">
+                        @isset($seperatedCategoriesByDay_Sum)
+                            @foreach($seperatedCategoriesByDay_Sum[$day] as $category => $duration)
+                                <div class="">
+                                    <span>{{$category}}</span>
+                                    <span class="text-amber-400">{{substr($duration/60/60,0,4)}}</span> h
+                                    <span>/&nbsp;</span>
+                                </div>
+                            @endforeach
+                        @endisset
+                    </div>
+
                 @endforeach
             @endisset
         </div>

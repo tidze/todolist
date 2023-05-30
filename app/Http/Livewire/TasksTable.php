@@ -26,27 +26,13 @@ class TasksTable extends Component
     {
         // you have to send it through an array after the view
         return view('livewire.tasks-table', [
-            // 'sendBackId' => $this->sendBackId,
-
             'allTasks' => DB::table('tasks')->select('tasks.*', 'categories.category', 'categories.description', 'categories.color')
                 ->join('categories', 'tasks.category_id', '=', 'categories.id')
                 ->where('tasks.user_id', Auth::user()->id)
                 ->orderByDesc('starting_time')
                 ->paginate(5),
             'targetTaskIdEdit' => $this->targetTaskIdEdit,
-
         ]);
-    }
-
-    public function getAllTasks()
-    {
-        // $this->allTasks = TaskModel::select('tasks.*', 'categories.category', 'categories.description')
-        // ->join('categories', 'tasks.category_id', '=', 'categories.id')
-        // ->orderBy('starting_time', 'DESC')
-        // ->paginate(2);
-        // ->items();
-        // $this->allTasks= TaskModel::paginate(2);
-        // dd($this->allTasks);
     }
 
     public function confirmDelete($id)
@@ -57,9 +43,6 @@ class TasksTable extends Component
     public function deleteTask($id)
     {
         TaskModel::findOrFail($id)->delete();
-        // TaskModel::findOrFail($this->deleteId)->delete();
-        // dd($targetTask);
-        // $this->emit('refreshComponent');
     }
 
     public function targetTaskIdSetter($id){

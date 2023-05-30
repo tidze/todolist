@@ -39,17 +39,22 @@ class CustomChart extends Component
 
     public $confirming;
 
+    public $startingDatetime;
+    public $endingDatetime;
+
     public function mount()
     {
         $date = new DateTime();
         $date->setTimezone(new DateTimeZone('asia/tehran'));
-        $date->setTime(7, 30, 0);
+        $date->setTime(7, 0, 0);
+        // $this->startingDatetime = $date;
         $this->c_startingDatepoint_unix = $date->format('U');
         $this->c_startingHourpoint = $date->format('H:i');
         $this->c_startingDate = $date->format('Y-m-d');
 
         $date->add(new DateInterval('P1D'));
         $date->setTime(03, 00, 0);
+        // $this->endingDatetime = $date;
         $this->c_endingDatepoint_unix = $date->format('U');
         $this->c_endingHourpoint = $date->format('H:i');
         $this->c_endingDate = $date->format('Y-m-d');
@@ -212,6 +217,7 @@ class CustomChart extends Component
 
         arsort($taskSumOfDurations);
         $this->taskSumOfDurations = $taskSumOfDurations;
+        // dd($this->taskSumOfDurations);
 
         $this->calcTaskHeight();
         // You may wonder: Why did I add this custom made foreach loop, while I could have used the `setTaskPositionType()`?

@@ -3,7 +3,8 @@
     <div class="relative z-50">
 
         <p class="text-[10px] text-white">
-            {{-- <span>$targetTaskIdEdit = {{isset($targetTaskIdEdit) ? $targetTaskIdEdit : 'Not Set' }}</span> --}}
+            <span>$targetTaskIdEdit = {{isset($targetTaskIdEdit) ? $targetTaskIdEdit : 'Not Set' }}</span><br>
+            <span>$$allTasks = {{isset($$allTasks) ? $allTasks: 'Not Set' }}</span>
         </p>
 
         {{-- Loading State Animations --}}
@@ -82,6 +83,7 @@
                 </thead>
                 <tbody>
 
+                    @isset($allTasks)
                     @foreach ($allTasks as $task)
                         <tr @if ($task->id == $targetTaskIdEdit) @class(['box-border','border','border-indigo-500','bg-gray-900','text-indigo-500','bg-indigo-900','bg-opacity-20']) @endif
                             class="box-border border-b bg-gray-900 border-gray-700 border text-teal-600">
@@ -137,9 +139,13 @@
 
                         </tr>
                     @endforeach
+                    @endisset
+
                 </tbody>
             </table>
         </div>
+        @isset($allTasks)
         {{ $allTasks->links('livewire.pagination-livewire-simple') }}
+        @endisset
     </div>
 </div>

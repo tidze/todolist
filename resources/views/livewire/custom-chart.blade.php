@@ -154,8 +154,6 @@
                                     Now
                                 </div>
                                 {{-- Hour:Minute indicator --}}
-
-
                             </div>
                         </div>
                     </div>
@@ -195,19 +193,21 @@
                                     {{ $_task['height'] ?? '' }};
                                     border-color: rgb(126, 126, 126)">
                             @endif
+
+                            {{-- Close button next to each task for deleting them. --}}
                             <div class="absolute right-0 translate-x-full border-t border-yellow-500">
                                 @if ($confirming === $_task['id'])
-                                <div class="w-5 h-5 ml-1 translate-x-1/2 border border-teal-600 bg-teal-500 bg-opacity-20 text-teal-500
+                                    <div class="text-xs w-6 h-6 -ml-4 translate-x-full -translate-y-1/2 border border-teal-600 bg-teal-500 bg-opacity-20 text-teal-500
                                 rounded-full cursor-pointer inline-flex justify-center items-center hover:bg-opacity-40 hover:font-bold"
-                                wire:click="deleteTask({{$_task['id']}})">
-                                    &#10003 ?
-                                </div>
+                                        wire:click="deleteTask({{ $_task['id'] }})">
+                                        &#10003 ?
+                                    </div>
                                 @else
-                                <div class="w-5 h-5 ml-1 translate-x-1/2 border border-yellow-600 bg-yellow-500 bg-opacity-20 text-yellow-500
+                                    <div class="text-xs w-6 h-6 -ml-4 translate-x-full -translate-y-1/2 border border-yellow-600 bg-yellow-500 bg-opacity-20 text-yellow-500
                                 rounded-full cursor-pointer inline-flex justify-center items-center hover:bg-opacity-40 hover:font-bold"
-                                wire:click="confirmDelete({{$_task['id']}})">
-                                    &#10005
-                                </div>
+                                        wire:click="confirmDelete({{ $_task['id'] }})">
+                                        &#10005
+                                    </div>
                                 @endif
                             </div>
                             {{-- The Starting point is 100% off by Y Axis so i added translate transform --}}
@@ -246,8 +246,49 @@
     {{-- TasksCategory Duration --}}
     @isset($taskSumOfDurations)
         @foreach ($taskSumOfDurations as $category => $duration)
-            <div class="text-sm">{{ $category }} <span class="text-amber-400">{{ substr($duration / 3600, 0, 3) }}</span> h </div>
+            <div class="text-sm">{{ $category }} <span class="text-amber-400">{{ substr($duration / 3600, 0, 4) }}</span> h<span> &nbsp; | &nbsp; </span><span
+                    class="text-amber-600">{{ (substr($duration / 3600, 0, 4) / (($c_endingDatepoint_unix - $c_startingDatepoint_unix) / 60 / 60)) * 100 }}</span> % </div>
         @endforeach
+        @if ($now['visible'] == 'visible')
+            <div class="text-sm">Used <span class="text-amber-400">{{ array_sum($taskSumOfDurations) / 60 / 60 }}</span> h <span> &nbsp; | &nbsp; </span><span
+                    class="text-amber-600">{{ (array_sum($taskSumOfDurations) / 60 / 60 / (($c_endingDatepoint_unix - $c_startingDatepoint_unix) / 60 / 60)) * 100 }}</span> % </div>
+            <div class="text-sm">Remained <span class="text-amber-400">{{ substr((($c_endingDatepoint_unix - $now['unix']) / 60 / 60 - array_sum($taskSumOfDurations) / 60 / 60),0,4) }}</span> h <span> &nbsp; | &nbsp;
+                </span><span
+                    class="text-amber-600">{{
+
+                                substr((($c_endingDatepoint_unix - $now['unix']) /
+                                ($c_endingDatepoint_unix - $c_startingDatepoint_unix)
+                                * 100),0,4)
+
+                            }}</span> %
+            </div>
+            <div class="text-sm">Unknown <span class="text-amber-400">{{
+                    substr(
+                        ($now['unix']
+                        - $c_startingDatepoint_unix
+                        - array_sum($taskSumOfDurations))/60/60
+                        ,0,4)
+                     }}</span> h <span> &nbsp; | &nbsp;
+            </span><span class="text-amber-600">
+                {{
+
+            substr(
+                    (
+                        (
+                            $now['unix']
+                            - $c_startingDatepoint_unix
+                            - array_sum($taskSumOfDurations)
+                        )
+                        /
+                        (
+                            $c_endingDatepoint_unix
+                            -
+                            $c_startingDatepoint_unix
+                        )
+                    ),0,4)
+                }}</span> %
+        </div>
+        @endif
     @endisset
 </div>
 </div>

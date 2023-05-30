@@ -20,7 +20,8 @@ class CustomGraphX extends Component
     public $x_startingDate;
     public $x_endingDate;
     public $x_flattened;
-    public $x_seperatedTasks;
+    public $seperatedTasksByDay;
+    public $seperatedCategoriesByDay_Sum;
 
     public function render()
     {
@@ -37,8 +38,8 @@ class CustomGraphX extends Component
         $this->x_endingHour = $date->format('H:i');
         $this->x_endingDate = $date->format('Y-m-d');
 
-        $date->sub(new DateInterval('P7D'));
-        $date->setTime(7, 30, 0);
+        $date->sub(new DateInterval('P20D'));
+        $date->setTime(7, 0, 0);
         $this->x_startingDatepoint_unix = $date->format('U');
         $this->x_startingHour = $date->format('H:i');
         $this->x_startingDate = $date->format('Y-m-d');
@@ -235,15 +236,77 @@ class CustomGraphX extends Component
         // $task['position'] = 'absolute';
         // }
         $this->x_tasksGraphArray = $this->stdclassToArray($this->x_tasksGraphArray);
-        $this->x_seperatedTasks = $this->seperateTasksIntoDays($this->x_tasksGraphArray, substr($this->x_startingDatepoint_unix, 0, 10), substr($this->x_endingDatepoint_unix, 0, 10));
-        $this->x_seperatedTasks = $this->calcTaskWidthForSeperatedTasks($this->x_seperatedTasks, substr($this->x_startingDatepoint_unix, 0, 10), substr($this->x_endingDatepoint_unix, 0, 10));
-        $this->x_seperatedTasks = $this->calcTaskOffsetForSeperatedTasks($this->x_seperatedTasks, substr($this->x_startingDatepoint_unix, 0, 10), substr($this->x_endingDatepoint_unix, 0, 10));
-        $this->x_seperatedTasks = array_reverse($this->x_seperatedTasks);
-        // dd(DB::table('tasks')
-        // ->where([
-        // ['starting_time', '>=', substr($this->x_startingDatepoint_unix, 0, 10)],
-        // ['starting_time', '<', substr($this->x_endingDatepoint_unix, 0, 10)]
-        // ])->get());
+        $this->seperatedTasksByDay = $this->seperateTasksIntoDays($this->x_tasksGraphArray, substr($this->x_startingDatepoint_unix, 0, 10), substr($this->x_endingDatepoint_unix, 0, 10));
+        $this->seperatedTasksByDay = $this->calcTaskWidthForSeperatedTasks($this->seperatedTasksByDay, substr($this->x_startingDatepoint_unix, 0, 10), substr($this->x_endingDatepoint_unix, 0, 10));
+        $this->seperatedTasksByDay = $this->calcTaskOffsetForSeperatedTasks($this->seperatedTasksByDay, substr($this->x_startingDatepoint_unix, 0, 10), substr($this->x_endingDatepoint_unix, 0, 10));
+        $this->seperatedTasksByDay = array_reverse($this->seperatedTasksByDay);
+
+        // Sort dailyTasks By their Category
+        foreach ($this->seperatedTasksByDay as $outerKey => $innerArray) {
+            if (!empty($innerArray)) {
+                foreach ($innerArray as $innerKey => $task) {
+                    $CategoriesSeperatedByDay[$outerKey] = array_unique(array_column($innerArray, 'category'), SORT_REGULAR);
+                }
+            } else {
+                $CategoriesSeperatedByDay[$outerKey] = []; // Preserve empty array for empty $innerArray
+            }
+        }
+        // Re-index the array
+        foreach ($CategoriesSeperatedByDay as $outerKey => $innerArray) {
+            $CategoriesSeperatedByDay[$outerKey] = array_merge($innerArray);
+        }
+        // Flip the inner array indexes
+        $CategoriesSeperatedByDay_Flipped = [];
+        foreach ($CategoriesSeperatedByDay as $outerKey => $innerArray) {
+            $CategoriesSeperatedByDay_Flipped[$outerKey] = array_flip($innerArray);
+        }
+
+        // group tasks based on their category
+        $seperatedCategoriesByDay = [];
+        $CategoriesSeperatedByDay_Count = count($CategoriesSeperatedByDay);
+        $seperatedTasksByDay_Count = count($this->seperatedTasksByDay);
+
+        for ($i = 0; $i < $CategoriesSeperatedByDay_Count; $i++) {
+            $CategoriesSeperatedByDay_InnerCount = count($CategoriesSeperatedByDay[$i]);
+            $seperatedTasksByDay_InnerCount = count($this->seperatedTasksByDay[$i]);
+
+            if (!empty($CategoriesSeperatedByDay[$i])) {
+                for ($j = 0; $j < $CategoriesSeperatedByDay_InnerCount; $j++) {
+                    for ($k = 0; $k < $seperatedTasksByDay_InnerCount; $k++) {
+                        if (
+                            $CategoriesSeperatedByDay[$i][$j]
+                            ==
+                            $this->seperatedTasksByDay[$i][$k]['category']
+                            )
+                            {
+                                $seperatedCategoriesByDay[$i][$CategoriesSeperatedByDay[$i][$j]][$k] = $this->seperatedTasksByDay[$i][$k]['ending_time']-$this->seperatedTasksByDay[$i][$k]['starting_time'];
+                            }
+                    }
+                }
+            } else {
+                $seperatedCategoriesByDay[$i] = [];
+            }
+        }
+
+        // Calculate the sum
+        $seperatedCategoriesByDay_Sum = [];
+        foreach($seperatedCategoriesByDay as $day=>$category){
+            if(!empty($seperatedCategoriesByDay[$day])){
+                foreach($category as $index=>$tasks){
+                    $seperatedCategoriesByDay_Sum[$day][$index] = array_sum($tasks);
+                }
+            }else{
+                $seperatedCategoriesByDay_Sum[$day] = [];
+            }
+        }
+
+        // Sort by seconds
+        foreach($seperatedCategoriesByDay_Sum as &$categories){
+            arsort($categories);
+        }
+        
+        $this->seperatedCategoriesByDay_Sum = $seperatedCategoriesByDay_Sum;
+        // dd($this->seperatedTasksByDay, $CategoriesSeperatedByDay, $seperatedCategoriesByDay,$seperatedCategoriesByDay_Sum);
     }
 
     public function getTaskForPastSevenDays()
@@ -282,13 +345,13 @@ class CustomGraphX extends Component
         //    $starting_datetime->getTimestamp(),
         // );
         $this->x_tasksGraphArray = $this->stdclassToArray($this->x_tasksGraphArray);
-        $this->x_seperatedTasks = $this->seperateTasksIntoDays($this->x_tasksGraphArray, $starting_datetime->getTimestamp(), $ending_datetime->getTimestamp());
-        $this->x_seperatedTasks = $this->calcTaskWidthForSeperatedTasks($this->x_seperatedTasks, $starting_datetime->getTimestamp(), $ending_datetime->getTimestamp());
-        $this->x_seperatedTasks = $this->calcTaskOffsetForSeperatedTasks($this->x_seperatedTasks, $starting_datetime->getTimestamp(), $ending_datetime->getTimestamp());
-        $this->x_seperatedTasks = array_reverse($this->x_seperatedTasks);
+        $this->seperatedTasksByDay = $this->seperateTasksIntoDays($this->x_tasksGraphArray, $starting_datetime->getTimestamp(), $ending_datetime->getTimestamp());
+        $this->seperatedTasksByDay = $this->calcTaskWidthForSeperatedTasks($this->seperatedTasksByDay, $starting_datetime->getTimestamp(), $ending_datetime->getTimestamp());
+        $this->seperatedTasksByDay = $this->calcTaskOffsetForSeperatedTasks($this->seperatedTasksByDay, $starting_datetime->getTimestamp(), $ending_datetime->getTimestamp());
+        $this->seperatedTasksByDay = array_reverse($this->seperatedTasksByDay);
         $this->x_startingDatepoint_unix = $starting_datetime->getTimestamp();
         $this->x_endingDatepoint_unix = $ending_datetime->getTimestamp();
-        // dd($this->x_seperatedTasks);
+        // dd($this->seperatedTasksByDay);
     }
 
     public function getTaskForPastThirtyDays()
@@ -316,13 +379,13 @@ class CustomGraphX extends Component
             ->orderBy('starting_time', 'desc')
             ->get()->toArray();
         $this->x_tasksGraphArray = $this->stdclassToArray($this->x_tasksGraphArray);
-        $this->x_seperatedTasks = $this->seperateTasksIntoDays($this->x_tasksGraphArray, $starting_datetime->getTimestamp(), $ending_datetime->getTimestamp());
-        $this->x_seperatedTasks = $this->calcTaskWidthForSeperatedTasks($this->x_seperatedTasks, $starting_datetime->getTimestamp(), $ending_datetime->getTimestamp());
-        $this->x_seperatedTasks = $this->calcTaskOffsetForSeperatedTasks($this->x_seperatedTasks, $starting_datetime->getTimestamp(), $ending_datetime->getTimestamp());
-        $this->x_seperatedTasks = array_reverse($this->x_seperatedTasks);
+        $this->seperatedTasksByDay = $this->seperateTasksIntoDays($this->x_tasksGraphArray, $starting_datetime->getTimestamp(), $ending_datetime->getTimestamp());
+        $this->seperatedTasksByDay = $this->calcTaskWidthForSeperatedTasks($this->seperatedTasksByDay, $starting_datetime->getTimestamp(), $ending_datetime->getTimestamp());
+        $this->seperatedTasksByDay = $this->calcTaskOffsetForSeperatedTasks($this->seperatedTasksByDay, $starting_datetime->getTimestamp(), $ending_datetime->getTimestamp());
+        $this->seperatedTasksByDay = array_reverse($this->seperatedTasksByDay);
         $this->x_startingDatepoint_unix = $starting_datetime->getTimestamp();
         $this->x_endingDatepoint_unix = $ending_datetime->getTimestamp();
-        // dd($this->x_seperatedTasks);
+        // dd($this->seperatedTasksByDay);
     }
 
     public function stdclassToArray($array)
