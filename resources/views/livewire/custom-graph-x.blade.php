@@ -119,7 +119,7 @@
                         @endforeach
                     </div>
 
-                    <div class="text-white text-[10px] flex justify-start w-full">
+                    <div class="text-white text-[12px] flex justify-start w-full">
                         @isset($seperatedCategoriesByDay_Sum)
                             @foreach($seperatedCategoriesByDay_Sum[$day] as $category => $duration)
                                 <div class="">

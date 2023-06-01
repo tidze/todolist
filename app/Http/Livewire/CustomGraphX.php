@@ -38,7 +38,7 @@ class CustomGraphX extends Component
         $this->x_endingHour = $date->format('H:i');
         $this->x_endingDate = $date->format('Y-m-d');
 
-        $date->sub(new DateInterval('P20D'));
+        $date->sub(new DateInterval('P8D'));
         $date->setTime(7, 0, 0);
         $this->x_startingDatepoint_unix = $date->format('U');
         $this->x_startingHour = $date->format('H:i');
@@ -304,7 +304,7 @@ class CustomGraphX extends Component
         foreach($seperatedCategoriesByDay_Sum as &$categories){
             arsort($categories);
         }
-        
+
         $this->seperatedCategoriesByDay_Sum = $seperatedCategoriesByDay_Sum;
         // dd($this->seperatedTasksByDay, $CategoriesSeperatedByDay, $seperatedCategoriesByDay,$seperatedCategoriesByDay_Sum);
     }

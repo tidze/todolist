@@ -248,13 +248,13 @@ class CustomChart extends Component
     {
         $date = new DateTime();
         $date->setTimezone(new DateTimeZone('asia/tehran'));
-        $date->setTimestamp($this->c_startingDatepoint_unix);
+        $date->setTimestamp(substr($this->c_startingDatepoint_unix,0,10));
         $date->sub(new DateInterval('P1D'));
         $this->c_startingDatepoint_unix = $date->format('U');
         $this->c_startingHourpoint = $date->format('H:i');
         $this->c_startingDate = $date->format('Y-m-d');
 
-        $date->setTimestamp($this->c_endingDatepoint_unix);
+        $date->setTimestamp(substr($this->c_endingDatepoint_unix,0,10));
         $date->sub(new DateInterval('P1D'));
         $this->c_endingDatepoint_unix = $date->format('U');
         $this->c_endingHourpoint = $date->format('H:i');
@@ -266,13 +266,13 @@ class CustomChart extends Component
     {
         $date = new DateTime();
         $date->setTimezone(new DateTimeZone('asia/tehran'));
-        $date->setTimestamp($this->c_startingDatepoint_unix);
+        $date->setTimestamp(substr($this->c_startingDatepoint_unix,0,10));
         $date->add(new DateInterval('P1D'));
         $this->c_startingDatepoint_unix = $date->format('U');
         $this->c_startingHourpoint = $date->format('H:i');
         $this->c_startingDate = $date->format('Y-m-d');
 
-        $date->setTimestamp($this->c_endingDatepoint_unix);
+        $date->setTimestamp(substr($this->c_endingDatepoint_unix,0,10));
         $date->add(new DateInterval('P1D'));
         $this->c_endingDatepoint_unix = $date->format('U');
         $this->c_endingHourpoint = $date->format('H:i');

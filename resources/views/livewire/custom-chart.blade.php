@@ -249,10 +249,11 @@
             <div class="text-sm">{{ $category }} <span class="text-amber-400">{{ substr($duration / 3600, 0, 4) }}</span> h<span> &nbsp; | &nbsp; </span><span
                     class="text-amber-600">{{ (substr($duration / 3600, 0, 4) / (($c_endingDatepoint_unix - $c_startingDatepoint_unix) / 60 / 60)) * 100 }}</span> % </div>
         @endforeach
+        {{-- This if statement needs fix. --}}
         @if ($now['visible'] == 'visible')
-            <div class="text-sm">Used <span class="text-amber-400">{{ array_sum($taskSumOfDurations) / 60 / 60 }}</span> h <span> &nbsp; | &nbsp; </span><span
-                    class="text-amber-600">{{ (array_sum($taskSumOfDurations) / 60 / 60 / (($c_endingDatepoint_unix - $c_startingDatepoint_unix) / 60 / 60)) * 100 }}</span> % </div>
-            <div class="text-sm">Remained <span class="text-amber-400">{{ substr((($c_endingDatepoint_unix - $now['unix']) / 60 / 60 - array_sum($taskSumOfDurations) / 60 / 60),0,4) }}</span> h <span> &nbsp; | &nbsp;
+            <div class="text-sm">Used <span class="text-amber-400">{{ substr(array_sum($taskSumOfDurations) / 60 / 60,0,4) }}</span> h <span> &nbsp; | &nbsp; </span><span
+                    class="text-amber-600">{{ substr((array_sum($taskSumOfDurations) / 60 / 60 / (($c_endingDatepoint_unix - $c_startingDatepoint_unix) / 60 / 60)) * 100,0,4) }}</span> % </div>
+            <div class="text-sm">Remained <span class="text-amber-400">{{ substr(($c_endingDatepoint_unix - $now['unix']) / 60 / 60,0,4)  }}</span> h <span> &nbsp; | &nbsp;
                 </span><span
                     class="text-amber-600">{{
 
@@ -285,6 +286,7 @@
                             -
                             $c_startingDatepoint_unix
                         )
+                        *100
                     ),0,4)
                 }}</span> %
         </div>

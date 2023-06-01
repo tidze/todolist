@@ -101,7 +101,7 @@
                     <label class="px-2 py-1 text-[16px]" for="fullDuration">Full Duration</label>
                 </div>
                 {{-- Component `Desired Duration input range` --}}
-                <div class="flex flex-col py-2 px-1">
+                {{-- <div class="flex flex-col py-2 px-1">
                     <div class="flex flex-row">
                         <input class="flex-grow flex-shrink basis-60" name="desiredDuration" wire:model.defer="desiredDuration" id="desiredDuration" min="0"
                             max=@if (empty($desiredDuration)) 0 @else @php print('\''.$desiredDuration.'\'') @endphp @endif type="range"
@@ -120,7 +120,7 @@
                         <span class="text-red-500 text-[9px] text-center">{{ $message }}</span>
                     @enderror
 
-                </div>
+                </div> --}}
                 <div class="flex-auto w-full">
                     <div class="flex flex-auto justify-center items-center text-center py-1">
                         <input id="taskCategory" wire:model.defer="taskCategory" name="taskCategory" type="text"
