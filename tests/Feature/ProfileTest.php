@@ -10,6 +10,22 @@ class ProfileTest extends TestCase
 {
     use RefreshDatabase;
 
+    /**
+     * A basic test example.
+     */
+    public function test_a_basic_request(): void
+    {
+        $response = $this->get('/');
+
+        $response->assertStatus(200);
+
+        $response->ddHeaders();
+
+        $response->ddSession();
+
+        $response->dd();
+    }
+
     public function test_profile_page_is_displayed(): void
     {
         $user = User::factory()->create();

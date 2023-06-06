@@ -10,5 +10,6 @@
     </span>
     <a class="text-blue-600 hover:underline" href="https://github.com/loebi-ch/jquery-clock-timepicker">github</a>
     <br>
-    <span>Contanct Me : tidze.gh@gmail.com</span>
+    <span>Contanct Me : tidze.gh@gmail.com @include('aboutme_link')</span>
+
 </div>

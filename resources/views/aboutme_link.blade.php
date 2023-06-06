@@ -1,0 +1,1 @@
+<a href="{{route('aboutme')}}" class="text-blue-500 hover:underline">About Me</a>

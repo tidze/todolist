@@ -1,3 +1,4 @@
+# Admin Panel for myself for sending emails and such
 # Add Static Graph with changable starting and ending timepoint V1
 # Add Google Graph to the website for each task (at the end of the day what did you do? sum)
 # Change the task description inputs so that it would show them based on category inputs
@@ -18,7 +19,7 @@
 # Add Email Verification
 # Add Sketchy Theme to the calendar
 # Add Animation to the for helping the user to undrestand how things are done
-# Add initial guidance
+# Add initial guidance for the user, like a popup window or sth
 # Notification and stuff like that
 # Problem of editing a task and it would interfere with another task's duration
 # Problem How to merge Databases? From phone local save to windows ? what if it was locally saved?
