@@ -22,7 +22,7 @@
         </header>
         <main class="flex-auto flex sm:flex-row flex-col bg-zinc-800  p-4">
             <section class="sm:flex-1 flex sm:justify-end justify-center items-center sm:p-3 p-10" id="picture">
-                <div class="border border-orange-500 w-80 h-80 rounded-full bg-orange-900 bg-opacity-40"><img src="{{asset('about-me-assets/20220331_121355 - Copy3.png')}}" class="object-scale-down w-full h-full rounded-full" alt="profile picture"></div>
+                <div class="border border-orange-500 w-80 h-80 rounded-full bg-orange-900 bg-opacity-40"><img src="{{asset('about-me-assets/AboutMe_low_quality.png')}}" class="object-scale-down w-full h-full rounded-full" alt="profile picture"></div>
             </section>
             <section class="sm:flex-1 flex flex-col justify-center sm:items-start sm:p-3" id="info">
                 <h1 class="text-[76px] m-1">Hello!</h1>
@@ -38,7 +38,7 @@
                 </p>
             </section>
         </main>
-        <footer class="text-center py-2 border-t border-orange-500 border-opacity-50 debug-border" id="infoBar">
+        <footer class="text-center py-2 border-t border-orange-500 border-opacity-50" id="infoBar">
             <ul class="flex flex-row justify-around items-center">
                 <li class="font-bold">Phone <br><span class="font-normal text-sm hover:underline text-blue-500 cursor-pointer" id="phoneRevealer">Click To Reveal</span><span class="font-normal text-sm hidden" id="phoneNumber">+989226556078</span></li>
                 <li class="font-bold">Email <br><span class="font-normal text-sm">tidze.gh@gmail.com</span></li>
