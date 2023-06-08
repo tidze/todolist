@@ -41,6 +41,7 @@ class CustomChart extends Component
 
     public $startingDatetime;
     public $endingDatetime;
+    public $tasksSortedByDescription_Sum;
 
     public function mount()
     {
@@ -191,6 +192,23 @@ class CustomChart extends Component
             ->orderBy('starting_time')
             ->get()->toArray();
 
+        // Sort dailyTasks By their Description
+        $uniqueDescriptions = array_unique(array_column($this->dailyTasks, 'description'), SORT_REGULAR);
+        $tasksSortedByDescription = [];
+        foreach ($uniqueDescriptions as $uniqueDescription) {
+            foreach ($this->dailyTasks as $key => $task) {
+                if ($task->description == $uniqueDescription) {
+                    $tasksSortedByDescription[$uniqueDescription][$key] = abs($task->ending_time - $task->starting_time);
+                }
+            }
+        }
+        $tasksSortedByDescription_Sum = [];
+        foreach ($tasksSortedByDescription as $key => $value) {
+            $tasksSortedByDescription_Sum[$key] = array_sum($value);
+        }
+        arsort($tasksSortedByDescription_Sum);
+        $this->tasksSortedByDescription_Sum = $tasksSortedByDescription_Sum;
+
         // Sort dailyTasks By their Category
         $uniqueCategories = array_unique(array_column($this->dailyTasks, 'category'), SORT_REGULAR);
         $tasksSortedByCategory = [];
@@ -248,13 +266,13 @@ class CustomChart extends Component
     {
         $date = new DateTime();
         $date->setTimezone(new DateTimeZone('asia/tehran'));
-        $date->setTimestamp(substr($this->c_startingDatepoint_unix,0,10));
+        $date->setTimestamp(substr($this->c_startingDatepoint_unix, 0, 10));
         $date->sub(new DateInterval('P1D'));
         $this->c_startingDatepoint_unix = $date->format('U');
         $this->c_startingHourpoint = $date->format('H:i');
         $this->c_startingDate = $date->format('Y-m-d');
 
-        $date->setTimestamp(substr($this->c_endingDatepoint_unix,0,10));
+        $date->setTimestamp(substr($this->c_endingDatepoint_unix, 0, 10));
         $date->sub(new DateInterval('P1D'));
         $this->c_endingDatepoint_unix = $date->format('U');
         $this->c_endingHourpoint = $date->format('H:i');
@@ -266,13 +284,13 @@ class CustomChart extends Component
     {
         $date = new DateTime();
         $date->setTimezone(new DateTimeZone('asia/tehran'));
-        $date->setTimestamp(substr($this->c_startingDatepoint_unix,0,10));
+        $date->setTimestamp(substr($this->c_startingDatepoint_unix, 0, 10));
         $date->add(new DateInterval('P1D'));
         $this->c_startingDatepoint_unix = $date->format('U');
         $this->c_startingHourpoint = $date->format('H:i');
         $this->c_startingDate = $date->format('Y-m-d');
 
-        $date->setTimestamp(substr($this->c_endingDatepoint_unix,0,10));
+        $date->setTimestamp(substr($this->c_endingDatepoint_unix, 0, 10));
         $date->add(new DateInterval('P1D'));
         $this->c_endingDatepoint_unix = $date->format('U');
         $this->c_endingHourpoint = $date->format('H:i');
@@ -346,6 +364,5 @@ class CustomChart extends Component
         TaskModel::findOrFail($id)->delete();
         // Later. This is not optimiezed. The funcions are not minimized enough. Just a whole chunk of funtions running again that even may not need to run twice.
         $this->getTask();
-
     }
 }

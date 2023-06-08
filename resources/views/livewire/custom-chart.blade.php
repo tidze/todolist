@@ -292,6 +292,12 @@
         </div>
         @endif
     @endisset
+    {{-- TasksCategory Description --}}
+    @isset($tasksSortedByDescription_Sum)
+        @foreach ($tasksSortedByDescription_Sum as $category => $duration_sum)
+            <div class="text-sm text-gray-300">{{$category}}<span class="text-orange-400">{{$duration_sum/60}}</span><span> m </span><span class="text-amber-400">{{substr($duration_sum/60/60,0,4)}}</span><span> h </span></div>
+        @endforeach
+    @endisset
 </div>
 </div>
 

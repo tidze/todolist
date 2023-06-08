@@ -119,11 +119,11 @@
                         @endforeach
                     </div>
 
-                    <div class="text-white text-[12px] flex justify-start w-full">
+                    <div class="text-white text-[12px] flex flex-wrap justify-start w-full">
                         @isset($seperatedCategoriesByDay_Sum)
                             @foreach($seperatedCategoriesByDay_Sum[$day] as $category => $duration)
                                 <div class="">
-                                    <span>{{$category}}</span>
+                                    <span class="whitespace-nowrap">{{$category}}</span>
                                     <span class="text-amber-400">{{substr($duration/60/60,0,4)}}</span> h
                                     <span>/&nbsp;</span>
                                 </div>
