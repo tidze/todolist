@@ -96,8 +96,8 @@ class Task extends Component
         $this->desiredDuration = $task->desired_duration;
         $this->taskDone = $task->done;
         // turn it into each time zone , this fix is temporary
-        $this->startingTimepoint_unix = $task->starting_time * 1000;
-        $this->endingTimepoint_unix = $task->ending_time * 1000;
+        $this->startingTimepoint_unix = $task->starting_time;
+        $this->endingTimepoint_unix = $task->ending_time;
         $this->startingTimepoint =  date("H:i", $task->starting_time + 12600);
         $this->endingTimepoint = date("H:i", $task->ending_time + 12600);
         $this->startingDatepoint =  date("Y-m-d", $task->starting_time + 12600);

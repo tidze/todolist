@@ -76,7 +76,7 @@
                     </div>
                     <label class="basis-1/5 self-center" for="startingTimepoint">Start</label>
 
-                    <input class="bg-black text-center p-0 text-[15px]" id="startingTimepoint_unix" wire:model.defer="startingTimepoint_unix" name="startingTimepoint_unix" type="hidden" value="" />
+                    <input class="bg-black text-center p-0 text-[15px]" id="startingTimepoint_unix" wire:model.defer="startingTimepoint_unix" name="startingTimepoint_unix" type="text" value="" />
                     {{-- <label for="starting/Timepoint_unix">startingTimepoint_unix</label> --}}
                     {{-- @error('startingTimepoint_unix') --}}
                     {{-- <span class="text-red-500 text-[9px]">{{ $message }}</span> --}}
@@ -95,7 +95,7 @@
                     </div>
                     <label class="basis-1/5 self-center" for="endingTimepoint">End</label>
 
-                    <input name="endingTimepoint_unix" wire:model.defer="endingTimepoint_unix" id="endingTimepoint_unix" class="bg-black text-center p-0 text-[15px]" type="hidden" value="0" />
+                    <input name="endingTimepoint_unix" wire:model.defer="endingTimepoint_unix" id="endingTimepoint_unix" class="bg-black text-center p-0 text-[15px]" type="text" value="0" />
                     {{-- <label for="startingTimepoint_unix">startingTimepoint_unix</label> --}}
                     {{-- @error('endingTimepoint_unix') --}}
                     {{-- <span class="text-red-500 text-[9px]">{{ $message }}</span> --}}
@@ -379,6 +379,7 @@
         $("#endingDate").on("change", () => {
             giveDateObject("#endingDate", "#endingTimepoint", "#endingTimepoint_unix");
             document.getElementById("endingTimepoint_unix").dispatchEvent(new Event('input'));
+
         });
 
         // for all input[date], to be selectable with just clicking anywhere on input. (not just date picker icon)
@@ -396,6 +397,13 @@
             let $startingTimepoint =  $('#startingTimepoint').val();
             $('#startingTimepoint').val($('#endingTimepoint').val());
             $('#endingTimepoint').val($startingTimepoint);
+
+            let $startingTimepoint_unix =  $('#startingTimepoint_unix').val();
+            $('#startingTimepoint_unix').val($('#endingTimepoint_unix').val());
+            $('#endingTimepoint_unix').val($startingTimepoint_unix);
+
+            document.getElementById("endingTimepoint_unix").dispatchEvent(new Event('input'));
+            document.getElementById("startingTimepoint_unix").dispatchEvent(new Event('input'));
         });
 
         /*
@@ -522,6 +530,7 @@
 
         $('#setNowTime').on('click', function() {
             let newDate = new Date();
+            newDate.setSeconds(0);
             $('#startingTimepoint').val(("0" + newDate.getHours()).slice(-2) + ":" + ("0" + newDate.getMinutes()).slice(-2));
             $('#endingTimepoint').val(("0" + newDate.getHours()).slice(-2) + ":" + ("0" + newDate.getMinutes()).slice(-2));
             $('#startingTimepoint_unix').val((newDate.getTime()).toString().substring(0, 10));
