@@ -108,9 +108,9 @@
 </div>
 
 @push('script')
-    <script>
-        $('#categoryColor').on('change', function() {
-            console.log($('#categoryColor').val());
-        });
-    </script>
+    {{-- <script> --}}
+        {{-- $('#categoryColor').on('change', function() { --}}
+            {{-- console.log($('#categoryColor').val()); --}}
+        {{-- }); --}}
+    {{-- </script> --}}
 @endpush

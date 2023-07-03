@@ -40,6 +40,8 @@ class Task extends Component
         $dateTime = new DateTime();
         $dateTime->setTimezone(new DateTimeZone('asia/tehran'));
 
+        $dateTime->setTime($dateTime->format('H'), $dateTime->format('i'), 0);
+
         $this->endingTimepoint_unix = $dateTime->format('U');
         $this->startingTimepoint_unix = $dateTime->format('U');
         // the starting time for "clock time picker" ought to be current time. for now we leave it at 00:00

@@ -12,6 +12,9 @@
             </div>
         </div>
     </div> --}}
+    {{-- <div class="max-w-xl lg:max-w-6xl lg:flex-row mx-auto flex flex-wrap flex-col"> --}}
+        {{-- @livewire('timepoint-selector') --}}
+    {{-- </div> --}}
 
 
     <div class="max-w-xl lg:max-w-6xl lg:flex-row mx-auto flex flex-wrap flex-col">
@@ -36,11 +39,10 @@
         {{-- {{ storage_path() }}<br> --}}
         {{-- {{ app_path() }}<br> --}}
         {{-- <div class="w-full"> --}}
-            {{-- @livewire('tasks-table') --}}
+        {{-- @livewire('tasks-table') --}}
         {{-- </div> --}}
 
         {{-- <div class="w-full"> --}}
-            {{-- @livewire('category-color') --}}
         {{-- </div> --}}
 
         <div>

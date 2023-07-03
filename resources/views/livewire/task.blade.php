@@ -54,6 +54,10 @@
                     class="text-[14px] text-gray-400 bg-gray-800 inline-flex justify-center items-center border-2 border-gray-500 rounded-xl px-2 py-2 hover:bg-gray-700 cursor-pointer active:border-gray-50 active:text-white select-none">
                     Now
                 </div>
+                <div id="switchHours"
+                    class="text-[14px] text-gray-400 bg-gray-800 inline-flex justify-center items-center border-2 border-gray-500 rounded-xl px-2 py-2 hover:bg-gray-700 cursor-pointer active:border-gray-50 active:text-white select-none">
+                    Switch
+                </div>
             </div>
         </div>
         {{-- Old FOrm --}}
@@ -67,15 +71,17 @@
                         <input {{-- wire:ignore --}} id="startingDate" type="date" class="border-2 rounded-xl border-gray-500 bg-gray-800" value="{{ $startingDatepoint }}">
                     </div>
                     <div class="basis-2/5 flex">
-                        <input class="inline-block w-40 bg-black text-center startingTimepoint border-2 h-full rounded-xl border-gray-500" id="startingTimepoint" wire:model.defer="startingTimepoint" type="text" />
+                        <input class="inline-block w-40 bg-black text-center startingTimepoint border-2 h-full rounded-xl border-gray-500" id="startingTimepoint" wire:model.defer="startingTimepoint" type="text"
+                            value="{{$startingTimepoint}}" />
                     </div>
                     <label class="basis-1/5 self-center" for="startingTimepoint">Start</label>
 
                     <input class="bg-black text-center p-0 text-[15px]" id="startingTimepoint_unix" wire:model.defer="startingTimepoint_unix" name="startingTimepoint_unix" type="hidden" value="" />
-                    {{-- <label for="startingTimepoint_unix">startingTimepoint_unix</label> --}}
+                    {{-- <label for="starting/Timepoint_unix">startingTimepoint_unix</label> --}}
                     {{-- @error('startingTimepoint_unix') --}}
                     {{-- <span class="text-red-500 text-[9px]">{{ $message }}</span> --}}
                     {{-- @enderror --}}
+
                 </div>
 
                 {{-- Component endingTimepoint --}}
@@ -104,7 +110,7 @@
                 <div class="flex flex-col py-2 px-1">
                     <div class="flex flex-row">
                         <input class="flex-grow flex-shrink basis-60" name="desiredDuration" wire:model.defer="desiredDuration" id="desiredDuration" min="0"
-                            max=@if (empty($desiredDuration)) 0 @else @php print('\''.$desiredDuration.'\'') @endphp @endif type="range"
+                            max=@if (empty($desiredDuration)) 0 @else @php print('\''.$desiredDuration.'\'') @endphp @endif type="range" readonly disabled
                             value=@if (empty($desiredDuration)) 0 @else @php print('\''.$desiredDuration.'\'') @endphp @endif oninput="rangeValue.innerText = this.value">
                         <label class="flex-grow flex-shrink basis-1 text-center" id="rangeValue">
                             @if (empty($desiredDuration))
@@ -296,8 +302,7 @@
 
 @push('script')
     <script>
-        // console.log('Task Script Loaded.')
-        const date1 = new Date();
+        // console.log('Task\'s Script Loaded.')
 
         Livewire.hook('component.initialized', (component) => {
             $('.startingTimepoint').clockTimePicker({
@@ -330,7 +335,7 @@
                 }
             });
         });
-        // input range wasn't working in chrome so I added   part
+        // input range wasn't working in chrome so I added this part
         document.querySelectorAll('input[type="range"]').forEach((input) => {
             input.addEventListener('mousedown', () => window.getSelection().removeAllRanges());
         });
@@ -387,28 +392,45 @@
             document.querySelector("#targetDate").showPicker();
         });
 
+        $('#switchHours').on('click',()=>{
+            let $startingTimepoint =  $('#startingTimepoint').val();
+            $('#startingTimepoint').val($('#endingTimepoint').val());
+            $('#endingTimepoint').val($startingTimepoint);
+        });
+
+        /*
+        * Creates a new date from given date(dateInput param) and hour(input param) input and puts it in output(output param).
+        * Parameters: dateInput - input[type=date] 2023-06-09
+        *             input     - input[type=text] 02:00
+        *             output    - input[type=text] 1654889000 unix
+        */
         function giveDateObject(dateInput, input, output) {
             input = String(input);
             output = String(output);
 
-            // getting the day, month, year from targetDate input and creating a date
-            let purifiedDate = $(dateInput).val().replaceAll('-', '');
-            let year = purifiedDate.slice(0, 4);
+            // Getting the day, month, year from targetDate input and creating a date
+            let purifiedDate = $(dateInput).val().replaceAll('-', '');  // 2023-06-09 => 20230609
+            let year = purifiedDate.slice(0, 4); // 20230609 => 2023
 
-            // and do not forget that js month is starting from '0'
-            let month = purifiedDate.slice(4, 6) - 1;
-            let day = purifiedDate.slice(6, 8);
+            // And do not forget that js month is starting from '0'
+            let month = purifiedDate.slice(4, 6) - 1; // 20230609 => 06 - 1 = 5
+            let day = purifiedDate.slice(6, 8); // 20230609 => 09
+
+            // Creates a new date from seperated parameters.(year, month, day)
             let date = new Date(year, month, day);
 
-            // I did not want any milisecond in parameter
+            // And no miliseconds in parameter :)
             date.setSeconds(0);
 
-            let hours = $(input).val().replace(':', '').slice(0, 2);
-            let minutes = $(input).val().replace(':', '').slice(2, 4);
+            // Gets hours and minutes from given input and uses them to set the new date's hours and minutes.
+            let hours = $(input).val().replace(':', '').slice(0, 2); // 02:14 => 0214 => 02
+            let minutes = $(input).val().replace(':', '').slice(2, 4); // 02:14 => 0214 => 14
             date.setHours(hours);
             date.setMinutes(minutes);
-            $(output).val(date.getTime());
-            // document.getElementById(output).value = date;
+
+            let unixTenDigits = date.getTime().toString();
+            $(output).val(unixTenDigits.slice(0, 10));
+
             setFullDuration();
         }
 
@@ -417,11 +439,11 @@
             let startingTimePoint = document.getElementById("startingTimepoint_unix").value;
             let endingTimePoint = document.getElementById("endingTimepoint_unix").value;
             let difference = Math.abs(startingTimePoint - endingTimePoint);
-            document.getElementById("fullDuration_obj").value = msToTime(difference);
-            document.getElementById("desiredDuration").max = msToMin(difference);
-            document.getElementById("desiredDuration").value = msToMin(difference);
+            document.getElementById("fullDuration_obj").value = secToTime(difference);
+            document.getElementById("desiredDuration").max = secToMin(difference);
+            document.getElementById("desiredDuration").value = secToMin(difference);
             document.getElementById("desiredDuration").dispatchEvent(new Event('input'));
-            document.getElementById("rangeValue").innerText = msToMin(difference);
+            document.getElementById("rangeValue").innerText = secToMin(difference);
 
         }
 
@@ -430,12 +452,30 @@
             // return Math.ceil(duration / (1000 * 60));
         }
 
+        function secToMin(duration) {
+            return Math.floor(duration / (60));
+        }
+
         function msToTime(duration) {
             var milliseconds = parseInt((duration % 1000) / 100),
                 seconds = Math.floor((duration / 1000) % 60),
                 minutes = Math.floor((duration / (1000 * 60)) % 60),
                 hours = Math.floor((duration / (1000 * 60 * 60)) % 24),
                 day = Math.floor(duration / (1000 * 60 * 60 * 24)),
+                hours = hours < 10 ? "0" + hours : hours;
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            return day + " " + hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+            // return day + " " + hours + ":" + minutes + ":" + seconds;
+        }
+
+        function secToTime(duration) {
+            var milliseconds = parseInt((duration % 1) / 100),
+                seconds = Math.floor((duration / 1) % 60),
+                minutes = Math.floor((duration / (1 * 60)) % 60),
+                hours = Math.floor((duration / (1 * 60 * 60)) % 24),
+                day = Math.floor(duration / (1 * 60 * 60 * 24)),
                 hours = hours < 10 ? "0" + hours : hours;
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
@@ -453,6 +493,10 @@
             // console.log(day, month, year);
         }
 
+        /*
+        * Sets date for today. format: 2023-06-04
+        * Parameters: targetInput - input[type=date]
+        */
         function setDateForToday(targetInput) {
             let newDate = new Date();
             let day = ("0" + newDate.getDate()).slice(-2);
