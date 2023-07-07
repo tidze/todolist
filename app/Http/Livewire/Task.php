@@ -159,7 +159,6 @@ class Task extends Component
         $this->startingTimepoint = '00:00';
         $this->endingTimepoint = '00:00';
         $this->targetTaskIdEdit = '';
-        $this->taskDone = '';
 
     }
 
@@ -219,7 +218,6 @@ class Task extends Component
         $this->startingTimepoint = '00:00';
         $this->endingTimepoint = '00:00';
         $this->targetTaskIdEdit = '';
-        $this->taskDone = '';
     }
 
     public function checkForExistingCategory($user_id, $category, $description)

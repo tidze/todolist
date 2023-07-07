@@ -1,4 +1,4 @@
-<div class="relative border-4 border-yellow-700 box-border text-white text-[10px]">
+<div class="relative border-4 border-yellow-700 box-border flex-1 text-white text-[10px]">
     <div wire:loading class="bg-blue-400 bg-opacity-30 animate-pulse absolute w-full h-full"></div>
     {{-- Components Debugger Information --}}
     <div class="text-yellow-500 text-[11px] w-full">
