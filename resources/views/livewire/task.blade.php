@@ -74,6 +74,10 @@
                         <input class="inline-block w-40 bg-black text-center startingTimepoint border-2 h-full rounded-xl border-gray-500" id="startingTimepoint" wire:model.defer="startingTimepoint" type="text"
                             value="{{$startingTimepoint}}" />
                     </div>
+                    <div id="setNowTimeForStartingHourAndMinute"
+                    class="text-[14px] text-gray-400 bg-gray-800 inline-flex justify-center items-center border-2 border-gray-500 rounded-xl px-2 py-2 hover:bg-gray-700 cursor-pointer active:border-gray-50 active:text-white select-none">
+                    Now
+                    </div>
                     <label class="basis-1/5 self-center" for="startingTimepoint">Start</label>
 
                     <input class="bg-black text-center p-0 text-[15px]" id="startingTimepoint_unix" wire:model.defer="startingTimepoint_unix" name="startingTimepoint_unix" type="hidden" value="" />
@@ -92,6 +96,10 @@
                     <div class="basis-2/5 flex">
                         <input class="w-40 bg-black text-center endingTimepoint border-2 h-full rounded-xl border-gray-500" id="endingTimepoint" wire:model.defer="endingTimepoint" type="text"
                             value={{ $endingTimepoint }} onchange="" />
+                    </div>
+                    <div id="setNowTimeForEndingHourAndMinute"
+                    class="text-[14px] text-gray-400 bg-gray-800 inline-flex justify-center items-center border-2 border-gray-500 rounded-xl px-2 py-2 hover:bg-gray-700 cursor-pointer active:border-gray-50 active:text-white select-none">
+                    Now
                     </div>
                     <label class="basis-1/5 self-center" for="endingTimepoint">End</label>
 
@@ -539,5 +547,25 @@
             document.getElementById("startingTimepoint_unix").dispatchEvent(new Event('input'));
             setFullDuration();
         });
+
+        $('#setNowTimeForStartingHourAndMinute').on('click', function() {
+            let newDate = new Date();
+            newDate.setSeconds(0);
+            $('#startingTimepoint').val(("0" + newDate.getHours()).slice(-2) + ":" + ("0" + newDate.getMinutes()).slice(-2));
+            $('#startingTimepoint_unix').val((newDate.getTime()).toString().substring(0, 10));
+            document.getElementById("startingTimepoint_unix").dispatchEvent(new Event('input'));
+            setFullDuration();
+        });
+
+        $('#setNowTimeForEndingHourAndMinute').on('click', function() {
+            let newDate = new Date();
+            newDate.setSeconds(0);
+            $('#endingTimepoint').val(("0" + newDate.getHours()).slice(-2) + ":" + ("0" + newDate.getMinutes()).slice(-2));
+            $('#endingTimepoint_unix').val((newDate.getTime()).toString().substring(0, 10));
+            document.getElementById("endingTimepoint_unix").dispatchEvent(new Event('input'));
+            setFullDuration();
+        });
+
+
     </script>
 @endpush

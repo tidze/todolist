@@ -8,7 +8,7 @@
     <div class="relative z-10 flex flex-col h-full bg-black bg-opacity-90 text-gray-300">
         <header class="relative z-10 shadow-md shadow-orange-500">
             <nav>
-                <ul class="flex px-4">
+                <ul class="flex lg:px-4">
                     <li class="m-3 flex justify-center items-center">
                         <div class="w-4 h-4 rounded-full bg-orange-500"></div>
                     </li>
@@ -21,7 +21,7 @@
             </nav>
         </header>
         <main class="flex-auto flex md:flex-row flex-col sm:flex-col bg-zinc-800 justify-center items-center p-4">
-            <section class="sm:flex-1 flex md:justify-end justify-center sm:justify-center md:items-center items-center sm:p-3 p-8" id="picture">
+            <section class="sm:flex-1 flex md:justify-end justify-center sm:justify-center md:items-center items-center p-3" id="picture">
                 <div class="border border-orange-500 w-64 h-64 sm:w-80 sm:h-80 rounded-full bg-orange-900 bg-opacity-40"><img src="{{ asset('about-me-assets/AboutMe_low_quality.png') }}"
                         class="object-scale-down w-full h-full rounded-full" alt="profile picture"></div>
             </section>
