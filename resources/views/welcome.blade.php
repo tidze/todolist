@@ -52,7 +52,7 @@
                     </a>
 
 
-                    <div class="flex w-full scale-100 p-6 bg-white bg-gray-800/50 bg-gradient-to-bl from-gray-700/50 via-transparent ring-1 ring-inset ring-white/5 rounded-lg shadow-2xl shadow-gray-500/20 motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-orange-500">
+                    <div class="flex w-full scale-100 p-6 bg-gray-800/50 bg-gradient-to-bl from-gray-700/50 via-transparent ring-1 ring-inset ring-white/5 rounded-lg shadow-2xl shadow-gray-500/20 motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-orange-500">
                         <div class="flex  justify-start items-center w-full ">
 
                             @if (Route::has('login'))
@@ -63,7 +63,7 @@
                                                 class="text-orange-500 text-xl">&#x2AA7</span>&#x2800 Dashboard</a>
                                     @else
                                         <a href="{{ route('login') }}"
-                                            class="m-1 flex-1 p-2 font-semibold text-gray-600  hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-orange-500"> <span
+                                            class="m-1 flex-1 p-2 font-semibold text-gray-600 hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-orange-500"> <span
                                                 class="text-orange-500 text-xl">&#x2AA7</span>&#x2800 Log
                                             in</a>
 

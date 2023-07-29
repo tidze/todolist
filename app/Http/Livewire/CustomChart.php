@@ -202,6 +202,8 @@ class CustomChart extends Component
                 }
             }
         }
+
+
         $tasksSortedByDescription_Sum = [];
         foreach ($tasksSortedByDescription as $key => $value) {
             $tasksSortedByDescription_Sum[$key] = array_sum($value);

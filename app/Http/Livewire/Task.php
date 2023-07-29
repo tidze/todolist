@@ -57,28 +57,29 @@ class Task extends Component
 
     public function render()
     {
-        // dd(DB::table('tasks')
-        // ->join('categories', 'tasks.category_id', '=', 'categories.id')
-        // ->select('categories.description', 'categories.color', DB::raw('COUNT(*) as count'))
-        // ->where('tasks.user_id', 2)
-        // ->groupBy('categories.color', 'categories.description')
-        // ->orderByDesc('count')
-        // ->get()->toArray());
+        $sortedCategoriesByCategory = $this->sortCategoriesByCategory();
+        $sortedCategoriesByCategory_ENCODED = json_encode($sortedCategoriesByCategory);
+        $sortedCategoriesByCategory_ArrayKeys = array_keys($sortedCategoriesByCategory);
+        // dd($sortedCategoriesByCategory_ENCODED,$sortedCategoriesByCategory,$sortedCategoriesByCategory_ArrayKeys);
         return view('livewire.task', [
             'category_distinct_desc' => DB::table('tasks')
-            ->join('categories', 'tasks.category_id', '=', 'categories.id')
-            ->select('categories.category', DB::raw('COUNT(*) as count'))
-            ->where('tasks.user_id', Auth::user()->id)
-            ->groupBy('categories.category')
-            ->orderByDesc('count')
-            ->get()->toArray(),
+                ->join('categories', 'tasks.category_id', '=', 'categories.id')
+                ->select('categories.category', DB::raw('COUNT(*) as count'))
+                ->where('tasks.user_id', Auth::user()->id)
+                ->groupBy('categories.category')
+                ->orderByDesc('count')
+                ->get()->toArray(),
             'category_description_distinct_desc' => DB::table('tasks')
-                        ->join('categories', 'tasks.category_id', '=', 'categories.id')
-                        ->select('categories.description', 'categories.color', DB::raw('COUNT(*) as count'))
-                        ->where('tasks.user_id', Auth::user()->id)
-                        ->groupBy('categories.color', 'categories.description')
-                        ->orderByDesc('count')
-                        ->get()->toArray()
+                ->join('categories', 'tasks.category_id', '=', 'categories.id')
+                ->select('categories.description', 'categories.color', DB::raw('COUNT(*) as count'))
+                ->where('tasks.user_id', Auth::user()->id)
+                ->groupBy('categories.color', 'categories.description')
+                ->orderByDesc('count')
+                ->get()->toArray(),
+            'sortedCategoriesByCategory' => $sortedCategoriesByCategory,
+            'sortedCategoriesByCategory_ENCODED' => $sortedCategoriesByCategory_ENCODED,
+            'sortedCategoriesByCategory_ArrayKeys' => $sortedCategoriesByCategory_ArrayKeys
+
         ]);
     }
 
@@ -104,8 +105,7 @@ class Task extends Component
         $this->endingDatepoint = date("Y-m-d", $task->ending_time + 12600);
         // send back the targetTaskIdEdit to tasks-table
         // $this->emitTo('tasks-table', 'sendBackId', $this->targetTaskIdEdit);
-        $this->emitTo('custom-chart','$refresh');
-
+        $this->emitTo('custom-chart', '$refresh');
     }
 
     public function update()
@@ -147,7 +147,7 @@ class Task extends Component
             // if the category exists, just retrive the id from categories table and update it with category_id
             $this->updateIntoTasks(trim($this->targetTaskIdEdit), trim($this->taskCategory), trim($this->taskDescription));
         }
-        $this->emitTo('custom-chart','getTask');
+        $this->emitTo('custom-chart', 'getTask');
         $this->resetErrorBag();
         $this->resetValidation();
 
@@ -159,7 +159,6 @@ class Task extends Component
         $this->startingTimepoint = '00:00';
         $this->endingTimepoint = '00:00';
         $this->targetTaskIdEdit = '';
-
     }
 
     public function deleteTask($id)
@@ -206,7 +205,7 @@ class Task extends Component
         $this->emitTo('tasks-table', '$refresh');
         $this->emitTo('tasks-table', 'sendBackId', $this->targetTaskIdEdit);
         $this->emitTo('category-color', '$refresh');
-        $this->emitTo('custom-chart','getTask');
+        $this->emitTo('custom-chart', 'getTask');
 
         $this->resetErrorBag();
 
@@ -270,5 +269,50 @@ class Task extends Component
             session()->flash('unsuccessfull_message', 'Updating Task Was Unsuccessfull');
         }
         $this->emitTo('tasks-table', '$refresh');
+    }
+
+    /*
+    * Retrives 'categories' and 'distinct categories',
+    * And Sorts them by distinct categories.
+    */
+    public function sortCategoriesByCategory(){
+        // Optimized!  GG TOPOL
+        $distinctCategory = DB::table('tasks')
+            ->join('categories', 'tasks.category_id', '=', 'categories.id')
+            ->select('categories.category', DB::raw('COUNT(*) as count'))
+            ->where('tasks.user_id', Auth::user()->id)
+            ->groupBy('categories.category')
+            ->orderByDesc('count')
+            ->get()->toArray();
+        $distinctCategory = json_decode(json_encode($distinctCategory), true);
+        $categories = DB::table('tasks')
+            ->join('categories', 'tasks.category_id', '=', 'categories.id')
+            ->select('categories.category','categories.description','categories.color', DB::raw('COUNT(*) as count'))
+            ->where('tasks.user_id', Auth::user()->id)
+            ->groupBy('categories.category', 'categories.description','categories.color')
+            ->orderByDesc('count')
+            ->get()->toArray();
+        // dd('$distinctCategory',array_column($distinctCategory,'category'),'$categories',$categories);
+        $distinctCategory = array_column($distinctCategory,'category');
+        // If either of '' or '' is empty/null (like for example when for the first time user signs up) ignore the whole operation
+        if (isset($categories) && !empty($categories) && isset($distinctCategory) && !empty($distinctCategory)) {
+            $sortedCategoriesByCategory = [];
+            $categories = json_decode(json_encode($categories), true);
+            $distinctCategoryLength = count($distinctCategory);
+            for ($i = 0; $i < $distinctCategoryLength; $i++) {
+                // Because the array is getting unset items, the length changing so we need to assign new value to $categoriesLength everytime right before the iteration starts.
+                $categoriesLength = count($categories);
+                for ($j = 0; $j < $categoriesLength; $j++) {
+                    if ($categories[$j]['category'] === $distinctCategory[$i]) {
+                        $sortedCategoriesByCategory[$distinctCategory[$i]][] = $categories[$j];
+                        // $sortedCategoriesByCategory[$i][$distinctCategory[$i]][] = $categories[$j];
+                        unset($categories[$j]);
+                    }
+                }
+                $categories = array_values($categories);
+            }
+            // dd($distinctCategory, $sortedCategoriesByCategory, $categories);
+        }
+        return $sortedCategoriesByCategory;
     }
 }

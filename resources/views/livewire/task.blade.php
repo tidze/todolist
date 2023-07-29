@@ -17,6 +17,7 @@
             {{-- targetTaskIdEdit= <span class="text-amber-100">{{ $targetTaskIdEdit??'Not set' }}</span><br> --}}
             {{-- category_distinct_desc= <span class="text-amber-100">{{ print_r($category_distinct_desc)??'Not set' }}</span><br> --}}
             {{-- category_description_distinct_desc= <span class="text-amber-100">{{ print_r($category_description_distinct_desc)??'Not set' }}</span><br> --}}
+            {{-- sortedCategoriesByCategory= <pre class="text-amber-100">{{ print_r($sortedCategoriesByCategory)??'Not set' }}</pre><br> --}}
             {{-- taskDone= <span class="text-amber-100">{{ $taskDone ?? 'Not     set' }}</span><br> --}}
             {{-- detector= <span class="text-amber-100">{{ $detector??'Not Set' }}</span><br> --}}
             {{-- date_default_timezone_get=<span class="text-amber-100">{{ date_default_timezone_get() }}</span><br> --}}
@@ -85,7 +86,6 @@
                     {{-- @error('startingTimepoint_unix') --}}
                     {{-- <span class="text-red-500 text-[9px]">{{ $message }}</span> --}}
                     {{-- @enderror --}}
-
                 </div>
 
                 {{-- Component endingTimepoint --}}
@@ -144,10 +144,14 @@
 
                     {{-- Component `Select Category` --}}
                     <div class="flex w-full overflow-auto pb-2">
-                        @foreach ($category_distinct_desc as $category)
-                            <div class="py-1 px-2 border border-l-4 border-white text-white cursor-pointer rounded-lg mr-1 select-none whitespace-nowrap categoryAutoSetter" style="">{{ $category->category }}
-                            </div>
-                        @endforeach
+                        {{-- @foreach ($category_distinct_desc as $category) --}}
+                            {{-- <div class="py-1 px-2 border border-l-4 border-white text-white cursor-pointer rounded-lg mr-1 select-none whitespace-nowrap categoryAutoSetter" style="">{{ $category->category }} --}}
+                            {{-- </div> --}}
+                        {{-- @endforeach --}}
+
+                        @for ($i = 0; $i < count($sortedCategoriesByCategory_ArrayKeys); $i++)
+                            <div class="py-1 px-2 border border-l-4 border-white text-white cursor-pointer rounded-lg mr-1 select-none whitespace-nowrap categoryAutoSetter" style="">{{$sortedCategoriesByCategory_ArrayKeys[$i]}}</div>
+                        @endfor
                     </div>
 
                     @error('taskCategory')
@@ -162,11 +166,13 @@
                     </div>
 
                     {{-- Component `Select Description` --}}
-                    <div class="flex w-full overflow-auto pb-2">
-                        @foreach ($category_description_distinct_desc as $category)
-                            <div class="py-1 px-2 border border-l-4 border-l-transparent cursor-pointer rounded-lg mr-1 select-none whitespace-nowrap descriptionAutoSetter"
-                                style="border-color:{{ $category->color }};color:{{ $category->color }}">
-                                {{ $category->description }}</div>
+                    <div class="flex w-full overflow-auto pb-2 descriptionAutoSetterContainer">
+                        @foreach ($sortedCategoriesByCategory as $category=>$tasksOfTheCategory)
+                            @foreach ($tasksOfTheCategory as $task)
+                                <div class="py-1 px-2 border border-l-4 border-l-transparent cursor-pointer rounded-lg mr-1 select-none whitespace-nowrap descriptionAutoSetter"
+                                    style="border-color:{{ $task['color'] }};color:{{ $task['color'] }}">
+                                    {{ $task['description'] }}</div>
+                            @endforeach
                         @endforeach
                     </div>
                     @error('taskDescription')
@@ -311,6 +317,9 @@
 @push('script')
     <script>
         // console.log('Task\'s Script Loaded.')
+        // The variables for category on click, shows each description for that specific category
+        let sortedCategoriesByCategory_ENCODED = @json($sortedCategoriesByCategory_ENCODED);
+        var sortedCategoriesByCategory_ENCODED_Parsed = (JSON.parse(sortedCategoriesByCategory_ENCODED));
 
         Livewire.hook('component.initialized', (component) => {
             $('.startingTimepoint').clockTimePicker({
@@ -329,6 +338,20 @@
             copyDate("#targetDate", "#endingDate");
             // console.log('component.initialized');
         });
+
+        // Onclick event
+        $(document).ready(function() {
+
+        });
+
+        function isJSON(str) {
+            try {
+                JSON.parse(str);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
 
         Livewire.hook('element.updated', (el, component) => {
             $('.startingTimepoint').clockTimePicker({
@@ -526,12 +549,21 @@
         }
 
         $('.categoryAutoSetter').on('click', function() {
-            console.log();
             $('#taskCategory').val($(this).text().trim());
+            let arr = sortedCategoriesByCategory_ENCODED_Parsed[$(this).text().trim()];
+
+            $(".descriptionAutoSetterContainer").html('');
+            $.each(arr, function(index, value) {
+                $(".descriptionAutoSetterContainer").append('<div class="py-1 px-2 border border-l-4 border-l-transparent cursor-pointer rounded-lg mr-1 select-none whitespace-nowrap descriptionAutoSetter" style="border-color: ' + value.color + '; color: ' + value.color + ';">' + value.description + '</div>');
+            });
+            $('.descriptionAutoSetter').on('click', function() {
+                $('#taskDescription').val($(this).text().trim());
+                    document.getElementById("taskDescription").dispatchEvent(new Event('input'));
+            });
             document.getElementById("taskCategory").dispatchEvent(new Event('input'));
+
         });
         $('.descriptionAutoSetter').on('click', function() {
-            console.log();
             $('#taskDescription').val($(this).text().trim());
             document.getElementById("taskDescription").dispatchEvent(new Event('input'));
         });

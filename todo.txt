@@ -62,3 +62,9 @@ PlanPacer
 SELECT category_id, COUNT(`category_id`) FROM `tasks` WHERE `user_id` = 2 GROUP BY category_id;
 SELECT category_id, COUNT(`category_id`) FROM `tasks` WHERE `user_id` = 2 GROUP BY category_id
 ORDER BY `COUNT(``category_id``)` DESC
+
+
+[ 0 => "video" =>[
+    0=>['data','date','daty']   
+  ]
+]
