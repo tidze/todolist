@@ -14,7 +14,7 @@
                     </li>
                     <li class="m-3">{{ env('DEV_NAME') }}</li>
                     <li class="m-3 flex justify-center items-center font-light text-[10px]"><a href="#about">Developer</a></li>
-                    <li class="m-3 ml-auto"><a href="{{ asset('about-me-assets/MyResume-539[www.cvbuilder.me].pdf') }}">Resume <span class="font-bold">&#8681;</span></a></li>
+                    <li class="m-3 ml-auto"><a href="{{ asset('about-me-assets/MyResume-[www.cvbuilder.me].pdf') }}">Resume fa<span class="font-bold">&#8681;</span></a></li>
                     {{-- <li class="m-3"><a href="#projects">Projects</a></li> --}}
                     <li class="m-3"><a href="#infoBar">Contact</a></li>
                 </ul>

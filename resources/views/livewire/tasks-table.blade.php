@@ -82,63 +82,66 @@
                     </tr>
                 </thead>
                 <tbody>
-
                     @isset($allTasks)
-                    @foreach ($allTasks as $task)
-                        <tr @if ($task->id == $targetTaskIdEdit) @class(['box-border','border','border-indigo-500','bg-gray-900','text-indigo-500','bg-indigo-900','bg-opacity-20']) @endif
-                            class="box-border border-b bg-gray-900 border-gray-700 border text-teal-600">
-                            {{-- <td class="px-4 py-0"> --}}
-                                {{-- <form wire:submit.prevent="edit({{ $task->id }})"> --}}
-                                    {{-- <button type="submit" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button> --}}
-                                {{-- </form> --}}
-                            {{-- </td> --}}
-                            {{-- <td scope="row" class="box-border hover:box-content px-2 py-1 font-medium whitespace-nowrap text-white"> --}}
-                            {{-- {{ $task->id }} --}}
-                            {{-- </td> --}}
-                            {{-- <td class="px-2 py-0"> --}}
-                            {{-- {{ $task->user_id }} --}}
-                            {{-- </td> --}}
-                            {{-- <td class="px-2 py-0"> --}}
-                            {{-- {{ $task->category_id }} --}}
-                            {{-- </td> --}}
-                            <td class="px-4 py-0">
-                                @if ($confirming === $task->id)
-                                    <button wire:click="deleteTask({{ $task->id }})" type="submit" class="font-medium text-blue-600 dark:text-teal-500 hover:underline">Sure?</button>
-                                @else
-                                    <button wire:click="confirmDelete({{ $task->id }})" type="submit" class="font-medium text-blue-600 dark:text-gray-500 hover:underline">Delete</button>
-                                @endif
-                            </td>
-                            {{-- <td class="px-2 py-0"> --}}
-                            {{-- {{ $task->done }} --}}
-                            {{-- </td> --}}
-                            <td class="px-2 py-0 whitespace-nowrap">
-                                {{ date('Y-M(m)-d H:i', $task->starting_time + 12600) }}
-                            </td>
-                            <td class="px-2 py-0 whitespace-nowrap">
-                                {{ date('Y-M(m)-d H:i', $task->ending_time + 12600) }}
-                            </td>
-                            <td class="px-2 py-4">
-                                {{ $task->category }}
-                            </td>
-                            <td class="px-2 py-0">
-                                {{ $task->description }}
-                            </td>
-                            <td class="px-2 py-0 whitespace-nowrap">
-                                {{-- {{ $task->color }} --}}
-                                <div style="background-color:{{ $task->color }}" class="w-full h-4"></div>
-                            </td>
-                            <td class="px-2 py-0">
-                                {{ $task->desired_duration }}
-                            </td>
-                            {{-- <td class="px-2 py-0"> --}}
-                            {{-- {{ $task->starting_time }} --}}
-                            {{-- </td> --}}
-                            {{-- <td class="px-2 py-0"> --}}
-                            {{-- {{ $task->ending_time }} --}}
-                            {{-- </td> --}}
+                        @forelse ($allTasks as $task)
+                            <tr @if ($task->id == $targetTaskIdEdit) @class(['box-border','border','border-indigo-500','bg-gray-900','text-indigo-500','bg-indigo-900','bg-opacity-20']) @endif
+                                class="box-border border-b bg-gray-900 border-gray-700 border text-teal-600">
+                                {{-- <td class="px-4 py-0"> --}}
+                                    {{-- <form wire:submit.prevent="edit({{ $task->id }})"> --}}
+                                        {{-- <button type="submit" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</button> --}}
+                                    {{-- </form> --}}
+                                {{-- </td> --}}
+                                {{-- <td scope="row" class="box-border hover:box-content px-2 py-1 font-medium whitespace-nowrap text-white"> --}}
+                                {{-- {{ $task->id }} --}}
+                                {{-- </td> --}}
+                                {{-- <td class="px-2 py-0"> --}}
+                                {{-- {{ $task->user_id }} --}}
+                                {{-- </td> --}}
+                                {{-- <td class="px-2 py-0"> --}}
+                                {{-- {{ $task->category_id }} --}}
+                                {{-- </td> --}}
+                                <td class="px-4 py-0">
+                                    @if ($confirming === $task->id)
+                                        <button wire:click="deleteTask({{ $task->id }})" type="submit" class="font-medium text-blue-600 dark:text-teal-500 hover:underline">Sure?</button>
+                                    @else
+                                        <button wire:click="confirmDelete({{ $task->id }})" type="submit" class="font-medium text-blue-600 dark:text-gray-500 hover:underline">Delete</button>
+                                    @endif
+                                </td>
+                                {{-- <td class="px-2 py-0"> --}}
+                                {{-- {{ $task->done }} --}}
+                                {{-- </td> --}}
+                                <td class="px-2 py-0 whitespace-nowrap">
+                                    {{ date('Y-M(m)-d H:i', $task->starting_time + 12600) }}
+                                </td>
+                                <td class="px-2 py-0 whitespace-nowrap">
+                                    {{ date('Y-M(m)-d H:i', $task->ending_time + 12600) }}
+                                </td>
+                                <td class="px-2 py-4">
+                                    {{ $task->category }}
+                                </td>
+                                <td class="px-2 py-0">
+                                    {{ $task->description }}
+                                </td>
+                                <td class="px-2 py-0 whitespace-nowrap">
+                                    {{-- {{ $task->color }} --}}
+                                    <div style="background-color:{{ $task->color }}" class="w-full h-4"></div>
+                                </td>
+                                <td class="px-2 py-0">
+                                    {{ $task->desired_duration }}
+                                </td>
+                                {{-- <td class="px-2 py-0"> --}}
+                                {{-- {{ $task->starting_time }} --}}
+                                {{-- </td> --}}
+                                {{-- <td class="px-2 py-0"> --}}
+                                {{-- {{ $task->ending_time }} --}}
+                                {{-- </td> --}}
 
-                        </tr>
-                    @endforeach
+                            </tr>
+                        @empty
+                        <div class="bg-gray-500 bg-opacity-20 border-l-8 border-gray-600 text-gray-500 p-2">
+                            There are no tasks recorded yet ¯\_(ツ)_/¯
+                        </div>
+                        @endforelse
                     @endisset
 
                 </tbody>

@@ -167,12 +167,12 @@
 
                     {{-- Component `Select Description` --}}
                     <div class="flex w-full overflow-auto pb-2 descriptionAutoSetterContainer">
-                        @foreach ($sortedCategoriesByCategory as $category=>$tasksOfTheCategory)
-                            @foreach ($tasksOfTheCategory as $task)
+                        @foreach ($categories as $category)
+                            {{-- @foreach ($tasksOfTheCategory as $task) --}}
                                 <div class="py-1 px-2 border border-l-4 border-l-transparent cursor-pointer rounded-lg mr-1 select-none whitespace-nowrap descriptionAutoSetter"
-                                    style="border-color:{{ $task['color'] }};color:{{ $task['color'] }}">
-                                    {{ $task['description'] }}</div>
-                            @endforeach
+                                    style="border-color:{{ $category['color'] }};color:{{ $category['color'] }}">
+                                    {{ $category['description'] }}</div>
+                            {{-- @endforeach --}}
                         @endforeach
                     </div>
                     @error('taskDescription')

@@ -30,5 +30,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/aboutme', AboutMe::class)->name('aboutme');
+Route::get('/kir', function () {
+    return view('gridBackground');
+});
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

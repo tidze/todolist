@@ -47,7 +47,7 @@ class Task extends Component
         // the starting time for "clock time picker" ought to be current time. for now we leave it at 00:00
         $this->startingTimepoint = $dateTime->format('H:i');;
         $this->endingTimepoint = $dateTime->format('H:i');;
-        $this->desiredDuration = '';
+        $this->desiredDuration = 0;
         $this->taskCategory = '';
         $this->taskDescription = '';
         $this->taskDone = false;
@@ -57,29 +57,17 @@ class Task extends Component
 
     public function render()
     {
-        $sortedCategoriesByCategory = $this->sortCategoriesByCategory();
+        $result = $this->sortCategoriesByCategory();
+        $sortedCategoriesByCategory = $result[0];
+        $categories = $result[1];
         $sortedCategoriesByCategory_ENCODED = json_encode($sortedCategoriesByCategory);
         $sortedCategoriesByCategory_ArrayKeys = array_keys($sortedCategoriesByCategory);
-        // dd($sortedCategoriesByCategory_ENCODED,$sortedCategoriesByCategory,$sortedCategoriesByCategory_ArrayKeys);
+        // dd('$sortedCategoriesByCategory_ENCODED',$sortedCategoriesByCategory_ENCODED,'$sortedCategoriesByCategory',$sortedCategoriesByCategory,'$sortedCategoriesByCategory_ArrayKeys',$sortedCategoriesByCategory_ArrayKeys,'$result',$result ,'$categories',$categories);
         return view('livewire.task', [
-            'category_distinct_desc' => DB::table('tasks')
-                ->join('categories', 'tasks.category_id', '=', 'categories.id')
-                ->select('categories.category', DB::raw('COUNT(*) as count'))
-                ->where('tasks.user_id', Auth::user()->id)
-                ->groupBy('categories.category')
-                ->orderByDesc('count')
-                ->get()->toArray(),
-            'category_description_distinct_desc' => DB::table('tasks')
-                ->join('categories', 'tasks.category_id', '=', 'categories.id')
-                ->select('categories.description', 'categories.color', DB::raw('COUNT(*) as count'))
-                ->where('tasks.user_id', Auth::user()->id)
-                ->groupBy('categories.color', 'categories.description')
-                ->orderByDesc('count')
-                ->get()->toArray(),
             'sortedCategoriesByCategory' => $sortedCategoriesByCategory,
             'sortedCategoriesByCategory_ENCODED' => $sortedCategoriesByCategory_ENCODED,
-            'sortedCategoriesByCategory_ArrayKeys' => $sortedCategoriesByCategory_ArrayKeys
-
+            'sortedCategoriesByCategory_ArrayKeys' => $sortedCategoriesByCategory_ArrayKeys,
+            'categories' => $categories,
         ]);
     }
 
@@ -153,7 +141,7 @@ class Task extends Component
 
         $this->taskCategory = '';
         $this->taskDescription = '';
-        $this->desiredDuration = '';
+        $this->desiredDuration = 0;
         $this->startingTimepoint_unix = '';
         $this->endingTimepoint_unix = '';
         $this->startingTimepoint = '00:00';
@@ -295,24 +283,25 @@ class Task extends Component
         // dd('$distinctCategory',array_column($distinctCategory,'category'),'$categories',$categories);
         $distinctCategory = array_column($distinctCategory,'category');
         // If either of '' or '' is empty/null (like for example when for the first time user signs up) ignore the whole operation
+        $sortedCategoriesByCategory = [];
         if (isset($categories) && !empty($categories) && isset($distinctCategory) && !empty($distinctCategory)) {
-            $sortedCategoriesByCategory = [];
             $categories = json_decode(json_encode($categories), true);
+            $categories_copy = $categories;
             $distinctCategoryLength = count($distinctCategory);
             for ($i = 0; $i < $distinctCategoryLength; $i++) {
                 // Because the array is getting unset items, the length changing so we need to assign new value to $categoriesLength everytime right before the iteration starts.
-                $categoriesLength = count($categories);
+                $categoriesLength = count($categories_copy);
                 for ($j = 0; $j < $categoriesLength; $j++) {
-                    if ($categories[$j]['category'] === $distinctCategory[$i]) {
-                        $sortedCategoriesByCategory[$distinctCategory[$i]][] = $categories[$j];
-                        // $sortedCategoriesByCategory[$i][$distinctCategory[$i]][] = $categories[$j];
-                        unset($categories[$j]);
+                    if ($categories_copy[$j]['category'] === $distinctCategory[$i]) {
+                        $sortedCategoriesByCategory[$distinctCategory[$i]][] = $categories_copy[$j];
+                        // $sortedCategoriesByCategory[$i][$distinctCategory[$i]][] = $categories_copy[$j];
+                        unset($categories_copy[$j]);
                     }
                 }
-                $categories = array_values($categories);
+                $categories_copy = array_values($categories_copy);
             }
             // dd($distinctCategory, $sortedCategoriesByCategory, $categories);
         }
-        return $sortedCategoriesByCategory;
+        return array($sortedCategoriesByCategory,$categories);
     }
 }

@@ -56,9 +56,6 @@ class CustomGraphX extends Component
     public function seperateTasksIntoDays($array, $starting_unix, $ending_unix)
     {
 
-        if (empty($array)) {
-            dd('seperateTasksIntoDays: Given array is empty', 'It may be no tasks in the zone', $array);
-        }
         $modified_array = array();
         $days = $this->modByDays($starting_unix, $ending_unix);
         for ($x = 0; $x < $days + 1; $x++) {

@@ -74,7 +74,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($allCategories as $category)
+                @forelse ($allCategories as $category)
                     <tr class="text-center">
                         <td class="box-border border-b bg-gray-900 border-gray-700 border text-teal-600 px-3 py-2">
                             <form wire:submit.prevent="edit({{ $category->id }})">
@@ -90,7 +90,11 @@
                         </td>
                         {{-- <td class="box-border border-b bg-gray-900 border-gray-700 border text-teal-600 px-3 py-2"><a href="">Delete</a></td> --}}
                     </tr>
-                @endforeach
+                @empty
+                    <div class="bg-gray-500 bg-opacity-20 border-l-8 border-gray-600 text-gray-500 p-2">
+                        There are no categories recorded yet ¯\_(ツ)_/¯
+                    </div>
+                @endforelse
             </tbody>
         </table>
         <div class="">

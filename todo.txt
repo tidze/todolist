@@ -1,20 +1,20 @@
 # Admin Panel for myself for sending emails and such
-# Add Static Graph with changable starting and ending timepoint V1
+# Add Static Graph with changable starting and ending timepoint V1 @
 # Add Google Graph to the website for each task (at the end of the day what did you do? sum)
-# Change the task description inputs so that it would show them based on category inputs
+# Change the task description inputs so that it would show them based on category inputs @
 # Add Dynamic Scroller Graph V2
 # Add a remaining time of the day
-# Add Color for each category type
-# Add pagination to the table tasks
+# Add Color for each category type @
+# Add pagination to the table tasks @
 # Fix Jquery import only one main page
 # Fix targetDate does not work on change while updating tasks
 # Bug ending clock time picker always switches to to hour when even when clicked on minute section but after edit changes
 # Fix targetDate onchange is not affecting timepoints
 # Make All the clocktime pickers component into only one component
 # Add timezone table to the database
-# Add User_id to the task table
+# Add User_id to the task table @
 # Add a Streak since when you had video/unknown
-# Add this to github
+# Add this to github @
 # Dockerize this app
 # Add Email Verification
 # Add Sketchy Theme to the calendar
@@ -24,6 +24,8 @@
 # Problem of editing a task and it would interfere with another task's duration
 # Problem How to merge Databases? From phone local save to windows ? what if it was locally saved?
 # Category Combiner
+# Shows warning when the user select same date for ending point and starting point
+# Make Notification PopUp Style
 
 #1 Make Edit button work for Every task
 #1 Make Website Livetime interactive using livewire
@@ -65,6 +67,6 @@ ORDER BY `COUNT(``category_id``)` DESC
 
 
 [ 0 => "video" =>[
-    0=>['data','date','daty']   
+    0=>['data','date','daty']
   ]
 ]
