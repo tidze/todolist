@@ -55,6 +55,7 @@
 
 <body class="font-sans antialiased">
     @livewireScripts
+    
     <div class="min-h-screen bg-gray-900">
         @include('layouts.navigation')
 

@@ -48,7 +48,7 @@
      </style>
 </head>
 
-<body>
+<body class="snap-y">
     @livewireScripts
     @yield('body')
 </body>

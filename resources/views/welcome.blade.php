@@ -17,6 +17,7 @@
 </head>
 
 <body class="antialiased">
+    
     <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-dots-lighter bg-gray-900 selection:bg-orange-500 selection:text-white">
 
         <div class="max-w-7xl mx-auto p-6 lg:p-8">
