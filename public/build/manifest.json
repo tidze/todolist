@@ -1,11 +1,15 @@
 {
+  "public/fonts/digital_display/DigitalDisplay.ttf": {
+    "file": "assets/DigitalDisplay-ee72b348.ttf",
+    "src": "public/fonts/digital_display/DigitalDisplay.ttf"
+  },
   "resources/css/app.css": {
-    "file": "assets/app-78a534d3.css",
+    "file": "assets/app-75a63c5a.css",
     "isEntry": true,
     "src": "resources/css/app.css"
   },
   "resources/js/app.js": {
-    "file": "assets/app-bbc88603.js",
+    "file": "assets/app-74f1a121.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   }

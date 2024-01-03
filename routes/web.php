@@ -1,7 +1,9 @@
 <?php
 
 use App\Http\Controllers\AboutMe;
+use App\Http\Controllers\lab;
 use App\Http\Controllers\ProfileController;
+use App\View\Components\CustomCalendar;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,3 +37,6 @@ Route::get('/kir', function () {
 });
 
 require __DIR__ . '/auth.php';
+
+// This URL is for testing components
+Route::get('/lab', [lab::class,'index']);

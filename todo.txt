@@ -26,6 +26,7 @@
 # Category Combiner
 # Shows warning when the user select same date for ending point and starting point
 # Make Notification PopUp Style
+# Make Digital clock
 
 #1 Make Edit button work for Every task
 #1 Make Website Livetime interactive using livewire

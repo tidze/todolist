@@ -1,3 +1,20 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Rubik+Doodle+Triangles&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* @font-face { */
+    /* font-family: 'digital_7'; */
+    /* src: url('../../public/fonts/digital_7/digital-7 (italic).ttf') format('ttf'), */
+         /* url('/fonts/digital_7/digital-7 (mono italic).ttf') format('ttf'), */
+         /* url('/fonts/digital_7/digital-7 (mono).ttf') format('ttf'); */
+    /* font-weight: normal; */
+    /* font-style: normal; */
+/* } */
+
+
+
+/* body { */
+    /* font-family: 'digital_7','digital_display', sans-serif; */
+/* } */
+

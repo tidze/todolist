@@ -12,6 +12,10 @@ module.exports = {
         extend: {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                tokhmi: ['kiri','monospace'],
+                custom: ['YourFont', 'sans-serif'],
+                'rdodle': 'Rubik Doodle Triangles',
+                // digital_display: ['digital_display', 'sans-serif'],
             },
         },
     },
